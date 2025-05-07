@@ -17,7 +17,6 @@
   </div>
 
 <script>
-  // Obtener ID desde la URL
   const params = new URLSearchParams(window.location.search);
   const animeId = params.get("id");
 
@@ -37,20 +36,37 @@
         ? `También conocido como: ${altNames.join(", ")}`
         : "";
 
-      document.getElementById("episodeCount").textContent = `${anime.episodes.length} episodio(s)`;
+      const groupedEpisodes = {};
+      for (const ep of anime.episodes) {
+        if (!groupedEpisodes[ep.number]) groupedEpisodes[ep.number] = [];
+        groupedEpisodes[ep.number].push(ep);
+      }
+
+      const episodeNumbers = Object.keys(groupedEpisodes).sort((a, b) => a - b);
+      document.getElementById("episodeCount").textContent = `${episodeNumbers.length} episodio(s)`;
 
       const list = document.getElementById("episodeList");
-      anime.episodes.forEach((ep, index) => {
+      episodeNumbers.forEach(number => {
+        const sources = groupedEpisodes[number];
         const div = document.createElement("div");
-        div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition flex items-center justify-between";
+        div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition";
+
+        const links = sources.map(ep =>
+          `<a href="${ep.url}" target="_blank" class="text-blue-400 hover:underline text-sm mr-4">${ep.language === 1 ? "Español" : "Subtitulado"}</a>`
+        ).join("");
+
         div.innerHTML = `
-          <span class="font-medium">Episodio ${index + 1}</span>
-          <a href="${ep.url}" target="_blank" class="text-blue-400 hover:underline text-sm">${ep.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"}</a>
+          <div class="flex justify-between items-center">
+            <span class="font-medium">Episodio ${number}</span>
+            <div>${links}</div>
+          </div>
         `;
+
         list.appendChild(div);
       });
     });
 </script>
+
 
 </body>
 </html>
