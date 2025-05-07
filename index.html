@@ -64,7 +64,7 @@
 
     function viewAnime(id) {
       localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
-      window.location.href = "anime.html";
+      window.location.href = `anime.html?id=${id}`;
     }
   </script>
 </body>
