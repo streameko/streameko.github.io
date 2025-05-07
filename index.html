@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Biblioteca de Anime</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div class="max-w-5xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center">Biblioteca de Anime</h1>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+      <input id="searchInput" type="text" placeholder="Buscar anime..." class="flex-1 p-3 rounded bg-gray-800 border border-gray-600">
+      <label class="flex items-center text-sm">
+        <input id="dubToggle" type="checkbox" class="mr-2"> Solo Doblados
+      </label>
+    </div>
+
+    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
