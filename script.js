@@ -20,7 +20,9 @@ function renderAnimeList() {
   animeList.innerHTML = "";
 
   Object.entries(animeData).forEach(([id, anime]) => {
-    if (!anime.name.toLowerCase().includes(query)) return;
+    const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+    const matchesSearch = names.some(name => name.includes(query));
+    if (!matchesSearch) return;
 
     const hasDub = anime.episodes.some(ep => ep.language === 1);
     if (dubbedOnly && !hasDub) return;
@@ -32,6 +34,7 @@ function renderAnimeList() {
     animeList.appendChild(div);
   });
 }
+
 
 function viewAnime(id) {
   localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
