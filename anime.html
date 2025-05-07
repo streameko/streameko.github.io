@@ -16,40 +16,58 @@
     <div id="episodeList" class="space-y-2"></div>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const animeId = params.get("id");
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const animeId = params.get("id");
 
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        const anime = data[animeId];
-        if (!anime) {
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-          return;
+  fetch("animes_por_id.json")
+    .then(res => res.json())
+    .then(data => {
+      const anime = data[animeId];
+      if (!anime) {
+        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+        return;
+      }
+
+      document.getElementById("animeTitle").textContent = anime.name;
+
+      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+      document.getElementById("alternativeNames").textContent = altNames.length
+        ? `También conocido como: ${altNames.join(", ")}`
+        : "";
+
+      // Agrupar episodios por número
+      const episodiosAgrupados = {};
+      anime.episodes.forEach(ep => {
+        if (!episodiosAgrupados[ep.episode]) {
+          episodiosAgrupados[ep.episode] = [];
         }
-
-        document.getElementById("animeTitle").textContent = anime.name;
-
-        const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-        document.getElementById("alternativeNames").textContent = altNames.length
-          ? `También conocido como: ${altNames.join(", ")}`
-          : "";
-
-        document.getElementById("episodeCount").textContent = `${anime.episodes.length} episodio(s)`;
-
-        const list = document.getElementById("episodeList");
-        anime.episodes.forEach((ep, index) => {
-  const div = document.createElement("div");
-  div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition flex items-center justify-between";
-  div.innerHTML = `
-    <span class="font-medium">Episodio ${index + 1}</span>
-    <a href="${ep.url}" target="_blank" class="text-blue-400 hover:underline text-sm">${ep.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"}</a>
-  `;
-  list.appendChild(div);
-});
-
+        episodiosAgrupados[ep.episode].push(ep);
       });
-  </script>
+
+      const list = document.getElementById("episodeList");
+      const episodiosOrdenados = Object.keys(episodiosAgrupados).sort((a, b) => a - b);
+      document.getElementById("episodeCount").textContent = `${episodiosOrdenados.length} episodio(s)`;
+
+      episodiosOrdenados.forEach(num => {
+        const versiones = episodiosAgrupados[num];
+        const div = document.createElement("div");
+        div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition";
+
+        const enlaces = versiones.map(v =>
+          `<a href="${v.url}" target="_blank" class="text-blue-400 hover:underline text-sm block">
+            ${v.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"} - Servidor ${v.server}
+          </a>`
+        ).join("");
+
+        div.innerHTML = `
+          <span class="font-medium">Episodio ${num}</span>
+          <div class="mt-2 ml-4 space-y-1">${enlaces}</div>
+        `;
+        list.appendChild(div);
+      });
+    });
+</script>
+
 </body>
 </html>
