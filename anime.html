@@ -39,15 +39,16 @@
         document.getElementById("episodeCount").textContent = `${anime.episodes.length} episodio(s)`;
 
         const list = document.getElementById("episodeList");
-        anime.episodes.forEach(ep => {
-          const div = document.createElement("div");
-          div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition flex items-center justify-between";
-          div.innerHTML = `
-            <span class="font-medium">Episodio ${ep.number}</span>
-            <a href="${ep.url}" target="_blank" class="text-blue-400 hover:underline text-sm">${ep.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"}</a>
-          `;
-          list.appendChild(div);
-        });
+        anime.episodes.forEach((ep, index) => {
+  const div = document.createElement("div");
+  div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition flex items-center justify-between";
+  div.innerHTML = `
+    <span class="font-medium">Episodio ${index + 1}</span>
+    <a href="${ep.url}" target="_blank" class="text-blue-400 hover:underline text-sm">${ep.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"}</a>
+  `;
+  list.appendChild(div);
+});
+
       });
   </script>
 </body>
