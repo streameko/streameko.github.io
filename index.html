@@ -20,6 +20,52 @@
     <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    let animeData = {};
+
+    fetch("animes_por_id.json")
+      .then(res => res.json())
+      .then(data => {
+        animeData = data;
+        renderAnimeList();
+      })
+      .catch(err => {
+        document.getElementById("animeList").innerHTML = "<p class='text-red-500'>No se pudo cargar el archivo JSON. Verifica que 'animes_por_id.json' esté en la misma carpeta.</p>";
+        console.error("Error cargando JSON:", err);
+      });
+
+    const searchInput = document.getElementById("searchInput");
+    const dubToggle = document.getElementById("dubToggle");
+    const animeList = document.getElementById("animeList");
+
+    searchInput.addEventListener("input", renderAnimeList);
+    dubToggle.addEventListener("change", renderAnimeList);
+
+    function renderAnimeList() {
+      const query = searchInput.value.toLowerCase();
+      const dubbedOnly = dubToggle.checked;
+      animeList.innerHTML = "";
+
+      Object.entries(animeData).forEach(([id, anime]) => {
+        const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+        const matchesSearch = names.some(name => name.includes(query));
+        if (!matchesSearch) return;
+
+        const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
+        if (dubbedOnly && !hasDub) return;
+
+        const div = document.createElement("div");
+        div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition";
+        div.innerHTML = `<h2 class="text-lg font-semibold mb-2">${anime.name}</h2>
+                         <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm" onclick="viewAnime('${id}')">Ver Episodios</button>`;
+        animeList.appendChild(div);
+      });
+    }
+
+    function viewAnime(id) {
+      localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
+      window.location.href = "anime.html";
+    }
+  </script>
 </body>
 </html>
