@@ -16,40 +16,41 @@
     <div id="episodeList" class="space-y-2"></div>
   </div>
 
-  <script>
-    // Obtener ID desde la URL
-    const params = new URLSearchParams(window.location.search);
-    const animeId = params.get("id");
+<script>
+  // Obtener ID desde la URL
+  const params = new URLSearchParams(window.location.search);
+  const animeId = params.get("id");
 
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        const anime = data[animeId];
-        if (!anime) {
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-          return;
-        }
+  fetch("animes_por_id.json")
+    .then(res => res.json())
+    .then(data => {
+      const anime = data[animeId];
+      if (!anime) {
+        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+        return;
+      }
 
-        document.getElementById("animeTitle").textContent = anime.name;
+      document.getElementById("animeTitle").textContent = anime.name;
 
-        const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-        document.getElementById("alternativeNames").textContent = altNames.length
-          ? `También conocido como: ${altNames.join(", ")}`
-          : "";
+      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+      document.getElementById("alternativeNames").textContent = altNames.length
+        ? `También conocido como: ${altNames.join(", ")}`
+        : "";
 
-        document.getElementById("episodeCount").textContent = `${anime.episodes.length} episodio(s)`;
+      document.getElementById("episodeCount").textContent = `${anime.episodes.length} episodio(s)`;
 
-        const list = document.getElementById("episodeList");
-        anime.episodes.forEach(ep => {
-          const div = document.createElement("div");
-          div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition flex items-center justify-between";
-          div.innerHTML = `
-            <span class="font-medium">Episodio ${ep.number}</span>
-            <a href="${ep.url}" target="_blank" class="text-blue-400 hover:underline text-sm">${ep.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"}</a>
-          `;
-          list.appendChild(div);
-        });
+      const list = document.getElementById("episodeList");
+      anime.episodes.forEach((ep, index) => {
+        const div = document.createElement("div");
+        div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition flex items-center justify-between";
+        div.innerHTML = `
+          <span class="font-medium">Episodio ${index + 1}</span>
+          <a href="${ep.url}" target="_blank" class="text-blue-400 hover:underline text-sm">${ep.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"}</a>
+        `;
+        list.appendChild(div);
       });
-  </script>
+    });
+</script>
+
 </body>
 </html>
