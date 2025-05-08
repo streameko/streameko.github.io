@@ -27,7 +27,7 @@ function renderAnimeList() {
     const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
     if (dubbedOnly && !hasDub) return;
 
-    const poster = anime.poster || "poster_default.jpg";
+    const poster = anime.poster || "poster_default.png";
     const div = document.createElement("div");
     div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition flex flex-col items-center";
     div.innerHTML = `
