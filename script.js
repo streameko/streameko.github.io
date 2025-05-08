@@ -24,19 +24,22 @@ function renderAnimeList() {
     const matchesSearch = names.some(name => name.includes(query));
     if (!matchesSearch) return;
 
-    const hasDub = anime.episodes.some(ep => ep.language === 1);
+    const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
     if (dubbedOnly && !hasDub) return;
 
+    const poster = anime.poster || "poster_default.jpg";
     const div = document.createElement("div");
-    div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition";
-    div.innerHTML = `<h2 class="text-lg font-semibold mb-2">${anime.name}</h2>
-                     <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm" onclick="viewAnime('${id}')">Ver Episodios</button>`;
+    div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition flex flex-col items-center";
+    div.innerHTML = `
+      <img src="${poster}" alt="Poster" class="mb-2 w-full h-48 object-cover rounded">
+      <h2 class="text-lg font-semibold mb-2 text-center">${anime.name}</h2>
+      <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm" onclick="viewAnime('${id}')">Ver Episodios</button>`;
     animeList.appendChild(div);
   });
 }
 
-
 function viewAnime(id) {
   localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
-  window.location.href = "anime.html";
+  window.location.href = `anime.html?id=${id}`;
 }
+
