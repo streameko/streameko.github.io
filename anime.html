@@ -3,71 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalle de Anime</title>
+  <title>Streameko</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-  <div class="max-w-4xl mx-auto p-6">
-    <a href="index.html" class="text-blue-400 hover:underline">&larr; Volver al listado</a>
-    <h1 id="animeTitle" class="text-3xl font-bold mt-4 mb-2"></h1>
-    <p id="alternativeNames" class="text-sm text-gray-400 mb-4"></p>
-    <p id="episodeCount" class="mb-6"></p>
+  <div class="max-w-5xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center">Streameko - Beta</h1>
 
-    <div id="episodeList" class="space-y-2"></div>
+    <div class="bg-yellow-100 text-yellow-900 p-3 rounded text-xs text-center mb-6 relative max-w-3xl mx-auto">
+      <p>
+        Algunos servidores pueden mostrar anuncios. Estoy trabajando para reemplazarlos por opciones sin publicidad.<br>
+        Gracias por tu paciencia mientras desarrollo esto solo.<br>
+        <span class="italic text-yellow-800">– El equipo de Streameko</span>
+      </p>
+      <button onclick="this.parentElement.style.display='none'" class="absolute top-1 right-3 text-yellow-800 hover:text-yellow-600 text-sm font-bold">×</button>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+      <input id="searchInput" type="text" placeholder="Buscar anime..." class="flex-1 p-3 rounded bg-gray-800 border border-gray-600">
+      <label class="flex items-center text-sm">
+        <input id="dubToggle" type="checkbox" class="mr-2"> Solo Doblados
+      </label>
+    </div>
+
+    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
   </div>
 
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const animeId = params.get("id");
+  <script>
+    let animeData = {};
 
-  fetch("animes_por_id.json")
-    .then(res => res.json())
-    .then(data => {
-      const anime = data[animeId];
-      if (!anime) {
-        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-        return;
-      }
-
-      document.getElementById("animeTitle").textContent = anime.name;
-
-      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-      document.getElementById("alternativeNames").textContent = altNames.length
-        ? `También conocido como: ${altNames.join(", ")}`
-        : "";
-
-      // Agrupar episodios por número
-      const episodiosAgrupados = {};
-      anime.episodes.forEach(ep => {
-        if (!episodiosAgrupados[ep.episode]) {
-          episodiosAgrupados[ep.episode] = [];
-        }
-        episodiosAgrupados[ep.episode].push(ep);
+    fetch("animes_por_id.json")
+      .then(res => res.json())
+      .then(data => {
+        animeData = data;
+        renderAnimeList();
+      })
+      .catch(err => {
+        document.getElementById("animeList").innerHTML = "<p class='text-red-500'>No se pudo cargar el archivo JSON. Verifica que 'animes_por_id.json' esté en la misma carpeta.</p>";
+        console.error("Error cargando JSON:", err);
       });
 
-      const list = document.getElementById("episodeList");
-      const episodiosOrdenados = Object.keys(episodiosAgrupados).sort((a, b) => a - b);
-      document.getElementById("episodeCount").textContent = `${episodiosOrdenados.length} episodio(s)`;
+    const searchInput = document.getElementById("searchInput");
+    const dubToggle = document.getElementById("dubToggle");
+    const animeList = document.getElementById("animeList");
 
-      episodiosOrdenados.forEach(num => {
-        const versiones = episodiosAgrupados[num];
+    searchInput.addEventListener("input", renderAnimeList);
+    dubToggle.addEventListener("change", renderAnimeList);
+
+    function renderAnimeList() {
+      const query = searchInput.value.toLowerCase();
+      const dubbedOnly = dubToggle.checked;
+      animeList.innerHTML = "";
+
+      Object.entries(animeData).forEach(([id, anime]) => {
+        const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+        const matchesSearch = names.some(name => name.includes(query));
+        if (!matchesSearch) return;
+
+        const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
+        if (dubbedOnly && !hasDub) return;
+
+        const poster = anime.poster || "poster_default.jpg";
         const div = document.createElement("div");
-        div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition";
-
-        const enlaces = versiones.map(v =>
-          `<a href="${v.url}" target="_blank" class="text-blue-400 hover:underline text-sm block">
-            ${v.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"} - Servidor ${v.server}
-          </a>`
-        ).join("");
-
+        div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition flex flex-col items-center";
         div.innerHTML = `
-          <span class="font-medium">Episodio ${num}</span>
-          <div class="mt-2 ml-4 space-y-1">${enlaces}</div>
-        `;
-        list.appendChild(div);
+          <img src="${poster}" alt="Poster" class="mb-2 w-full h-48 object-cover rounded">
+          <h2 class="text-lg font-semibold mb-2 text-center">${anime.name}</h2>
+          <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm" onclick="viewAnime('${id}')">Ver Episodios</button>`;
+        animeList.appendChild(div);
       });
-    });
-</script>
+    }
 
+    function viewAnime(id) {
+      localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
+      window.location.href = `anime.html?id=${id}`;
+    }
+  </script>
 </body>
 </html>
