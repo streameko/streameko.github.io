@@ -5,100 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Detalle de Anime</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Poppins', 'sans-serif']
-          },
-          colors: {
-            pastel: {
-              bg: '#1e1e2e',
-              card: '#2a2a40',
-              accent: '#a6c1ee',
-              soft: '#d4bfff',
-              yellow: '#fcd34d',
-              pink: '#fca5a5'
-            }
-          }
-        }
-      }
-    }
-  </script>
 </head>
-<body class="bg-pastel-bg text-white font-sans min-h-screen">
-  <div class="max-w-4xl mx-auto p-6 animate-fadeIn">
-    <a href="index.html" class="text-pastel-accent hover:underline">&larr; Volver al listado</a>
-    <h1 id="animeTitle" class="text-3xl font-bold mt-4 mb-2 text-pastel-soft"></h1>
-    <p id="alternativeNames" class="text-sm text-pastel-pink mb-4"></p>
-    <p id="episodeCount" class="mb-6 text-pastel-soft"></p>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div class="max-w-4xl mx-auto p-6">
+    <a href="index.html" class="text-blue-400 hover:underline">&larr; Volver al listado</a>
+    <h1 id="animeTitle" class="text-3xl font-bold mt-4 mb-2"></h1>
+    <p id="alternativeNames" class="text-sm text-gray-400 mb-4"></p>
+    <p id="episodeCount" class="mb-6"></p>
 
-    <div id="episodeList" class="space-y-3"></div>
+    <div id="episodeList" class="space-y-2"></div>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const animeId = params.get("id");
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const animeId = params.get("id");
 
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        const anime = data[animeId];
-        if (!anime) {
-          document.body.innerHTML = '<p class="text-center text-pastel-pink mt-10">Anime no encontrado.</p>';
-          return;
+  fetch("animes_por_id.json")
+    .then(res => res.json())
+    .then(data => {
+      const anime = data[animeId];
+      if (!anime) {
+        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+        return;
+      }
+
+      document.getElementById("animeTitle").textContent = anime.name;
+
+      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+      document.getElementById("alternativeNames").textContent = altNames.length
+        ? `También conocido como: ${altNames.join(", ")}`
+        : "";
+
+      // Agrupar episodios por número
+      const episodiosAgrupados = {};
+      anime.episodes.forEach(ep => {
+        if (!episodiosAgrupados[ep.episode]) {
+          episodiosAgrupados[ep.episode] = [];
         }
-
-        document.getElementById("animeTitle").textContent = anime.name;
-
-        const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-        document.getElementById("alternativeNames").textContent = altNames.length
-          ? `También conocido como: ${altNames.join(", ")}`
-          : "";
-
-        const episodiosAgrupados = {};
-        anime.episodes.forEach(ep => {
-          if (!episodiosAgrupados[ep.episode]) {
-            episodiosAgrupados[ep.episode] = [];
-          }
-          episodiosAgrupados[ep.episode].push(ep);
-        });
-
-        const list = document.getElementById("episodeList");
-        const episodiosOrdenados = Object.keys(episodiosAgrupados).sort((a, b) => a - b);
-        document.getElementById("episodeCount").textContent = `${episodiosOrdenados.length} episodio(s)`;
-
-        episodiosOrdenados.forEach(num => {
-          const versiones = episodiosAgrupados[num];
-          const div = document.createElement("div");
-          div.className = "bg-pastel-card p-4 rounded-lg shadow-md hover:shadow-lg transition";
-
-          const enlaces = versiones.map(v =>
-            `<a href="${v.url}" target="_blank" class="text-pastel-accent hover:underline text-sm block">
-              ${v.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"} – Servidor ${v.server}
-            </a>`
-          ).join("");
-
-          div.innerHTML = `
-            <span class="font-medium text-pastel-soft">Episodio ${num}</span>
-            <div class="mt-2 ml-4 space-y-1">${enlaces}</div>
-          `;
-          list.appendChild(div);
-        });
+        episodiosAgrupados[ep.episode].push(ep);
       });
-  </script>
 
-  <style>
-    .animate-fadeIn {
-      animation: fadeIn 0.5s ease-in-out both;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+      const list = document.getElementById("episodeList");
+      const episodiosOrdenados = Object.keys(episodiosAgrupados).sort((a, b) => a - b);
+      document.getElementById("episodeCount").textContent = `${episodiosOrdenados.length} episodio(s)`;
+
+      episodiosOrdenados.forEach(num => {
+        const versiones = episodiosAgrupados[num];
+        const div = document.createElement("div");
+        div.className = "bg-gray-800 p-3 rounded shadow hover:bg-gray-700 transition";
+
+        const enlaces = versiones.map(v =>
+          `<a href="${v.url}" target="_blank" class="text-blue-400 hover:underline text-sm block">
+            ${v.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"} - Servidor ${v.server}
+          </a>`
+        ).join("");
+
+        div.innerHTML = `
+          <span class="font-medium">Episodio ${num}</span>
+          <div class="mt-2 ml-4 space-y-1">${enlaces}</div>
+        `;
+        list.appendChild(div);
+      });
+    });
+</script>
+
 </body>
 </html>
-
