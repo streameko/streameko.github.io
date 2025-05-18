@@ -5,29 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streameko</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif']
+          },
+          colors: {
+            pastel: {
+              bg: '#1e1e2e',
+              card: '#2a2a40',
+              accent: '#a6c1ee',
+              soft: '#d4bfff',
+              yellow: '#fcd34d',
+              pink: '#fca5a5'
+            }
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
-  <div class="max-w-5xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6 text-center">Streameko - Beta</h1>
+<body class="bg-pastel-bg text-white font-sans min-h-screen">
+  <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-4xl font-semibold mb-6 text-center text-pastel-accent drop-shadow">Streameko - Beta</h1>
 
-    <div class="bg-yellow-100 text-yellow-900 p-3 rounded text-xs text-center mb-6 relative max-w-3xl mx-auto">
+    <div class="bg-pastel-card text-pastel-yellow p-4 rounded-lg text-xs text-center mb-6 shadow-md relative">
       <p>
-        Durante un mes estará disponible "R.I.P Curly".<br>
-        Esto como una forma de mostrar respeto, así como tambien recordarlo.<br>
-        Todo nuestro catalogo se encuentra disponible igualmente.<br>
-        <span class="italic text-yellow-800">– El equipo de Streameko</span>
+        Durante un mes estará disponible <strong>"R.I.P Curly"</strong>.<br>
+        Esto como una forma de mostrar respeto y recordarlo.<br>
+        Todo nuestro catálogo sigue disponible.<br>
+        <span class="italic text-pastel-yellow">– El equipo de Streameko</span>
       </p>
-      <button onclick="this.parentElement.style.display='none'" class="absolute top-1 right-3 text-yellow-800 hover:text-yellow-600 text-sm font-bold">×</button>
+      <button onclick="this.parentElement.style.display='none'" class="absolute top-1 right-3 text-pastel-yellow hover:text-pastel-soft text-sm font-bold">×</button>
     </div>
 
     <div class="flex flex-col md:flex-row gap-4 mb-6">
-      <input id="searchInput" type="text" placeholder="Buscar anime..." class="flex-1 p-3 rounded bg-gray-800 border border-gray-600">
-      <label class="flex items-center text-sm">
+      <input id="searchInput" type="text" placeholder="Buscar anime..."
+             class="flex-1 p-3 rounded bg-pastel-card border border-pastel-soft text-white placeholder:text-pastel-soft focus:outline-none focus:ring-2 focus:ring-pastel-accent transition" />
+      <label class="flex items-center text-sm text-pastel-soft">
         <input id="dubToggle" type="checkbox" class="mr-2"> Solo Doblados
       </label>
     </div>
 
-    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 animate-fadeIn"></div>
   </div>
 
   <script>
@@ -40,7 +63,7 @@
         renderAnimeList();
       })
       .catch(err => {
-        document.getElementById("animeList").innerHTML = "<p class='text-red-500'>No se pudo cargar el archivo JSON. Verifica que 'animes_por_id.json' esté en la misma carpeta.</p>";
+        document.getElementById("animeList").innerHTML = "<p class='text-red-500'>No se pudo cargar el archivo JSON.</p>";
         console.error("Error cargando JSON:", err);
       });
 
@@ -66,11 +89,13 @@
 
         const poster = anime.poster || "poster_default.png";
         const div = document.createElement("div");
-        div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition flex flex-col items-center";
+        div.className = "bg-pastel-card p-4 rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex flex-col items-center";
         div.innerHTML = `
-          <img src="${poster}" alt="Poster" class="mb-2 w-full max-h-64 object-contain rounded">
-          <h2 class="text-lg font-semibold mb-2 text-center">${anime.name}</h2>
-          <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm" onclick="viewAnime('${id}')">Ver Episodios</button>`;
+          <img src="${poster}" alt="Poster" class="mb-3 w-full h-64 object-cover rounded">
+          <h2 class="text-lg font-semibold mb-2 text-center text-pastel-soft">${anime.name}</h2>
+          <button class="bg-pastel-accent text-black hover:bg-pastel-soft px-4 py-2 rounded text-sm font-semibold transition" onclick="viewAnime('${id}')">
+            Ver Episodios
+          </button>`;
         animeList.appendChild(div);
       });
     }
@@ -80,6 +105,16 @@
       window.location.href = `anime.html?id=${id}`;
     }
   </script>
+
+  <style>
+    .animate-fadeIn {
+      animation: fadeIn 0.6s ease-out both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </body>
 </html>
 
