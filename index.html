@@ -8,13 +8,17 @@
   <style>
     :root {
       --bg-dark: #2e284b;
-      --bg-light: #f2f0fa;
+      --bg-light: #eee9fb;
       --card-dark: rgba(255, 255, 255, 0.07);
       --card-light: #ffffff;
       --text-dark: #ffffff;
       --text-light: #2e284b;
       --primary-dark: #a78bfa;
       --primary-light: #7c3aed;
+    }
+
+    html, body {
+      transition: background-color 0.4s ease, color 0.4s ease;
     }
 
     [data-theme="dark"] body {
@@ -29,7 +33,10 @@
 
     .card {
       border-radius: 1rem;
-      transition: all 0.2s ease;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      transform: translateY(0);
+      opacity: 0;
+      animation: fadeInUp 0.4s ease forwards;
     }
 
     [data-theme="dark"] .card {
@@ -38,13 +45,14 @@
 
     [data-theme="light"] .card {
       background: var(--card-light);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
     .glass {
       border-radius: 1rem;
       padding: 1rem;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(10px);
+      transition: background 0.3s ease;
     }
 
     [data-theme="dark"] .glass {
@@ -77,9 +85,20 @@
     input::placeholder {
       color: #cfcfe0;
     }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(10px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
-<body class="min-h-screen font-sans transition-colors">
+<body class="min-h-screen font-sans">
   <div class="max-w-6xl mx-auto p-6">
     <h1 class="text-4xl font-bold text-center mb-4">Streameko <span class="text-white/50 text-lg font-normal">– Beta</span></h1>
 
@@ -92,7 +111,7 @@
 
     <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
       <div class="relative w-full max-w-md">
-        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20 dark:bg-gray-100 dark:text-gray-800 dark:placeholder-gray-500" />
+        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20 dark:bg-gray-100 dark:text-gray-800 dark:placeholder-gray-500 transition-all" />
         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 dark:text-gray-600">🔍</span>
       </div>
       <label class="flex items-center text-sm gap-2">
@@ -151,185 +170,6 @@
         const matchesSearch = names.some(name => name.includes(query));
         if (!matchesSearch) return;
 
-<!DOCTYPE html>
-<html lang="es" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Streameko</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      --bg-dark: #2b233c;
-      --bg-light: #dcd6e9;
-      --text-dark: #f3f3f4;
-      --text-light: #1d1b23;
-      --card-dark: rgba(255, 255, 255, 0.06);
-      --card-light: rgba(255, 255, 255, 0.8);
-      --accent-dark: #a78bfa;
-      --accent-light: #7c3aed;
-    }
-
-    html, body {
-      transition: background-color 0.5s ease, color 0.5s ease;
-    }
-
-    [data-theme="dark"] body {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    [data-theme="light"] body {
-      background-color: var(--bg-light);
-      color: var(--text-light);
-    }
-
-    .card {
-      border-radius: 1rem;
-      transition: all 0.4s ease;
-      transform: translateY(0);
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    [data-theme="dark"] .card {
-      background: var(--card-dark);
-    }
-
-    [data-theme="light"] .card {
-      background: var(--card-light);
-      color: var(--text-light);
-    }
-
-    .glass {
-      border-radius: 1rem;
-      padding: 1rem;
-      backdrop-filter: blur(10px);
-      transition: background 0.3s ease;
-    }
-
-    [data-theme="dark"] .glass {
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    [data-theme="light"] .glass {
-      background: rgba(255, 255, 255, 0.7);
-      color: var(--text-light);
-    }
-
-    #themeToggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 50;
-      background-color: var(--accent-dark);
-      color: white;
-      border-radius: 9999px;
-      padding: 0.75rem 1.2rem;
-      font-size: 0.9rem;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      transition: background 0.3s ease;
-    }
-
-    [data-theme="light"] #themeToggle {
-      background-color: var(--accent-light);
-    }
-
-    input::placeholder {
-      color: #b8b8cc;
-    }
-
-    .search-input {
-      transition: all 0.3s ease;
-    }
-
-    [data-theme="light"] .search-input {
-      background-color: #f2f0f9;
-      color: #2c2738;
-      border-color: #bbb4cc;
-    }
-
-    [data-theme="dark"] .search-input {
-      background-color: #3d3651;
-      color: #f2f2f2;
-      border-color: #5e5670;
-    }
-  </style>
-</head>
-<body class="min-h-screen font-sans">
-  <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-4xl font-bold text-center mb-4">Streameko <span class="opacity-60 text-lg font-normal">– Beta</span></h1>
-
-    <div class="glass text-sm mb-6 text-center shadow max-w-3xl mx-auto">
-      <p class="mb-1 font-semibold text-yellow-300">Durante un mes estará disponible "R.I.P Curly".</p>
-      <p class="mb-1">Esto como una forma de mostrar respeto y recordarlo.</p>
-      <p>Todo nuestro catálogo sigue disponible.</p>
-      <p class="mt-2 italic opacity-80">– El equipo de Streameko</p>
-    </div>
-
-    <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
-      <div class="relative w-full max-w-md">
-        <input id="searchInput" type="text" placeholder="Buscar anime..." class="search-input w-full p-3 pl-10 rounded-full border focus:outline-none" />
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-60">🔍</span>
-      </div>
-      <label class="flex items-center text-sm gap-2">
-        <input id="dubToggle" type="checkbox" class="accent-pink-400"> Solo Doblados
-      </label>
-    </div>
-
-    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
-  </div>
-
-  <button id="themeToggle">Modo Claro</button>
-
-  <script>
-    const root = document.documentElement;
-    const themeBtn = document.getElementById("themeToggle");
-    let currentTheme = localStorage.getItem("theme") || "dark";
-
-    function applyTheme(theme) {
-      root.setAttribute("data-theme", theme);
-      themeBtn.textContent = theme === "dark" ? "Modo Claro" : "Modo Oscuro";
-      localStorage.setItem("theme", theme);
-    }
-
-    themeBtn.addEventListener("click", () => {
-      currentTheme = currentTheme === "dark" ? "light" : "dark";
-      applyTheme(currentTheme);
-    });
-
-    applyTheme(currentTheme);
-
-    // Lógica de la app
-    let animeData = {};
-
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        animeData = data;
-        renderAnimeList();
-      });
-
-    const searchInput = document.getElementById("searchInput");
-    const dubToggle = document.getElementById("dubToggle");
-    const animeList = document.getElementById("animeList");
-
-    searchInput.addEventListener("input", renderAnimeList);
-    dubToggle.addEventListener("change", renderAnimeList);
-
-    function renderAnimeList() {
-      const query = searchInput.value.toLowerCase();
-      const dubbedOnly = dubToggle.checked;
-      animeList.innerHTML = "";
-
-      Object.entries(animeData).forEach(([id, anime]) => {
-        const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
-        const matchesSearch = names.some(name => name.includes(query));
-        if (!matchesSearch) return;
-
         const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
         if (dubbedOnly && !hasDub) return;
 
@@ -337,7 +177,7 @@
         const div = document.createElement("div");
         div.className = "card p-4 flex flex-col items-center text-center";
         div.innerHTML = `
-          <img src="${poster}" alt="Poster" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px] shadow" />
+          <img src="${poster}" alt="Poster" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
           <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
           <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
         `;
@@ -352,4 +192,3 @@
   </script>
 </body>
 </html>
-
