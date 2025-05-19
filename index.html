@@ -1,33 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Streameko</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white min-h-screen">
-  <div class="max-w-5xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6 text-center">Streameko - Beta</h1>
+  <style>
+    body {
+      background-color: #2e284b;
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-    <div class="bg-yellow-100 text-yellow-900 p-3 rounded text-xs text-center mb-6 relative max-w-3xl mx-auto">
-      <p>
-        Durante un mes estará disponible "R.I.P Curly".<br>
-        Esto como una forma de mostrar respeto, así como tambien recordarlo.<br>
-        Todo nuestro catalogo se encuentra disponible igualmente.<br>
-        <span class="italic text-yellow-800">– El equipo de Streameko</span>
-      </p>
-      <button onclick="this.parentElement.style.display='none'" class="absolute top-1 right-3 text-yellow-800 hover:text-yellow-600 text-sm font-bold">×</button>
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+    }
+
+    input::placeholder {
+      color: #cfcfe0;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    button {
+      transition: background 0.2s ease;
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen">
+  <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-4xl font-bold text-center mb-4 text-white/90">Streameko <span class="text-white/50 text-lg font-normal">– Beta</span></h1>
+
+    <div class="glass p-4 text-sm text-white mb-6 text-center shadow max-w-3xl mx-auto">
+      <p class="mb-1"><span class="text-yellow-300 font-semibold">Durante un mes estará disponible "R.I.P Curly".</span></p>
+      <p class="mb-1">Esto como una forma de mostrar respeto y recordarlo.</p>
+      <p>Todo nuestro catálogo sigue disponible.</p>
+      <p class="mt-2 italic text-white/80">– El equipo de Streameko</p>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
-      <input id="searchInput" type="text" placeholder="Buscar anime..." class="flex-1 p-3 rounded bg-gray-800 border border-gray-600">
-      <label class="flex items-center text-sm">
-        <input id="dubToggle" type="checkbox" class="mr-2"> Solo Doblados
+    <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
+      <div class="relative w-full max-w-md">
+        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20" />
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">🔍</span>
+      </div>
+      <label class="flex items-center text-white/70 text-sm gap-2">
+        <input id="dubToggle" type="checkbox" class="accent-pink-400"> Solo Doblados
       </label>
     </div>
 
-    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </div>
 
   <script>
@@ -40,7 +71,7 @@
         renderAnimeList();
       })
       .catch(err => {
-        document.getElementById("animeList").innerHTML = "<p class='text-red-500'>No se pudo cargar el archivo JSON. Verifica que 'animes_por_id.json' esté en la misma carpeta.</p>";
+        document.getElementById("animeList").innerHTML = "<p class='text-red-500'>No se pudo cargar el archivo JSON.</p>";
         console.error("Error cargando JSON:", err);
       });
 
@@ -61,16 +92,17 @@
         const matchesSearch = names.some(name => name.includes(query));
         if (!matchesSearch) return;
 
-        const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
+        const hasDub = anime.episodes.some(ep => ep.language === 1);
         if (dubbedOnly && !hasDub) return;
 
         const poster = anime.poster || "poster_default.png";
         const div = document.createElement("div");
-        div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition flex flex-col items-center";
+        div.className = "card p-4 flex flex-col items-center text-center";
         div.innerHTML = `
-          <img src="${poster}" alt="Poster" class="mb-2 w-full max-h-64 object-contain rounded">
-          <h2 class="text-lg font-semibold mb-2 text-center">${anime.name}</h2>
-          <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm" onclick="viewAnime('${id}')">Ver Episodios</button>`;
+          <img src="${poster}" alt="Poster" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
+          <h2 class="text-white font-semibold text-base mb-2">${anime.name}</h2>
+          <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
+        `;
         animeList.appendChild(div);
       });
     }
@@ -82,4 +114,3 @@
   </script>
 </body>
 </html>
-
