@@ -1,150 +1,172 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Streameko – Ver Anime</title>
-  <meta name="theme-color" content="#2e284b" />
+  <title>Detalles de Anime – Streameko</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
       --bg: #2e284b;
       --card: rgba(255, 255, 255, 0.06);
       --text: #ffffff;
-      --primary: #a78bfa;
       --glass: rgba(255, 255, 255, 0.05);
-    }
+      --primary: #a78bfa;
+    }html, body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
 
-    html, body {
-      background-color: var(--bg);
-      color: var(--text);
-    }
+.card {
+  background: var(--card);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.4s ease forwards;
+}
 
-    .card {
-      background: var(--card);
-      border-radius: 1rem;
-    }
+.glass {
+  background: var(--glass);
+  border-radius: 1rem;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+}
 
-    .glass {
-      background: var(--glass);
-      border-radius: 1rem;
-      padding: 1rem;
-      backdrop-filter: blur(10px);
-    }
+.tab-button {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-    .tab-button {
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      transition: all 0.3s ease;
-    }
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    .tab-button.active {
-      background-color: #a78bfa;
-      color: white;
-    }
-
-    .tab-button:not(.active):hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
   </style>
 </head>
 <body class="min-h-screen font-sans">
+  <div class="max-w-4xl mx-auto p-6">
+    <a href="index.html" class="text-indigo-300 hover:underline text-sm">&larr; Volver al inicio</a><div class="glass mt-4 mb-6 text-center shadow">
+  <h1 id="animeTitle" class="text-3xl font-bold mb-1"></h1>
+  <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
+  <p id="episodeCount" class="text-white/80"></p>
+</div>
 
-  <!-- Loader estilo Streameko -->
-  <div id="loader" class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
-    <div class="glass text-white text-center px-6 py-4 rounded-xl animate-pulse shadow-xl">
-      <p class="text-lg font-semibold">Cargando episodios...</p>
+<div class="flex gap-4 mb-4 justify-center">
+  <button id="tab-sub" class="tab-button bg-indigo-600 text-white">Subtitulado</button>
+  <button id="tab-dub" class="tab-button bg-indigo-400 text-white/80">Doblado</button>
+</div>
+
+<div id="episodeListSub" class="space-y-4"></div>
+<div id="episodeListDub" class="space-y-4 hidden"></div>
+
+  </div>  <!-- Modal -->  <div id="videoModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-4 max-w-3xl w-full relative">
+      <button id="closeModal" class="absolute top-2 right-2 text-black font-bold text-xl">✖</button>
+      <div id="modalContent" class="aspect-video w-full"></div>
     </div>
-  </div>
+  </div><script>
+  const params = new URLSearchParams(window.location.search);
+  const animeId = params.get("id");
 
-  <!-- Contenido principal oculto hasta que cargue -->
-  <div id="content" class="max-w-4xl mx-auto p-6 hidden">
-    <a href="index.html" class="text-indigo-300 hover:underline text-sm">&larr; Volver al inicio</a>
+  const openModal = (embedUrl) => {
+    document.getElementById("modalContent").innerHTML = `
+      <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
+    `;
+    document.getElementById("videoModal").classList.remove("hidden");
+  };
 
-    <div class="glass mt-4 mb-6 text-center shadow">
-      <h1 id="animeTitle" class="text-3xl font-bold mb-1"></h1>
-      <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
-      <p id="episodeCount" class="text-white/80"></p>
-    </div>
+  document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("videoModal").classList.add("hidden");
+    document.getElementById("modalContent").innerHTML = "";
+  });
 
-    <div class="flex gap-4 mb-4 justify-center">
-      <button id="tab-sub" class="tab-button active">Subtitulado</button>
-      <button id="tab-dub" class="tab-button">Doblado</button>
-    </div>
-
-    <div id="episodeListSub" class="space-y-4"></div>
-    <div id="episodeListDub" class="space-y-4 hidden"></div>
-  </div>
-
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const animeId = urlParams.get("id");
-    if (!animeId) {
-      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">ID de anime no proporcionado.</p>';
-    }
-
-    function renderEpisodios(episodios, contenedorId) {
-      const contenedor = document.getElementById(contenedorId);
-      episodios.forEach(ep => {
-        const div = document.createElement("div");
-        div.className = "card p-4 flex flex-col md:flex-row md:items-center justify-between";
-        div.innerHTML = `
-          <p class="text-sm mb-2 md:mb-0">${ep.title || `Episodio ${ep.number}`}</p>
-          <a href="${ep.url}" target="_blank" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1 rounded-full text-sm transition">Ver</a>
-        `;
-        contenedor.appendChild(div);
-      });
-    }
-
-    function setActiveTab(tab) {
-      const subBtn = document.getElementById("tab-sub");
-      const dubBtn = document.getElementById("tab-dub");
-      const listSub = document.getElementById("episodeListSub");
-      const listDub = document.getElementById("episodeListDub");
-
-      if (tab === "sub") {
-        subBtn.classList.add("active");
-        dubBtn.classList.remove("active");
-        listSub.classList.remove("hidden");
-        listDub.classList.add("hidden");
+  const setActiveTab = (tab) => {
+    ["sub", "dub"].forEach(type => {
+      const btn = document.getElementById(`tab-${type}`);
+      if (type === tab) {
+        btn.classList.remove("bg-indigo-400", "text-white/80");
+        btn.classList.add("bg-indigo-600", "text-white");
       } else {
-        subBtn.classList.remove("active");
-        dubBtn.classList.add("active");
-        listSub.classList.add("hidden");
-        listDub.classList.remove("hidden");
+        btn.classList.remove("bg-indigo-600", "text-white");
+        btn.classList.add("bg-indigo-400", "text-white/80");
       }
+
+      document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`).classList.toggle("hidden", type !== tab);
+    });
+  };
+
+  ["sub", "dub"].forEach(type =>
+    document.getElementById(`tab-${type}`).addEventListener("click", () => setActiveTab(type))
+  );
+
+  fetch("animes_por_id.json")
+  .then(res => res.json())
+  .then(data => {
+    const anime = data[animeId];
+    if (!anime) {
+      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+      return;
     }
 
-    document.getElementById("tab-sub").addEventListener("click", () => setActiveTab("sub"));
-    document.getElementById("tab-dub").addEventListener("click", () => setActiveTab("dub"));
+    document.getElementById("animeTitle").textContent = anime.name;
 
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        const anime = data[animeId];
-        if (!anime) {
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-          return;
-        }
+    const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+    document.getElementById("alternativeNames").textContent = altNames.length
+      ? `También conocido como: ${altNames.join(", ")}`
+      : "";
 
-        document.getElementById("animeTitle").textContent = anime.name || "Anime sin nombre";
-        document.getElementById("alternativeNames").textContent = anime.alternative_names?.join(" / ") || "";
-        document.getElementById("episodeCount").textContent = `Episodios totales: ${anime.episodes?.length || 0}`;
+    const episodiosSub = anime.episodes.filter(e => e.language === 0);
+    const episodiosDub = anime.episodes.filter(e => e.language === 1);
 
-        const episodiosSub = anime.episodes?.filter(e => e.language === 0) || [];
-        const episodiosDub = anime.episodes?.filter(e => e.language === 1) || [];
+    const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
+    document.getElementById("episodeCount").textContent =
+      `${episodiosUnicos.size} episodio(s)`;
 
-        renderEpisodios(episodiosSub, "episodeListSub");
-        renderEpisodios(episodiosDub, "episodeListDub");
+    const renderEpisodios = (episodios, containerId) => {
+      const container = document.getElementById(containerId);
+      const agrupados = {};
 
-        if (episodiosDub.length === 0) {
-          document.getElementById("tab-dub").classList.add("hidden");
-        }
-
-        setActiveTab("sub");
-        document.getElementById("loader").remove();
-        document.getElementById("content").classList.remove("hidden");
+      episodios.forEach(ep => {
+        if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
+        agrupados[ep.episode].push(ep);
       });
-  </script>
-</body>
+
+      const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
+      ordenados.forEach(num => {
+        const versiones = agrupados[num];
+        const div = document.createElement("div");
+        div.className = "card p-4";
+
+        const botones = versiones.map(v => `
+          <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
+            Servidor ${v.server}
+          </button>
+        `).join(" ");
+
+        div.innerHTML = `
+          <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
+          <div class="flex flex-wrap gap-2">${botones}</div>
+        `;
+
+        container.appendChild(div);
+      });
+    };
+
+    renderEpisodios(episodiosSub, "episodeListSub");
+    renderEpisodios(episodiosDub, "episodeListDub");
+
+    
+    if (episodiosDub.length === 0) {
+      document.getElementById("tab-dub").classList.add("hidden");
+    }
+
+    setActiveTab("sub");
+  });
+</script></body>
 </html>
