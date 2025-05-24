@@ -19,16 +19,6 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    #fadeOverlay {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-}
-
-#fadeOverlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
     :root {
       --bg: #2e284b;
       --card: rgba(255, 255, 255, 0.06);
@@ -160,6 +150,5 @@
       window.location.href = `anime.html?id=${id}`;
     }
   </script>
-<div id="fadeOverlay" class="fixed inset-0 bg-[#2e284b] z-50"></div>
 </body>
 </html>
