@@ -54,12 +54,48 @@
       <p id="episodeCount" class="text-white/80"></p>
     </div>
 
-    <div id="episodeList" class="space-y-4"></div>
+    <div class="flex gap-4 mb-4 justify-center">
+      <button id="tab-sub" class="px-4 py-2 bg-indigo-600 rounded-full font-semibold">Subtitulado</button>
+      <button id="tab-dub" class="px-4 py-2 bg-indigo-400 rounded-full font-semibold">Doblado</button>
+    </div>
+
+    <div id="episodeListSub" class="space-y-4"></div>
+    <div id="episodeListDub" class="space-y-4 hidden"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="videoModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-4 max-w-3xl w-full relative">
+      <button id="closeModal" class="absolute top-2 right-2 text-black font-bold text-xl">✖</button>
+      <div id="modalContent" class="aspect-video w-full"></div>
+    </div>
   </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const animeId = params.get("id");
+
+    const openModal = (embedUrl) => {
+      document.getElementById("modalContent").innerHTML = `
+        <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
+      `;
+      document.getElementById("videoModal").classList.remove("hidden");
+    };
+
+    document.getElementById("closeModal").addEventListener("click", () => {
+      document.getElementById("videoModal").classList.add("hidden");
+      document.getElementById("modalContent").innerHTML = "";
+    });
+
+    document.getElementById("tab-sub").addEventListener("click", () => {
+      document.getElementById("episodeListSub").classList.remove("hidden");
+      document.getElementById("episodeListDub").classList.add("hidden");
+    });
+
+    document.getElementById("tab-dub").addEventListener("click", () => {
+      document.getElementById("episodeListSub").classList.add("hidden");
+      document.getElementById("episodeListDub").classList.remove("hidden");
+    });
 
     fetch("animes_por_id.json")
       .then(res => res.json())
@@ -77,35 +113,44 @@
           ? `También conocido como: ${altNames.join(", ")}`
           : "";
 
-        const episodiosAgrupados = {};
-        anime.episodes.forEach(ep => {
-          if (!episodiosAgrupados[ep.episode]) {
-            episodiosAgrupados[ep.episode] = [];
-          }
-          episodiosAgrupados[ep.episode].push(ep);
-        });
+        const episodiosSub = anime.episodes.filter(e => e.language === 0);
+        const episodiosDub = anime.episodes.filter(e => e.language === 1);
 
-        const list = document.getElementById("episodeList");
-        const episodiosOrdenados = Object.keys(episodiosAgrupados).sort((a, b) => a - b);
-        document.getElementById("episodeCount").textContent = `${episodiosOrdenados.length} episodio(s)`;
+        document.getElementById("episodeCount").textContent =
+          `${anime.episodes.length} episodio(s)`;
 
-        episodiosOrdenados.forEach(num => {
-          const versiones = episodiosAgrupados[num];
-          const div = document.createElement("div");
-          div.className = "card p-4";
+        const renderEpisodios = (episodios, containerId) => {
+          const container = document.getElementById(containerId);
+          const agrupados = {};
 
-          const enlaces = versiones.map(v =>
-            `<a href="${v.url}" target="_blank" class="text-indigo-300 hover:underline text-sm block">
-              ${v.language === 1 ? "Ver (Español)" : "Ver (Subtitulado)"} – Servidor ${v.server}
-            </a>`
-          ).join("");
+          episodios.forEach(ep => {
+            if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
+            agrupados[ep.episode].push(ep);
+          });
 
-          div.innerHTML = `
-            <span class="font-semibold text-white/90">Episodio ${num}</span>
-            <div class="mt-2 ml-2 space-y-1">${enlaces}</div>
-          `;
-          list.appendChild(div);
-        });
+          const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
+          ordenados.forEach(num => {
+            const versiones = agrupados[num];
+            const div = document.createElement("div");
+            div.className = "card p-4";
+
+            const botones = versiones.map(v => `
+              <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
+                Servidor ${v.server}
+              </button>
+            `).join(" ");
+
+            div.innerHTML = `
+              <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
+              <div class="flex flex-wrap gap-2">${botones}</div>
+            `;
+
+            container.appendChild(div);
+          });
+        };
+
+        renderEpisodios(episodiosSub, "episodeListSub");
+        renderEpisodios(episodiosDub, "episodeListDub");
       });
   </script>
 </body>
