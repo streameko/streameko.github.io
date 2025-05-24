@@ -114,63 +114,68 @@
   );
 
   fetch("animes_por_id.json")
-    .then(res => res.json())
-    .then(data => {
-      const anime = data[animeId];
-      if (!anime) {
-        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-        return;
-      }
+  .then(res => res.json())
+  .then(data => {
+    const anime = data[animeId];
+    if (!anime) {
+      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+      return;
+    }
 
-      document.getElementById("animeTitle").textContent = anime.name;
+    document.getElementById("animeTitle").textContent = anime.name;
 
-      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-      document.getElementById("alternativeNames").textContent = altNames.length
-        ? `También conocido como: ${altNames.join(", ")}`
-        : "";
+    const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+    document.getElementById("alternativeNames").textContent = altNames.length
+      ? `También conocido como: ${altNames.join(", ")}`
+      : "";
 
-      const episodiosSub = anime.episodes.filter(e => e.language === 0);
-      const episodiosDub = anime.episodes.filter(e => e.language === 1);
+    const episodiosSub = anime.episodes.filter(e => e.language === 0);
+    const episodiosDub = anime.episodes.filter(e => e.language === 1);
 
-      const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
-      document.getElementById("episodeCount").textContent =
-        `${episodiosUnicos.size} episodio(s)`;
+    const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
+    document.getElementById("episodeCount").textContent =
+      `${episodiosUnicos.size} episodio(s)`;
 
-      const renderEpisodios = (episodios, containerId) => {
-        const container = document.getElementById(containerId);
-        const agrupados = {};
+    const renderEpisodios = (episodios, containerId) => {
+      const container = document.getElementById(containerId);
+      const agrupados = {};
 
-        episodios.forEach(ep => {
-          if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
-          agrupados[ep.episode].push(ep);
-        });
+      episodios.forEach(ep => {
+        if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
+        agrupados[ep.episode].push(ep);
+      });
 
-        const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
-        ordenados.forEach(num => {
-          const versiones = agrupados[num];
-          const div = document.createElement("div");
-          div.className = "card p-4";
+      const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
+      ordenados.forEach(num => {
+        const versiones = agrupados[num];
+        const div = document.createElement("div");
+        div.className = "card p-4";
 
-          const botones = versiones.map(v => `
-            <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
-              Servidor ${v.server}
-            </button>
-          `).join(" ");
+        const botones = versiones.map(v => `
+          <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
+            Servidor ${v.server}
+          </button>
+        `).join(" ");
 
-          div.innerHTML = `
-            <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
-            <div class="flex flex-wrap gap-2">${botones}</div>
-          `;
+        div.innerHTML = `
+          <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
+          <div class="flex flex-wrap gap-2">${botones}</div>
+        `;
 
-          container.appendChild(div);
-        });
-      };
+        container.appendChild(div);
+      });
+    };
 
-      renderEpisodios(episodiosSub, "episodeListSub");
-      renderEpisodios(episodiosDub, "episodeListDub");
+    renderEpisodios(episodiosSub, "episodeListSub");
+    renderEpisodios(episodiosDub, "episodeListDub");
 
-      setActiveTab("sub");
-    });
+    
+    if (episodiosDub.length === 0) {
+      document.getElementById("tab-dub").classList.add("hidden");
+    }
+
+    setActiveTab("sub");
+  });
 </script>
 </body>
 </html>
