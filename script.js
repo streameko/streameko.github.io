@@ -39,7 +39,13 @@ function renderAnimeList() {
 }
 
 function viewAnime(id) {
-  localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
-  window.location.href = `anime.html?id=${id}`;
+  const overlay = document.getElementById("fadeOverlay");
+  overlay.classList.remove("pointer-events-none");
+  overlay.classList.add("opacity-100");
+
+  setTimeout(() => {
+    localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
+    window.location.href = `anime.html?id=${id}`;
+  }, 500);
 }
 
