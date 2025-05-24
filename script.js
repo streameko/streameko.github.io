@@ -40,8 +40,7 @@ function renderAnimeList() {
 
 function viewAnime(id) {
   const overlay = document.getElementById("fadeOverlay");
-  overlay.classList.remove("pointer-events-none");
-  overlay.classList.add("opacity-100");
+  overlay.classList.add("active");
 
   setTimeout(() => {
     localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
