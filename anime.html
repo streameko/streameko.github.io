@@ -71,87 +71,103 @@
     </div>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const animeId = params.get("id");
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const animeId = params.get("id");
 
-    const openModal = (embedUrl) => {
-      document.getElementById("modalContent").innerHTML = `
-        <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
-      `;
-      document.getElementById("videoModal").classList.remove("hidden");
-    };
+  const openModal = (embedUrl) => {
+    document.getElementById("modalContent").innerHTML = `
+      <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
+    `;
+    document.getElementById("videoModal").classList.remove("hidden");
+  };
 
-    document.getElementById("closeModal").addEventListener("click", () => {
-      document.getElementById("videoModal").classList.add("hidden");
-      document.getElementById("modalContent").innerHTML = "";
-    });
+  document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("videoModal").classList.add("hidden");
+    document.getElementById("modalContent").innerHTML = "";
+  });
 
-    document.getElementById("tab-sub").addEventListener("click", () => {
+  const setActiveTab = (tab) => {
+    document.getElementById("tab-sub").classList.remove("bg-indigo-600", "text-white");
+    document.getElementById("tab-dub").classList.remove("bg-indigo-600", "text-white");
+
+    document.getElementById("tab-sub").classList.add("bg-indigo-400");
+    document.getElementById("tab-dub").classList.add("bg-indigo-400");
+
+    if (tab === "sub") {
+      document.getElementById("tab-sub").classList.add("bg-indigo-600", "text-white");
       document.getElementById("episodeListSub").classList.remove("hidden");
       document.getElementById("episodeListDub").classList.add("hidden");
-    });
-
-    document.getElementById("tab-dub").addEventListener("click", () => {
-      document.getElementById("episodeListSub").classList.add("hidden");
+    } else {
+      document.getElementById("tab-dub").classList.add("bg-indigo-600", "text-white");
       document.getElementById("episodeListDub").classList.remove("hidden");
+      document.getElementById("episodeListSub").classList.add("hidden");
+    }
+  };
+
+  document.getElementById("tab-sub").addEventListener("click", () => setActiveTab("sub"));
+  document.getElementById("tab-dub").addEventListener("click", () => setActiveTab("dub"));
+
+  fetch("animes_por_id.json")
+    .then(res => res.json())
+    .then(data => {
+      const anime = data[animeId];
+      if (!anime) {
+        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+        return;
+      }
+
+      document.getElementById("animeTitle").textContent = anime.name;
+
+      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+      document.getElementById("alternativeNames").textContent = altNames.length
+        ? `También conocido como: ${altNames.join(", ")}`
+        : "";
+
+      const episodiosSub = anime.episodes.filter(e => e.language === 0);
+      const episodiosDub = anime.episodes.filter(e => e.language === 1);
+
+      // Conteo único por número de episodio
+      const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
+      document.getElementById("episodeCount").textContent =
+        `${episodiosUnicos.size} episodio(s)`;
+
+      const renderEpisodios = (episodios, containerId) => {
+        const container = document.getElementById(containerId);
+        const agrupados = {};
+
+        episodios.forEach(ep => {
+          if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
+          agrupados[ep.episode].push(ep);
+        });
+
+        const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
+        ordenados.forEach(num => {
+          const versiones = agrupados[num];
+          const div = document.createElement("div");
+          div.className = "card p-4";
+
+          const botones = versiones.map(v => `
+            <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
+              Servidor ${v.server}
+            </button>
+          `).join(" ");
+
+          div.innerHTML = `
+            <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
+            <div class="flex flex-wrap gap-2">${botones}</div>
+          `;
+
+          container.appendChild(div);
+        });
+      };
+
+      renderEpisodios(episodiosSub, "episodeListSub");
+      renderEpisodios(episodiosDub, "episodeListDub");
+
+      // Activar tab por defecto
+      setActiveTab("sub");
     });
-
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        const anime = data[animeId];
-        if (!anime) {
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-          return;
-        }
-
-        document.getElementById("animeTitle").textContent = anime.name;
-
-        const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-        document.getElementById("alternativeNames").textContent = altNames.length
-          ? `También conocido como: ${altNames.join(", ")}`
-          : "";
-
-        const episodiosSub = anime.episodes.filter(e => e.language === 0);
-        const episodiosDub = anime.episodes.filter(e => e.language === 1);
-
-        document.getElementById("episodeCount").textContent =
-          `${anime.episodes.length} episodio(s)`;
-
-        const renderEpisodios = (episodios, containerId) => {
-          const container = document.getElementById(containerId);
-          const agrupados = {};
-
-          episodios.forEach(ep => {
-            if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
-            agrupados[ep.episode].push(ep);
-          });
-
-          const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
-          ordenados.forEach(num => {
-            const versiones = agrupados[num];
-            const div = document.createElement("div");
-            div.className = "card p-4";
-
-            const botones = versiones.map(v => `
-              <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
-                Servidor ${v.server}
-              </button>
-            `).join(" ");
-
-            div.innerHTML = `
-              <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
-              <div class="flex flex-wrap gap-2">${botones}</div>
-            `;
-
-            container.appendChild(div);
-          });
-        };
-
-        renderEpisodios(episodiosSub, "episodeListSub");
-        renderEpisodios(episodiosDub, "episodeListDub");
-      });
-  </script>
+</script>
 </body>
 </html>
