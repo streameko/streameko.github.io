@@ -29,22 +29,17 @@ function renderAnimeList() {
 
     const poster = anime.poster || "poster_default.png";
     const div = document.createElement("div");
-    div.className = "bg-gray-800 p-4 rounded shadow hover:bg-gray-700 transition flex flex-col items-center";
+    div.className = "card p-4 flex flex-col items-center text-center";
     div.innerHTML = `
-      <img src="${poster}" alt="Poster" class="mb-2 w-full h-48 object-cover rounded">
-      <h2 class="text-lg font-semibold mb-2 text-center">${anime.name}</h2>
-      <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm" onclick="viewAnime('${id}')">Ver Episodios</button>`;
+      <img src="${poster}" alt="Poster de ${anime.name}" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
+      <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
+      <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
+    `;
     animeList.appendChild(div);
   });
 }
 
 function viewAnime(id) {
-  const overlay = document.getElementById("fadeOverlay");
-  overlay.classList.add("active");
-
-  setTimeout(() => {
-    localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
-    window.location.href = `anime.html?id=${id}`;
-  }, 500);
+  localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
+  window.location.href = `anime.html?id=${id}`;
 }
-
