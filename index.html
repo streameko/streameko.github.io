@@ -3,7 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Streameko</title>
+  <title>Streameko – Ver Anime Gratis Subtitulado y Doblado</title>
+
+  <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español. Accede a cientos de series con alta calidad y sin límites." />
+  <meta name="keywords" content="anime, ver anime, anime gratis, anime subtitulado, anime doblado, anime online, streameko" />
+  <meta name="author" content="Streameko" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2e284b" />
+  <link rel="canonical" href="https://streameko.github.io/" />
+
+  <meta property="og:title" content="Streameko – Ver Anime Gratis Subtitulado y Doblado" />
+  <meta property="og:description" content="Disfruta anime online sin límites. Subtitulado y doblado al español en Streameko." />
+  <meta property="og:url" content="https://streameko.github.io/" />
+  <meta property="og:type" content="website" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
@@ -124,7 +137,7 @@
         const div = document.createElement("div");
         div.className = "card p-4 flex flex-col items-center text-center";
         div.innerHTML = `
-          <img src="${poster}" alt="Poster" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
+          <img src="${poster}" alt="Poster de ${anime.name}" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
           <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
           <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
         `;
