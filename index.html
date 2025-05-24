@@ -90,6 +90,7 @@
 
     <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
       <div class="relative w-full max-w-md">
+        <label for="searchInput" class="sr-only">Buscar anime</label>
         <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20 transition-all" />
         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">🔍</span>
       </div>
@@ -100,6 +101,7 @@
       </label>
     </div>
 
+    <div id="loader" class="text-white text-center mt-10 animate-pulse">Cargando animes...</div>
     <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </div>
 
@@ -110,6 +112,7 @@
       .then(res => res.json())
       .then(data => {
         animeData = data;
+        document.getElementById("loader").style.display = "none";
         renderAnimeList();
       });
 
@@ -135,9 +138,9 @@
 
         const poster = anime.poster || "poster_default.png";
         const div = document.createElement("div");
-        div.className = "card p-4 flex flex-col items-center text-center";
+        div.className = "card p-4 flex flex-col items-center text-center hover:scale-[1.02] hover:shadow-xl transition-transform";
         div.innerHTML = `
-          <img src="${poster}" alt="Poster de ${anime.name}" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
+          <img src="${poster}" alt="Póster del anime ${anime.name}, imagen promocional" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
           <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
           <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
         `;
