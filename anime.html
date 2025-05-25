@@ -120,13 +120,7 @@
 
     const openModal = (embedUrl) => {
       document.getElementById("modalContent").innerHTML = `
-        <iframe
-          src="${embedUrl}"
-          class="w-full h-full rounded"
-          allowfullscreen
-          sandbox=""
-          referrerpolicy="no-referrer"
-        ></iframe>
+        <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
       `;
       document.getElementById("videoModal").classList.remove("hidden");
     };
