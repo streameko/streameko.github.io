@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,7 +50,6 @@
       }
     }
 
-    /* Loader personalizado */
     #loader {
       position: fixed;
       inset: 0;
@@ -95,13 +95,15 @@
       <p id="episodeCount" class="text-white/80"></p>
     </div>
 
-    <div class="flex gap-4 mb-4 justify-center">
+    <div class="flex flex-wrap gap-2 mb-4 justify-center">
       <button id="tab-sub" class="tab-button bg-indigo-600 text-white">Subtitulado</button>
       <button id="tab-dub" class="tab-button bg-indigo-400 text-white/80">Doblado</button>
+      <button id="tab-cas" class="tab-button bg-indigo-400 text-white/80">Castellano</button>
     </div>
 
     <div id="episodeListSub" class="space-y-4"></div>
     <div id="episodeListDub" class="space-y-4 hidden"></div>
+    <div id="episodeListCas" class="space-y-4 hidden"></div>
   </div>
 
   <!-- Modal de video -->
@@ -129,22 +131,25 @@
     });
 
     const setActiveTab = (tab) => {
-      ["sub", "dub"].forEach(type => {
+      ["sub", "dub", "cas"].forEach(type => {
         const btn = document.getElementById(`tab-${type}`);
-        if (type === tab) {
-          btn.classList.remove("bg-indigo-400", "text-white/80");
-          btn.classList.add("bg-indigo-600", "text-white");
-        } else {
-          btn.classList.remove("bg-indigo-600", "text-white");
-          btn.classList.add("bg-indigo-400", "text-white/80");
+        const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        if (btn && list) {
+          if (type === tab) {
+            btn.classList.remove("bg-indigo-400", "text-white/80");
+            btn.classList.add("bg-indigo-600", "text-white");
+            list.classList.remove("hidden");
+          } else {
+            btn.classList.remove("bg-indigo-600", "text-white");
+            btn.classList.add("bg-indigo-400", "text-white/80");
+            list.classList.add("hidden");
+          }
         }
-
-        document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`).classList.toggle("hidden", type !== tab);
       });
     };
 
-    ["sub", "dub"].forEach(type =>
-      document.getElementById(`tab-${type}`).addEventListener("click", () => setActiveTab(type))
+    ["sub", "dub", "cas"].forEach(type =>
+      document.getElementById(`tab-${type}`)?.addEventListener("click", () => setActiveTab(type))
     );
 
     fetch("animes_por_id.json")
@@ -157,7 +162,6 @@
       }
 
       document.getElementById("animeTitle").textContent = anime.name;
-
       const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
       document.getElementById("alternativeNames").textContent = altNames.length
         ? `También conocido como: ${altNames.join(", ")}`
@@ -165,6 +169,7 @@
 
       const episodiosSub = anime.episodes.filter(e => e.language === 0);
       const episodiosDub = anime.episodes.filter(e => e.language === 1);
+      const episodiosCas = anime.episodes.filter(e => e.language === 2);
 
       const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
       document.getElementById("episodeCount").textContent =
@@ -202,14 +207,13 @@
 
       renderEpisodios(episodiosSub, "episodeListSub");
       renderEpisodios(episodiosDub, "episodeListDub");
+      renderEpisodios(episodiosCas, "episodeListCas");
 
-      if (episodiosDub.length === 0) {
-        document.getElementById("tab-dub").classList.add("hidden");
-      }
+      if (episodiosDub.length === 0) document.getElementById("tab-dub").classList.add("hidden");
+      if (episodiosCas.length === 0) document.getElementById("tab-cas").classList.add("hidden");
 
       setActiveTab("sub");
 
-      // Cuando todo está listo, ocultamos loader y mostramos contenido
       document.getElementById("loader").style.display = "none";
       document.querySelector(".main-content").classList.remove("hidden");
     });
