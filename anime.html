@@ -86,6 +86,26 @@
     <div class="loader-text">Cargando...</div>
   </div>
 
+  <!-- Modal NSFW Streameko -->
+  <div id="nsfwModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full text-center text-black relative shadow-xl">
+      <h2 class="text-2xl font-bold mb-4">🫣 ¿Estás segur@?</h2>
+      <p class="mb-6">
+        Este anime está marcado como contenido para adultos...<br>
+        Si decides continuar, Streameko no se hace responsable de<br>
+        tu pérdida de pureza ni de las miradas juzgonas de tu gato.
+      </p>
+      <div class="flex justify-center gap-4">
+        <button id="continueBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded">
+          Entro bajo mi propio riesgo 👀
+        </button>
+        <button id="exitBtn" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">
+          ¡No quería ver esto, lo juro!
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Contenido principal -->
   <div class="max-w-4xl mx-auto p-6 main-content hidden">
     <a href="index.html" class="text-indigo-300 hover:underline text-sm">&larr; Volver al inicio</a>
@@ -153,70 +173,87 @@
     );
 
     fetch("animes_por_id.json")
-    .then(res => res.json())
-    .then(data => {
-      const anime = data[animeId];
-      if (!anime) {
-        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-        return;
-      }
+      .then(res => res.json())
+      .then(data => {
+        const anime = data[animeId];
+        if (!anime) {
+          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+          return;
+        }
 
-      document.getElementById("animeTitle").textContent = anime.name;
-      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-      document.getElementById("alternativeNames").textContent = altNames.length
-        ? `También conocido como: ${altNames.join(", ")}`
-        : "";
+        // Mostrar modal si IsH === true
+        if ("IsH" in anime && anime.IsH === true) {
+          document.getElementById("nsfwModal").classList.remove("hidden");
 
-      const episodiosSub = anime.episodes.filter(e => e.language === 0);
-      const episodiosDub = anime.episodes.filter(e => e.language === 1);
-      const episodiosCas = anime.episodes.filter(e => e.language === 2);
+          document.getElementById("continueBtn").onclick = () => {
+            document.getElementById("nsfwModal").classList.add("hidden");
+            document.querySelector(".main-content").classList.remove("hidden");
+          };
 
-      const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
-      document.getElementById("episodeCount").textContent =
-        `${episodiosUnicos.size} episodio(s)`;
+          document.getElementById("exitBtn").onclick = () => {
+            window.location.href = "index.html";
+          };
 
-      const renderEpisodios = (episodios, containerId) => {
-        const container = document.getElementById(containerId);
-        const agrupados = {};
+          // Detener aquí para no mostrar contenido aún
+          return;
+        }
 
-        episodios.forEach(ep => {
-          if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
-          agrupados[ep.episode].push(ep);
-        });
+        document.getElementById("animeTitle").textContent = anime.name;
+        const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+        document.getElementById("alternativeNames").textContent = altNames.length
+          ? `También conocido como: ${altNames.join(", ")}`
+          : "";
 
-        const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
-        ordenados.forEach(num => {
-          const versiones = agrupados[num];
-          const div = document.createElement("div");
-          div.className = "card p-4";
+        const episodiosSub = anime.episodes.filter(e => e.language === 0);
+        const episodiosDub = anime.episodes.filter(e => e.language === 1);
+        const episodiosCas = anime.episodes.filter(e => e.language === 2);
 
-          const botones = versiones.map(v => `
-            <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
-              Servidor ${v.server}
-            </button>
-          `).join(" ");
+        const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
+        document.getElementById("episodeCount").textContent =
+          `${episodiosUnicos.size} episodio(s)`;
 
-          div.innerHTML = `
-            <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
-            <div class="flex flex-wrap gap-2">${botones}</div>
-          `;
+        const renderEpisodios = (episodios, containerId) => {
+          const container = document.getElementById(containerId);
+          const agrupados = {};
 
-          container.appendChild(div);
-        });
-      };
+          episodios.forEach(ep => {
+            if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
+            agrupados[ep.episode].push(ep);
+          });
 
-      renderEpisodios(episodiosSub, "episodeListSub");
-      renderEpisodios(episodiosDub, "episodeListDub");
-      renderEpisodios(episodiosCas, "episodeListCas");
+          const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
+          ordenados.forEach(num => {
+            const versiones = agrupados[num];
+            const div = document.createElement("div");
+            div.className = "card p-4";
 
-      if (episodiosDub.length === 0) document.getElementById("tab-dub").classList.add("hidden");
-      if (episodiosCas.length === 0) document.getElementById("tab-cas").classList.add("hidden");
+            const botones = versiones.map(v => `
+              <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
+                Servidor ${v.server}
+              </button>
+            `).join(" ");
 
-      setActiveTab("sub");
+            div.innerHTML = `
+              <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
+              <div class="flex flex-wrap gap-2">${botones}</div>
+            `;
 
-      document.getElementById("loader").style.display = "none";
-      document.querySelector(".main-content").classList.remove("hidden");
-    });
+            container.appendChild(div);
+          });
+        };
+
+        renderEpisodios(episodiosSub, "episodeListSub");
+        renderEpisodios(episodiosDub, "episodeListDub");
+        renderEpisodios(episodiosCas, "episodeListCas");
+
+        if (episodiosDub.length === 0) document.getElementById("tab-dub").classList.add("hidden");
+        if (episodiosCas.length === 0) document.getElementById("tab-cas").classList.add("hidden");
+
+        setActiveTab("sub");
+
+        document.getElementById("loader").style.display = "none";
+        document.querySelector(".main-content").classList.remove("hidden");
+      });
   </script>
 </body>
 </html>
