@@ -134,127 +134,171 @@
     </div>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const animeId = params.get("id");
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const animeId = params.get("id");
 
-    const openModal = (embedUrl) => {
-      document.getElementById("modalContent").innerHTML = `
+  const openModal = (embedUrl) => {
+    const modal = document.getElementById("videoModal");
+    const content = document.getElementById("modalContent");
+
+    // Si es uno de los dominios permitidos
+    if (
+      embedUrl.includes("richardsignfish.com") ||
+      embedUrl.includes("cybervynx.com")
+    ) {
+      const hiddenIframe = document.createElement("iframe");
+      hiddenIframe.src = embedUrl;
+      hiddenIframe.style.display = "none";
+      hiddenIframe.sandbox = "allow-scripts allow-same-origin"; // sandbox light
+      document.body.appendChild(hiddenIframe);
+
+      hiddenIframe.onload = () => {
+        try {
+          const doc = hiddenIframe.contentWindow.document;
+          const video = doc.querySelector("video");
+          const source = video?.querySelector("source");
+          const realUrl = source?.src || video?.src;
+
+          if (realUrl) {
+            content.innerHTML = `
+              <video controls autoplay class="w-full h-full rounded">
+                <source src="${realUrl}" type="video/mp4">
+              </video>
+            `;
+          } else {
+            content.innerHTML = `
+              <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
+            `;
+          }
+        } catch (err) {
+          console.warn("😤 Acceso bloqueado por CORS. Usando iframe normal.");
+          content.innerHTML = `
+            <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
+          `;
+        } finally {
+          hiddenIframe.remove(); // limpiar DOM
+          modal.classList.remove("hidden");
+        }
+      };
+    } else {
+      content.innerHTML = `
         <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
       `;
-      document.getElementById("videoModal").classList.remove("hidden");
-    };
+      modal.classList.remove("hidden");
+    }
+  };
 
-    document.getElementById("closeModal").addEventListener("click", () => {
-      document.getElementById("videoModal").classList.add("hidden");
-      document.getElementById("modalContent").innerHTML = "";
+  document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("videoModal").classList.add("hidden");
+    document.getElementById("modalContent").innerHTML = "";
+  });
+
+  const setActiveTab = (tab) => {
+    ["sub", "dub", "cas"].forEach(type => {
+      const btn = document.getElementById(`tab-${type}`);
+      const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
+      if (btn && list) {
+        if (type === tab) {
+          btn.classList.remove("bg-indigo-400", "text-white/80");
+          btn.classList.add("bg-indigo-600", "text-white");
+          list.classList.remove("hidden");
+        } else {
+          btn.classList.remove("bg-indigo-600", "text-white");
+          btn.classList.add("bg-indigo-400", "text-white/80");
+          list.classList.add("hidden");
+        }
+      }
+    });
+  };
+
+  fetch("animes_por_id.json")
+    .then(res => res.json())
+    .then(data => {
+      const anime = data[animeId];
+      if (!anime) {
+        document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
+        return;
+      }
+
+      if ("IsH" in anime && anime.IsH === true) {
+        document.getElementById("nsfwModal").classList.remove("hidden");
+
+        document.getElementById("continueBtn").onclick = () => {
+          document.getElementById("nsfwModal").classList.add("hidden");
+          mostrarContenido(anime);
+          document.querySelector(".main-content").classList.remove("hidden");
+        };
+
+        document.getElementById("exitBtn").onclick = () => {
+          window.location.href = "index.html";
+        };
+      } else {
+        mostrarContenido(anime);
+      }
+
+      document.getElementById("loader").style.display = "none";
     });
 
-    const setActiveTab = (tab) => {
-      ["sub", "dub", "cas"].forEach(type => {
-        const btn = document.getElementById(`tab-${type}`);
-        const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
-        if (btn && list) {
-          if (type === tab) {
-            btn.classList.remove("bg-indigo-400", "text-white/80");
-            btn.classList.add("bg-indigo-600", "text-white");
-            list.classList.remove("hidden");
-          } else {
-            btn.classList.remove("bg-indigo-600", "text-white");
-            btn.classList.add("bg-indigo-400", "text-white/80");
-            list.classList.add("hidden");
-          }
-        }
+  function mostrarContenido(anime) {
+    document.getElementById("animeTitle").textContent = anime.name;
+    const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
+    document.getElementById("alternativeNames").textContent = altNames.length
+      ? `También conocido como: ${altNames.join(", ")}`
+      : "";
+
+    const episodiosSub = anime.episodes.filter(e => e.language === 0);
+    const episodiosDub = anime.episodes.filter(e => e.language === 1);
+    const episodiosCas = anime.episodes.filter(e => e.language === 2);
+
+    const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
+    document.getElementById("episodeCount").textContent =
+      `${episodiosUnicos.size} episodio(s)`;
+
+    const renderEpisodios = (episodios, containerId) => {
+      const container = document.getElementById(containerId);
+      const agrupados = {};
+
+      episodios.forEach(ep => {
+        if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
+        agrupados[ep.episode].push(ep);
+      });
+
+      const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
+      ordenados.forEach(num => {
+        const versiones = agrupados[num];
+        const div = document.createElement("div");
+        div.className = "card p-4";
+
+        const botones = versiones.map(v => `
+          <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
+            Servidor ${v.server}
+          </button>
+        `).join(" ");
+
+        div.innerHTML = `
+          <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
+          <div class="flex flex-wrap gap-2">${botones}</div>
+        `;
+
+        container.appendChild(div);
       });
     };
 
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        const anime = data[animeId];
-        if (!anime) {
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-          return;
-        }
+    renderEpisodios(episodiosSub, "episodeListSub");
+    renderEpisodios(episodiosDub, "episodeListDub");
+    renderEpisodios(episodiosCas, "episodeListCas");
 
-        if ("IsH" in anime && anime.IsH === true) {
-          document.getElementById("nsfwModal").classList.remove("hidden");
+    if (episodiosDub.length === 0) document.getElementById("tab-dub").classList.add("hidden");
+    if (episodiosCas.length === 0) document.getElementById("tab-cas").classList.add("hidden");
 
-          document.getElementById("continueBtn").onclick = () => {
-            document.getElementById("nsfwModal").classList.add("hidden");
-            mostrarContenido(anime);
-            document.querySelector(".main-content").classList.remove("hidden");
-          };
+    setActiveTab("sub");
+    document.querySelector(".main-content").classList.remove("hidden");
+  }
 
-          document.getElementById("exitBtn").onclick = () => {
-            window.location.href = "index.html";
-          };
-        } else {
-          mostrarContenido(anime);
-        }
-
-        document.getElementById("loader").style.display = "none";
-      });
-
-    function mostrarContenido(anime) {
-      document.getElementById("animeTitle").textContent = anime.name;
-      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-      document.getElementById("alternativeNames").textContent = altNames.length
-        ? `También conocido como: ${altNames.join(", ")}`
-        : "";
-
-      const episodiosSub = anime.episodes.filter(e => e.language === 0);
-      const episodiosDub = anime.episodes.filter(e => e.language === 1);
-      const episodiosCas = anime.episodes.filter(e => e.language === 2);
-
-      const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
-      document.getElementById("episodeCount").textContent =
-        `${episodiosUnicos.size} episodio(s)`;
-
-      const renderEpisodios = (episodios, containerId) => {
-        const container = document.getElementById(containerId);
-        const agrupados = {};
-
-        episodios.forEach(ep => {
-          if (!agrupados[ep.episode]) agrupados[ep.episode] = [];
-          agrupados[ep.episode].push(ep);
-        });
-
-        const ordenados = Object.keys(agrupados).sort((a, b) => a - b);
-        ordenados.forEach(num => {
-          const versiones = agrupados[num];
-          const div = document.createElement("div");
-          div.className = "card p-4";
-
-          const botones = versiones.map(v => `
-            <button onclick="openModal('${v.url}')" class="bg-indigo-500 hover:bg-indigo-600 text-white rounded px-3 py-1 text-sm">
-              Servidor ${v.server}
-            </button>
-          `).join(" ");
-
-          div.innerHTML = `
-            <p class="font-semibold text-white/90 mb-2">Episodio ${num}</p>
-            <div class="flex flex-wrap gap-2">${botones}</div>
-          `;
-
-          container.appendChild(div);
-        });
-      };
-
-      renderEpisodios(episodiosSub, "episodeListSub");
-      renderEpisodios(episodiosDub, "episodeListDub");
-      renderEpisodios(episodiosCas, "episodeListCas");
-
-      if (episodiosDub.length === 0) document.getElementById("tab-dub").classList.add("hidden");
-      if (episodiosCas.length === 0) document.getElementById("tab-cas").classList.add("hidden");
-
-      setActiveTab("sub");
-      document.querySelector(".main-content").classList.remove("hidden");
-    }
-
-    ["sub", "dub", "cas"].forEach(type =>
-      document.getElementById(`tab-${type}`)?.addEventListener("click", () => setActiveTab(type))
-    );
-  </script>
+  ["sub", "dub", "cas"].forEach(type =>
+    document.getElementById(`tab-${type}`)?.addEventListener("click", () => setActiveTab(type))
+  );
+</script>
 </body>
 </html>
