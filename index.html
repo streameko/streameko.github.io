@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inicio – Streameko</title>
 
-  <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español. Accede a cientos de series con alta calidad y sin límites." />
+  <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español." />
   <meta name="keywords" content="anime, ver anime, anime gratis, anime subtitulado, anime doblado, anime online, streameko" />
   <meta name="author" content="Streameko" />
   <meta name="robots" content="index, follow" />
@@ -109,6 +109,12 @@
       </label>
     </div>
 
+    <div class="flex justify-end mb-2">
+      <button onclick="limpiarRecientes()" class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition">
+        Limpiar Recientes 🧹
+      </button>
+    </div>
+
     <div id="loader" class="text-white text-center mt-10 animate-pulse">Cargando animes...</div>
     <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </div>
@@ -131,12 +137,39 @@
     searchInput.addEventListener("input", renderAnimeList);
     dubToggle.addEventListener("change", renderAnimeList);
 
+    function crearCardAnime(anime, id, extraEtiqueta = "") {
+      const poster = anime.poster || "poster_default.png";
+      const div = document.createElement("div");
+      div.className = "card p-4 flex flex-col items-center text-center hover:scale-[1.02] hover:shadow-xl transition-transform";
+
+      div.innerHTML = `
+        <img src="${poster}" alt="Póster del anime ${anime.name}, imagen promocional" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
+        <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
+        ${extraEtiqueta}
+        <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
+      `;
+      return div;
+    }
+
     function renderAnimeList() {
       const query = searchInput.value.toLowerCase();
       const dubbedOnly = dubToggle.checked;
       animeList.innerHTML = "";
 
+      // Primero: animes recientemente vistos
+      const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+      recientes.forEach(id => {
+        const anime = animeData[id];
+        if (!anime) return;
+        const etiqueta = `<p class="text-xs text-yellow-300 mb-2">🕒 Recientemente visto</p>`;
+        const card = crearCardAnime(anime, id, etiqueta);
+        animeList.appendChild(card);
+      });
+
+      // Segundo: resto del catálogo filtrado
       Object.entries(animeData).forEach(([id, anime]) => {
+        if (recientes.includes(id)) return; // Ya mostrado
+
         const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
         const matchesSearch = names.some(name => name.includes(query));
         if (!matchesSearch) return;
@@ -144,21 +177,27 @@
         const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
         if (dubbedOnly && !hasDub) return;
 
-        const poster = anime.poster || "poster_default.png";
-        const div = document.createElement("div");
-        div.className = "card p-4 flex flex-col items-center text-center hover:scale-[1.02] hover:shadow-xl transition-transform";
-        div.innerHTML = `
-          <img src="${poster}" alt="Póster del anime ${anime.name}, imagen promocional" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
-          <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
-          <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
-        `;
-        animeList.appendChild(div);
+        const card = crearCardAnime(anime, id);
+        animeList.appendChild(card);
       });
     }
 
     function viewAnime(id) {
       localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
+
+      const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+      const index = recientes.indexOf(id);
+      if (index !== -1) recientes.splice(index, 1);
+      recientes.unshift(id);
+      if (recientes.length > 6) recientes.pop();
+      localStorage.setItem("recientes", JSON.stringify(recientes));
+
       window.location.href = `anime.html?id=${id}`;
+    }
+
+    function limpiarRecientes() {
+      localStorage.removeItem("recientes");
+      renderAnimeList();
     }
   </script>
 </body>
