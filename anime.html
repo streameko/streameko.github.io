@@ -105,146 +105,257 @@
     </div>
   </div>
 
-  <!-- Contenido principal -->
-  <div class="max-w-4xl mx-auto p-6 main-content hidden">
-    <a href="index.html" class="text-indigo-300 hover:underline text-sm">&larr; Volver al inicio</a>
-    <div class="glass mt-4 mb-6 text-center shadow">
-      <h1 id="animeTitle" class="text-3xl font-bold mb-1"></h1>
-      <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
-      <p id="episodeCount" class="text-white/80"></p>
-    </div>
-
-    <!-- Sinopsis -->
-    <div id="overviewContainer" class="glass mt-4 mb-6 shadow max-h-[10rem] overflow-hidden relative transition-all duration-300">
-      <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line"></p>
-      <div class="absolute bottom-2 right-4">
-        <button id="toggleOverview" class="text-sm text-indigo-400 hover:underline hidden">Ver más</button>
-      </div>
-    </div>
-
-    <div class="flex flex-wrap gap-2 mb-4 justify-center">
-      <button id="tab-sub" class="tab-button bg-indigo-600 text-white">Subtitulado</button>
-      <button id="tab-dub" class="tab-button bg-indigo-400 text-white/80">Doblado</button>
-      <button id="tab-cas" class="tab-button bg-indigo-400 text-white/80">Castellano</button>
-    </div>
-
-    <div id="episodeListSub" class="space-y-4"></div>
-    <div id="episodeListDub" class="space-y-4 hidden"></div>
-    <div id="episodeListCas" class="space-y-4 hidden"></div>
-  </div>
-
-  <!-- Modal de video -->
-  <div id="videoModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-xl p-4 max-w-3xl w-full relative">
-      <button id="closeModal" class="absolute top-2 right-2 text-black font-bold text-xl">✖</button>
-      <div id="modalContent" class="aspect-video w-full"></div>
-    </div>
-  </div>
-
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const animeId = params.get("id");
-
-    const openModal = (embedUrl, episodeNum) => {
-      localStorage.setItem(`ultimo_${animeId}`, episodeNum);
-      document.getElementById("modalContent").innerHTML = `
-        <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>
-      `;
-      document.getElementById("videoModal").classList.remove("hidden");
-    };
-
-    document.getElementById("closeModal").addEventListener("click", () => {
-      document.getElementById("videoModal").classList.add("hidden");
-      document.getElementById("modalContent").innerHTML = "";
-    });
-
-    const setActiveTab = (tab) => {
-      ["sub", "dub", "cas"].forEach(type => {
-        const btn = document.getElementById(`tab-${type}`);
-        const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
-        if (btn && list) {
-          if (type === tab) {
-            btn.classList.remove("bg-indigo-400", "text-white/80");
-            btn.classList.add("bg-indigo-600", "text-white");
-            list.classList.remove("hidden");
-          } else {
-            btn.classList.remove("bg-indigo-600", "text-white");
-            btn.classList.add("bg-indigo-400", "text-white/80");
-            list.classList.add("hidden");
-          }
-        }
-      });
-    };
-
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        const anime = data[animeId];
-        if (!anime) {
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-          return;
-        }
-
-        if ("IsH" in anime && anime.IsH === true) {
-          document.getElementById("nsfwModal").classList.remove("hidden");
-
-          document.getElementById("continueBtn").onclick = () => {
-            document.getElementById("nsfwModal").classList.add("hidden");
-            mostrarContenido(anime);
-            document.querySelector(".main-content").classList.remove("hidden");
-          };
-
-          document.getElementById("exitBtn").onclick = () => {
-            window.location.href = "index.html";
-          };
-        } else {
-          mostrarContenido(anime);
-        }
-
-        document.getElementById("loader").style.display = "none";
-      });
-
-    function mostrarContenido(anime) {
-      document.getElementById("animeTitle").textContent = anime.name;
-      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-      document.getElementById("alternativeNames").textContent = altNames.length
-        ? `También conocido como: ${altNames.join(", ")}`
-        : "";
-
-      const episodiosSub = anime.episodes.filter(e => e.language === 0);
-      const episodiosDub = anime.episodes.filter(e => e.language === 1);
-      const episodiosCas = anime.episodes.filter(e => e.language === 2);
-
-      const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
-      document.getElementById("episodeCount").textContent =
-        `${episodiosUnicos.size} episodio(s)`;
-
-      // SINOPSIS
-      const overviewText = anime.overview.trim();
-      const overviewContainer = document.getElementById("overviewContainer");
-      const overviewElement = document.getElementById("animeOverview");
-      const toggleButton = document.getElementById("toggleOverview");
-
-      if (!overviewText) {
-        overviewElement.textContent = "Este anime no tiene sinopsis disponible. Tal vez lo importante... era el camino 🥲.";
-        toggleButton.classList.add("hidden");
-      } else {
-        overviewElement.textContent = overviewText;
-
-        if (overviewText.length > 300) {
-          toggleButton.classList.remove("hidden");
-          let expanded = false;
-
-          toggleButton.addEventListener("click", () => {
-            expanded = !expanded;
-            overviewContainer.classList.toggle("max-h-[10rem]");
-            overviewContainer.classList.toggle("max-h-full");
-            toggleButton.textContent = expanded ? "Ver menos" : "Ver más";
-          });
-        } else {
-          toggleButton.classList.add("hidden");
-        }
-      }
+<!DOCTYPE html>  
+<html lang="es">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>Ver Anime – Streameko</title>  
+  <script src="https://cdn.tailwindcss.com"></script>  
+  <style>  
+    :root {  
+      --bg: #2e284b;  
+      --card: rgba(255, 255, 255, 0.06);  
+      --text: #ffffff;  
+      --glass: rgba(255, 255, 255, 0.05);  
+      --primary: #a78bfa;  
+    }  
+  
+    html, body {  
+      background-color: var(--bg);  
+      color: var(--text);  
+      transition: background-color 0.4s ease, color 0.4s ease;  
+    }  
+  
+    .card {  
+      background: var(--card);  
+      border-radius: 1rem;  
+      transition: all 0.3s ease;  
+      opacity: 0;  
+      transform: translateY(10px);  
+      animation: fadeInUp 0.4s ease forwards;  
+    }  
+  
+    .glass {  
+      background: var(--glass);  
+      border-radius: 1rem;  
+      padding: 1rem;  
+      backdrop-filter: blur(10px);  
+    }  
+  
+    .tab-button {  
+      padding: 0.5rem 1rem;  
+      border-radius: 9999px;  
+      font-weight: 600;  
+      transition: background-color 0.3s ease, color 0.3s ease;  
+    }  
+  
+    @keyframes fadeInUp {  
+      to {  
+        opacity: 1;  
+        transform: translateY(0);  
+      }  
+    }  
+  
+    #loader {  
+      position: fixed;  
+      inset: 0;  
+      background: var(--bg);  
+      display: flex;  
+      align-items: center;  
+      justify-content: center;  
+      z-index: 9999;  
+    }  
+  
+    .loader-text {  
+      font-size: 2rem;  
+      font-weight: bold;  
+      color: var(--primary);  
+      animation: pulse 1.5s infinite ease-in-out;  
+    }  
+  
+    @keyframes pulse {  
+      0%, 100% {  
+        opacity: 0.4;  
+        transform: scale(1);  
+      }  
+      50% {  
+        opacity: 1;  
+        transform: scale(1.1);  
+      }  
+    }  
+  </style>  
+</head>  
+<body class="min-h-screen font-sans">  
+  <!-- Loader -->  
+  <div id="loader">  
+    <div class="loader-text">Cargando...</div>  
+  </div>  
+  
+  <!-- Modal NSFW Streameko -->  
+  <div id="nsfwModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">  
+    <div class="bg-white rounded-xl p-6 max-w-md w-full text-center text-black relative shadow-xl">  
+      <h2 class="text-2xl font-bold mb-4">🫣 ¿Estás segur@?</h2>  
+      <p class="mb-6">  
+        Este anime está marcado como contenido para adultos...<br>  
+        Si decides continuar, Streameko no se hace responsable de<br>  
+        tu pérdida de pureza ni de las miradas juzgonas de tu gato.  
+      </p>  
+      <div class="flex justify-center gap-4">  
+        <button id="continueBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded">  
+          Entro bajo mi propio riesgo 👀  
+        </button>  
+        <button id="exitBtn" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">  
+          ¡No quería ver esto, lo juro!  
+        </button>  
+      </div>  
+    </div>  
+  </div>  
+  
+  <!-- Contenido principal -->  
+  <div class="max-w-4xl mx-auto p-6 main-content hidden">  
+    <a href="index.html" class="text-indigo-300 hover:underline text-sm">&larr; Volver al inicio</a>  
+    <div class="glass mt-4 mb-6 text-center shadow">  
+      <h1 id="animeTitle" class="text-3xl font-bold mb-1"></h1>  
+      <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>  
+      <p id="episodeCount" class="text-white/80"></p>  
+    </div>  
+  
+    <!-- Sinopsis -->  
+    <div id="overviewContainer" class="glass mt-4 mb-6 shadow max-h-[10rem] overflow-hidden relative transition-all duration-300">  
+      <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line"></p>  
+      <div class="absolute bottom-2 right-4">  
+        <button id="toggleOverview" class="text-sm text-indigo-400 hover:underline hidden">Ver más</button>  
+      </div>  
+    </div>  
+  
+    <div class="flex flex-wrap gap-2 mb-4 justify-center">  
+      <button id="tab-sub" class="tab-button bg-indigo-600 text-white">Subtitulado</button>  
+      <button id="tab-dub" class="tab-button bg-indigo-400 text-white/80">Doblado</button>  
+      <button id="tab-cas" class="tab-button bg-indigo-400 text-white/80">Castellano</button>  
+    </div>  
+  
+    <div id="episodeListSub" class="space-y-4"></div>  
+    <div id="episodeListDub" class="space-y-4 hidden"></div>  
+    <div id="episodeListCas" class="space-y-4 hidden"></div>  
+  </div>  
+  
+  <!-- Modal de video -->  
+  <div id="videoModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">  
+    <div class="bg-white rounded-xl p-4 max-w-3xl w-full relative">  
+      <button id="closeModal" class="absolute top-2 right-2 text-black font-bold text-xl">✖</button>  
+      <div id="modalContent" class="aspect-video w-full"></div>  
+    </div>  
+  </div>  
+  
+  <script>  
+    const params = new URLSearchParams(window.location.search);  
+    const animeId = params.get("id");  
+  
+    const openModal = (embedUrl, episodeNum) => {  
+      localStorage.setItem(`ultimo_${animeId}`, episodeNum);  
+      document.getElementById("modalContent").innerHTML = `  
+        <iframe src="${embedUrl}" class="w-full h-full rounded" allowfullscreen></iframe>  
+      `;  
+      document.getElementById("videoModal").classList.remove("hidden");  
+    };  
+  
+    document.getElementById("closeModal").addEventListener("click", () => {  
+      document.getElementById("videoModal").classList.add("hidden");  
+      document.getElementById("modalContent").innerHTML = "";  
+    });  
+  
+    const setActiveTab = (tab) => {  
+      ["sub", "dub", "cas"].forEach(type => {  
+        const btn = document.getElementById(`tab-${type}`);  
+        const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);  
+        if (btn && list) {  
+          if (type === tab) {  
+            btn.classList.remove("bg-indigo-400", "text-white/80");  
+            btn.classList.add("bg-indigo-600", "text-white");  
+            list.classList.remove("hidden");  
+          } else {  
+            btn.classList.remove("bg-indigo-600", "text-white");  
+            btn.classList.add("bg-indigo-400", "text-white/80");  
+            list.classList.add("hidden");  
+          }  
+        }  
+      });  
+    };  
+  
+    fetch("animes_por_id.json")  
+      .then(res => res.json())  
+      .then(data => {  
+        const anime = data[animeId];  
+        if (!anime) {  
+          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';  
+          return;  
+        }  
+  
+        if ("IsH" in anime && anime.IsH === true) {  
+          document.getElementById("nsfwModal").classList.remove("hidden");  
+  
+          document.getElementById("continueBtn").onclick = () => {  
+            document.getElementById("nsfwModal").classList.add("hidden");  
+            mostrarContenido(anime);  
+            document.querySelector(".main-content").classList.remove("hidden");  
+          };  
+  
+          document.getElementById("exitBtn").onclick = () => {  
+            window.location.href = "index.html";  
+          };  
+        } else {  
+          mostrarContenido(anime);  
+        }  
+  
+        document.getElementById("loader").style.display = "none";  
+      });  
+  
+    function mostrarContenido(anime) {  
+      document.getElementById("animeTitle").textContent = anime.name;  
+      const altNames = anime.alternative_names?.filter(n => n.trim()) || [];  
+      document.getElementById("alternativeNames").textContent = altNames.length  
+        ? `También conocido como: ${altNames.join(", ")}`  
+        : "";  
+  
+      const episodiosSub = anime.episodes.filter(e => e.language === 0);  
+      const episodiosDub = anime.episodes.filter(e => e.language === 1);  
+      const episodiosCas = anime.episodes.filter(e => e.language === 2);  
+  
+      const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));  
+      document.getElementById("episodeCount").textContent =  
+        `${episodiosUnicos.size} episodio(s)`;  
+  
+      // SINOPSIS  
+      let overviewText = "";  
+      if ("overview" in anime && typeof anime.overview === "string") {  
+        overviewText = anime.overview.trim();  
+      }  
+  
+      const overviewContainer = document.getElementById("overviewContainer");  
+      const overviewElement = document.getElementById("animeOverview");  
+      const toggleButton = document.getElementById("toggleOverview");  
+  
+      if (!overviewText) {  
+        overviewElement.textContent = "Este anime no tiene sinopsis disponible. Tal vez lo importante... era el camino 🥲.";  
+        toggleButton.classList.add("hidden");  
+      } else {  
+        overviewElement.textContent = overviewText;  
+  
+        if (overviewText.length > 100) {  
+          toggleButton.classList.remove("hidden");  
+          let expanded = false;  
+  
+          toggleButton.addEventListener("click", () => {  
+            expanded = !expanded;  
+            overviewContainer.classList.toggle("max-h-[10rem]");  
+            overviewContainer.classList.toggle("max-h-full");  
+            toggleButton.textContent = expanded ? "Ver menos" : "Ver más";  
+          });  
+        } else {  
+          toggleButton.classList.add("hidden");  
+        }  
+      }  
 
       const renderEpisodios = (episodios, containerId) => {
         const container = document.getElementById(containerId);
