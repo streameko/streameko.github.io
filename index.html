@@ -1,115 +1,182 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inicio – Streameko</title>
-
-  <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español." />
-  <meta name="keywords" content="anime, ver anime, anime gratis, anime subtitulado, anime doblado, anime online, streameko" />
-  <meta name="author" content="Streameko" />
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#2e284b" />
-  <link rel="canonical" href="https://streameko.github.io/" />
-
-  <meta property="og:title" content="Streameko – Ver Anime Gratis Subtitulado y Doblado" />
-  <meta property="og:description" content="Disfruta anime online sin límites. Subtitulado y doblado al español en Streameko." />
-  <meta property="og:url" content="https://streameko.github.io/" />
-  <meta property="og:type" content="website" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inicio – Streameko Retro</title>
   <style>
-    :root {
-      --bg: #2e284b;
-      --card: rgba(255, 255, 255, 0.06);
-      --text: #ffffff;
-      --primary: #a78bfa;
-      --glass: rgba(255, 255, 255, 0.05);
+    /* Reset básico */
+    * {
+      box-sizing: border-box;
     }
-
-    html, body {
-      background-color: var(--bg);
-      color: var(--text);
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 1rem;
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeInUp 0.4s ease forwards;
-    }
-
-    .glass {
-      background: var(--glass);
-      border-radius: 1rem;
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #39ff14; /* verde neón fosforescente */
+      font-family: 'Courier New', Courier, monospace;
+      line-height: 1.5;
       padding: 1rem;
-      backdrop-filter: blur(10px);
     }
-
-    input::placeholder {
-      color: #cfcfe0;
+    h1, h2 {
+      text-shadow:
+        0 0 5px #39ff14,
+        0 0 10px #39ff14,
+        0 0 20px #39ff14;
     }
-
-    .switch-container {
-      background-color: var(--card);
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .warning {
+      border: 2px dashed #39ff14;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      background-color: rgba(57, 255, 20, 0.05);
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      box-shadow:
+        0 0 10px #39ff14,
+        inset 0 0 5px #39ff14;
+    }
+    .notice {
+      margin-top: 0.5rem;
+      font-style: italic;
+      color: #6fef6f;
+    }
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.5rem;
+      font-family: monospace;
+      font-size: 1rem;
+      color: #39ff14;
+      background-color: #000;
+      border: 2px solid #39ff14;
+      outline: none;
+      margin-bottom: 1rem;
+      box-shadow:
+        0 0 5px #39ff14;
+    }
+    input[type="text"]::placeholder {
+      color: #39ff1466;
+    }
+    label {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: background 0.3s ease;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
     }
-
-    .switch-container input {
-      accent-color: var(--primary);
-      transform: scale(1.3);
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #39ff14;
     }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    button {
+      background-color: transparent;
+      color: #39ff14;
+      border: 2px solid #39ff14;
+      padding: 0.4rem 1rem;
+      font-family: monospace;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 1rem;
+      box-shadow:
+        0 0 8px #39ff14;
+    }
+    button:hover {
+      background-color: #39ff14;
+      color: #000;
+      box-shadow:
+        0 0 12px #39ff14;
+    }
+    #animeList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .card {
+      border: 2px dotted #39ff14;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #001a00;
+      box-shadow:
+        0 0 10px #39ff14 inset;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow:
+        0 0 20px #39ff14 inset;
+    }
+    .card img {
+      max-width: 180px;
+      height: 240px;
+      object-fit: cover;
+      border: 1px solid #39ff14;
+      margin-bottom: 0.5rem;
+      box-shadow:
+        0 0 8px #39ff14;
+    }
+    .card h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.2rem;
+      text-align: center;
+      text-shadow: 0 0 5px #39ff14;
+    }
+    .card button {
+      margin-top: auto;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.9rem;
+    }
+    .reciente {
+      color: #aaffaa;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      text-shadow: 0 0 4px #aaffaa;
+    }
+    #loader {
+      text-align: center;
+      margin-top: 3rem;
+      font-weight: bold;
+      font-size: 1.25rem;
+      text-shadow:
+        0 0 10px #39ff14;
     }
   </style>
 </head>
-<body class="min-h-screen font-sans">
-  <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-4xl font-bold text-center mb-4">Streameko <span class="text-white/50 text-lg font-normal">– Beta</span></h1>
+<body>
 
-    <div class="glass text-sm mb-6 text-center shadow max-w-3xl mx-auto">
-      <p class="mb-1 font-semibold text-green-300">¡Necesitamos tu apoyo!</p>
-      <p>Si eres participante de un grupo de fandubs o conoces uno</p>
-      <p>y deseas ayudarnos a doblar animes sin doblaje, puedes</p>
-      <p>contactarme en mi Discord "kai_zzzeta" para poder discutir los detalles, ¡Gracias!</p>
-      <p class="mt-2 italic text-white/80">– El equipo de Streameko</p>
-    </div>
+  <h1>Streameko - Beta</h1>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
-      <div class="relative w-full max-w-md">
-        <label for="searchInput" class="sr-only">Buscar anime</label>
-        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20 transition-all" />
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">🔍</span>
-      </div>
-
-      <label class="switch-container text-sm font-medium text-white cursor-pointer">
-        <input id="dubToggle" type="checkbox">
-        Solo Doblados
-      </label>
-    </div>
-
-    <div class="flex justify-end mb-2">
-      <button onclick="limpiarRecientes()" class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition">
-        Limpiar Recientes 🧹
-      </button>
-    </div>
-
-    <div id="loader" class="text-white text-center mt-10 animate-pulse">Cargando animes...</div>
-    <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+  <div class="warning">
+    ⚠️ ESTILO RETRO ACTIVADO ⚠️<br />
+    Esto es solo una broma visual, no olvides volver a la modernidad cuando quieras.
+    <div class="notice">– El equipo de Streameko</div>
   </div>
+
+  <input type="text" id="searchInput" placeholder="Buscar anime..." autocomplete="off" />
+
+  <label for="dubToggle">
+    <input type="checkbox" id="dubToggle" />
+    Solo Doblados
+  </label>
+
+  <button onclick="limpiarRecientes()">🧹 Limpiar Recientes</button>
+
+  <div id="loader">Cargando animes...</div>
+
+  <div id="animeList"></div>
 
   <script>
     let animeData = {};
@@ -132,13 +199,13 @@
     function crearCardAnime(anime, id, extraEtiqueta = "") {
       const poster = anime.poster || "poster_default.png";
       const div = document.createElement("div");
-      div.className = "card p-4 flex flex-col items-center text-center hover:scale-[1.02] hover:shadow-xl transition-transform";
+      div.className = "card";
 
       div.innerHTML = `
-        <img src="${poster}" alt="Póster del anime ${anime.name}, imagen promocional" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
-        <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
         ${extraEtiqueta}
-        <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
+        <img src="${poster}" alt="Póster de ${anime.name}" />
+        <h2>${anime.name}</h2>
+        <button onclick="viewAnime('${id}')">Ver Episodios</button>
       `;
       return div;
     }
@@ -148,42 +215,35 @@
       const dubbedOnly = dubToggle.checked;
       animeList.innerHTML = "";
 
-      // Primero: animes recientemente vistos
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
       recientes.forEach(id => {
         const anime = animeData[id];
         if (!anime) return;
-        const etiqueta = `<p class="text-xs text-yellow-300 mb-2">🕒 Recientemente visto</p>`;
-        const card = crearCardAnime(anime, id, etiqueta);
-        animeList.appendChild(card);
+        const etiqueta = `<p class="reciente">🕒 Recientemente visto</p>`;
+        animeList.appendChild(crearCardAnime(anime, id, etiqueta));
       });
 
-      // Segundo: resto del catálogo filtrado
       Object.entries(animeData).forEach(([id, anime]) => {
-        if (recientes.includes(id)) return; // Ya mostrado
+        if (recientes.includes(id)) return;
 
         const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
-        const matchesSearch = names.some(name => name.includes(query));
-        if (!matchesSearch) return;
+        if (!names.some(name => name.includes(query))) return;
 
         const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
         if (dubbedOnly && !hasDub) return;
 
-        const card = crearCardAnime(anime, id);
-        animeList.appendChild(card);
+        animeList.appendChild(crearCardAnime(anime, id));
       });
     }
 
     function viewAnime(id) {
       localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
-
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
-      const index = recientes.indexOf(id);
-      if (index !== -1) recientes.splice(index, 1);
+      const idx = recientes.indexOf(id);
+      if (idx !== -1) recientes.splice(idx, 1);
       recientes.unshift(id);
       if (recientes.length > 6) recientes.pop();
       localStorage.setItem("recientes", JSON.stringify(recientes));
-
       window.location.href = `anime.html?id=${id}`;
     }
 
