@@ -31,6 +31,7 @@
 .anime-card {
   flex: 0 0 auto;
   width: 160px;
+  scroll-margin-inline-start: 4px;
   transition: transform 0.3s ease;
 }
 
@@ -73,7 +74,9 @@
       div.className = "anime-card";
       div.innerHTML = `
         <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" />
-        <p class="mt-1 text-sm truncate">${anime.name}</p>
+        <p class="mt-1 text-sm truncate whitespace-nowrap overflow-hidden">
+  ${anime.name}<span class="select-none opacity-0">⠀⠀⠀⠀</span>
+</p>
       `;
       div.onclick = () => {
         localStorage.setItem("selectedAnime", JSON.stringify(anime));
@@ -81,7 +84,10 @@
         const index = recientes.indexOf(id);
         if (index !== -1) recientes.splice(index, 1);
         recientes.unshift(id);
-        if (recientes.length > 6) recientes.pop();
+        if (recientes.length > 6) {
+        recientes.pop();
+        recientes.splice(1, 0);
+}
         localStorage.setItem("recientes", JSON.stringify(recientes));
         window.location.href = `anime.html?id=${id}`;
       };
