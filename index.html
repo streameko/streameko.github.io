@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streameko – Estilo Experimental</title>
+  <meta name="description" content="Explora el nuevo estilo experimental de Streameko." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#000000" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --accent: #e50914;
+    }body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.scrolling-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.scrolling-row::-webkit-scrollbar {
+  display: none;
+}
+
+.anime-card {
+  flex: 0 0 auto;
+  width: 160px;
+  transition: transform 0.3s ease;
+}
+
+.anime-card:hover {
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+  </style>
+</head>
+<body class="font-sans">
+  <div class="bg-zinc-900 text-white py-4 px-6 text-sm text-center">
+    🚧 Este es un estilo en desarrollo. Puede tener errores o cambiar sin aviso. <a href="stable.html" class="underline text-blue-400">Volver al estilo estable</a>
+  </div>  <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>  <div class="px-6">
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">🕒 Recientes</h2>
+      <div id="row-recientes" class="scrolling-row"></div>
+    </div>
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">🎌 Subtitulados</h2>
+      <div id="row-sub" class="scrolling-row"></div>
+    </div>
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">🇲🇽 Doblados</h2>
+      <div id="row-dub" class="scrolling-row"></div>
+    </div>
+  </div>  <script>
+    let animeData = {};
+
+    fetch("animes_por_id.json")
+      .then(res => res.json())
+      .then(data => {
+        animeData = data;
+        renderRows();
+      });
+
+    function crearCard(anime, id) {
+      const poster = anime.poster || "poster_default.png";
+      const div = document.createElement("div");
+      div.className = "anime-card";
+      div.innerHTML = `
+        <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" />
+        <p class="mt-1 text-sm truncate">${anime.name}</p>
+      `;
+      div.onclick = () => {
+        localStorage.setItem("selectedAnime", JSON.stringify(anime));
+        const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+        const index = recientes.indexOf(id);
+        if (index !== -1) recientes.splice(index, 1);
+        recientes.unshift(id);
+        if (recientes.length > 6) recientes.pop();
+        localStorage.setItem("recientes", JSON.stringify(recientes));
+        window.location.href = `anime.html?id=${id}`;
+      };
+      return div;
+    }
+
+    function renderRows() {
+      const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+      const rowRecientes = document.getElementById("row-recientes");
+      const rowSub = document.getElementById("row-sub");
+      const rowDub = document.getElementById("row-dub");
+
+      recientes.forEach(id => {
+        const anime = animeData[id];
+        if (anime) rowRecientes.appendChild(crearCard(anime, id));
+      });
+
+      Object.entries(animeData).forEach(([id, anime]) => {
+        const episodes = anime.episodes || [];
+        const hasSub = episodes.some(ep => ep.language === 0);
+        const hasDub = episodes.some(ep => ep.language === 1);
+
+        if (hasSub) rowSub.appendChild(crearCard(anime, id));
+        if (hasDub) rowDub.appendChild(crearCard(anime, id));
+      });
+    }
+  </script></body>
+</html>
