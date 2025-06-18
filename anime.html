@@ -1,77 +1,80 @@
-<!DOCTYPE html><html lang="es">
-<head>
+<!DOCTYPE html><html lang="es"><head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ver Animes – Streameko</title>  <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español." />
+  <title>Ver Animes – Streameko</title>
+  <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español." />
   <meta name="keywords" content="anime, ver anime, anime gratis, anime subtitulado, anime doblado, anime online, streameko" />
   <meta name="author" content="Streameko" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#141414" />
-  <link rel="canonical" href="https://streameko.github.io/" />  <meta property="og:title" content="Streameko – Ver Anime Gratis Subtitulado y Doblado" />
+  <link rel="canonical" href="https://streameko.github.io/" />
+  <meta property="og:title" content="Streameko – Ver Anime Gratis Subtitulado y Doblado" />
   <meta property="og:description" content="Disfruta anime online sin límites. Subtitulado y doblado al español en Streameko." />
   <meta property="og:url" content="https://streameko.github.io/" />
-  <meta property="og:type" content="website" />  <script src="https://cdn.tailwindcss.com"></script>  <style>
+  <meta property="og:type" content="website" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
     :root {
       --bg: #141414;
       --card: #1f1f1f;
       --text: #ffffff;
       --glass: rgba(255, 255, 255, 0.05);
       --primary: #e50914;
-    }
+    }html, body {
+  background-color: var(--bg);
+  color: var(--text);
+}
 
-    html, body {
-      background-color: var(--bg);
-      color: var(--text);
-    }
+.card {
+  background: var(--card);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
 
-    .card {
-      background: var(--card);
-      border-radius: 0.5rem;
-      transition: all 0.3s ease;
-    }
+.glass {
+  background: var(--glass);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+}
 
-    .glass {
-      background: var(--glass);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      backdrop-filter: blur(8px);
-    }
+.tab-button {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-    .tab-button {
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      font-weight: 600;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
 
-    #loader {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
+.loader-text {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary);
+  animation: pulse 1.5s infinite ease-in-out;
+}
 
-    .loader-text {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--primary);
-      animation: pulse 1.5s infinite ease-in-out;
-    }
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
 
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 0.4;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-    }
-  </style></head>
+  </style>
+</head>
 <body class="min-h-screen font-sans">
   <!-- Loader -->
   <div id="loader">
@@ -92,28 +95,32 @@
         </button>
       </div>
     </div>
-  </div>  <!-- Contenido principal -->  <div class="max-w-4xl mx-auto p-6 main-content hidden">
-    <a href="index.html" class="text-red-400 hover:underline text-sm">&larr; Volver al inicio</a>
-    <div class="glass mt-4 mb-6 text-center">
-      <h1 id="animeTitle" class="text-3xl font-bold mb-1"></h1>
-      <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
-      <p id="episodeCount" class="text-white/80"></p>
-    </div><div id="overviewContainer" class="glass mt-4 mb-6 shadow max-h-[10rem] overflow-hidden relative transition-all duration-300">
-  <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line"></p>
-  <div class="absolute bottom-2 right-4">
-    <button id="toggleOverview" class="text-sm text-red-400 hover:underline hidden">Ver más</button>
+  </div>  <!-- Contenido principal -->  <div class="max-w-5xl mx-auto p-6 main-content hidden">
+    <!-- Botón de regreso -->
+    <div class="mb-4">
+      <a href="index.html" class="text-red-400 hover:underline text-sm">&larr; Volver al inicio</a>
+    </div><!-- Encabezado con título y sinopsis -->
+<div class="glass text-center mb-6 p-6">
+  <h1 id="animeTitle" class="text-4xl font-bold mb-2"></h1>
+  <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
+  <p id="episodeCount" class="text-white/80 mb-3"></p>
+  <div id="overviewContainer" class="relative max-h-[10rem] overflow-hidden transition-all duration-300">
+    <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line"></p>
+    <button id="toggleOverview" class="absolute bottom-2 right-4 text-red-400 hover:underline text-sm hidden">Ver más</button>
   </div>
 </div>
 
-<div class="flex flex-wrap gap-2 mb-4 justify-center">
+<!-- Tabs de idioma -->
+<div class="card flex justify-center flex-wrap gap-3 py-4 mb-6">
   <button id="tab-sub" class="tab-button bg-red-600 text-white">Subtitulado</button>
   <button id="tab-dub" class="tab-button bg-red-400 text-white/80">Doblado</button>
   <button id="tab-cas" class="tab-button bg-red-400 text-white/80">Castellano</button>
 </div>
 
-<div id="episodeListSub" class="space-y-4"></div>
-<div id="episodeListDub" class="space-y-4 hidden"></div>
-<div id="episodeListCas" class="space-y-4 hidden"></div>
+<!-- Episodios -->
+<div id="episodeListSub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+<div id="episodeListDub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
+<div id="episodeListCas" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
 
   </div>  <!-- Modal de video -->  <div id="videoModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-xl p-4 max-w-3xl w-full relative">
@@ -223,7 +230,7 @@
         });
         Object.keys(grouped).sort((a, b) => a - b).forEach(num => {
           const div = document.createElement("div");
-          div.className = "card p-4";
+          div.className = "card p-4 h-full flex flex-col justify-between";
           const buttons = grouped[num].map(v => `<button onclick="openModal('${v.url}', ${num})" class="bg-red-500 hover:bg-red-600 text-white rounded px-3 py-1 text-sm">Servidor ${v.server}</button>`).join(" ");
           div.innerHTML = `<p class="font-semibold text-white/90 mb-2">Episodio ${num}</p><div class="flex flex-wrap gap-2">${buttons}</div>`;
           container.appendChild(div);
