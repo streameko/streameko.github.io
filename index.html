@@ -37,12 +37,10 @@
       flex: 0 0 auto;
       width: 120px;
       background: rgba(255, 255, 255, 0.05);
-      /* backdrop-filter eliminado */
       border-radius: 0.75rem;
       padding: 0.5rem;
       transition: transform 0.3s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      /* animation eliminado */
     }
 
     @media (min-width: 640px) {
@@ -114,7 +112,7 @@
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
         renderRows();
-      }, 300); // Debounce de 300 ms
+      }, 300);
     });
 
     function crearCard(anime, id) {
