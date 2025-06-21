@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,68 +16,75 @@
       --bg: #000000;
       --text: #ffffff;
       --accent: #e50914;
-    }body {
-  background-color: var(--bg);
-  color: var(--text);
-}
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+    }
 
-.scrolling-row {
-  display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  padding: 1rem 0;
-}
+    .scrolling-row {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
 
-.scrolling-row::-webkit-scrollbar {
-  display: none;
-}
+    .scrolling-row::-webkit-scrollbar {
+      display: none;
+    }
 
-.anime-card {
-  flex: 0 0 auto;
-  width: 120px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 0.75rem;
-  padding: 0.5rem;
-  transition: transform 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  animation: fadeInUp 0.4s ease forwards;
-}
+    .anime-card {
+      flex: 0 0 auto;
+      width: 120px;
+      background: rgba(255, 255, 255, 0.05);
+      /* backdrop-filter eliminado */
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      /* animation eliminado */
+    }
 
-@media (min-width: 640px) {
-  .anime-card {
-    width: 160px;
-  }
-}
+    @media (min-width: 640px) {
+      .anime-card {
+        width: 160px;
+      }
+    }
 
-.anime-card:hover {
-  transform: scale(1.1);
-  z-index: 10;
-}
+    .anime-card:hover {
+      transform: scale(1.1);
+      z-index: 10;
+    }
 
-.anime-card:hover p {
-  color: var(--accent);
-}
+    .anime-card:hover p {
+      color: var(--accent);
+    }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-p {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
+    p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body class="font-sans">
   <div class="bg-zinc-900 text-white py-4 px-6 text-sm text-center">
-    🚧 Este es un estilo en desarrollo. Puede tener errores o cambiar sin aviso. <a href="stable.html" class="underline text-blue-400">Volver al estilo estable</a>
-  </div>  <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>  <div class="px-6 mt-6">
+    🚧 Este es un estilo en desarrollo. Puede tener errores o cambiar sin aviso.
+    <a href="stable.html" class="underline text-blue-400">Volver al estilo estable</a>
+  </div>
+
+  <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>
+
+  <div class="px-6 mt-6">
     <input type="text" id="buscador" placeholder="Buscar anime..." class="w-full p-3 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
-  </div>  <div class="px-6">
+  </div>
+
+  <div class="px-6">
     <div class="mt-8">
       <h2 class="text-xl font-semibold mb-2">🕒 Recientes</h2>
       <div id="row-recientes" class="scrolling-row"></div>
@@ -89,8 +97,11 @@ p {
       <h2 class="text-xl font-semibold mb-2">🇲🇽 Doblados</h2>
       <div id="row-dub" class="scrolling-row"></div>
     </div>
-  </div>  <script>
+  </div>
+
+  <script>
     let animeData = {};
+    let debounceTimeout;
 
     fetch("animes_por_id.json")
       .then(res => res.json())
@@ -99,14 +110,19 @@ p {
         renderRows();
       });
 
-    document.getElementById("buscador").addEventListener("input", renderRows);
+    document.getElementById("buscador").addEventListener("input", () => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        renderRows();
+      }, 300); // Debounce de 300 ms
+    });
 
     function crearCard(anime, id) {
       const poster = anime.poster || "poster_default.png";
       const div = document.createElement("div");
       div.className = "anime-card";
       div.innerHTML = `
-        <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" />
+        <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" />
         <p class="mt-1 text-sm">${anime.name}</p>
       `;
       div.onclick = () => {
@@ -155,5 +171,6 @@ p {
         if (hasDub) rowDub.appendChild(crearCard(anime, id));
       });
     }
-  </script></body>
+  </script>
+</body>
 </html>
