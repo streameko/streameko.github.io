@@ -10,6 +10,9 @@
   <meta property="og:title" content="Streameko – Estilo Experimental" />
   <meta property="og:description" content="Explora animes recientes, subtitulados y doblados en un nuevo estilo experimental." />
   <meta property="og:url" content="https://streameko.github.io/" />
+  <meta property="og:image" content="https://i.postimg.cc/yNzkjyKW/Streameko-Logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
@@ -17,6 +20,7 @@
       --text: #ffffff;
       --accent: #e50914;
     }
+
     body {
       background-color: var(--bg);
       color: var(--text);
@@ -27,6 +31,7 @@
       overflow-x: auto;
       gap: 1rem;
       padding: 1rem 0;
+      -webkit-overflow-scrolling: touch;
     }
 
     .scrolling-row::-webkit-scrollbar {
@@ -49,18 +54,15 @@
       }
     }
 
-    .anime-card:hover {
-      transform: scale(1.1);
-      z-index: 10;
-    }
+    @media (hover: hover) {
+      .anime-card:hover {
+        transform: scale(1.1);
+        z-index: 10;
+      }
 
-    .anime-card:hover p {
-      color: var(--accent);
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      .anime-card:hover p {
+        color: var(--accent);
+      }
     }
 
     p {
@@ -79,7 +81,10 @@
   <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>
 
   <div class="px-6 mt-6">
-    <input type="text" id="buscador" placeholder="Buscar anime..." class="w-full p-3 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
+    <div class="relative">
+      <input type="text" id="buscador" placeholder="Buscar anime..." class="w-full p-3 pr-10 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
+      <button id="clearSearch" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hidden">✕</button>
+    </div>
   </div>
 
   <div class="px-6">
@@ -101,26 +106,12 @@
     let animeData = {};
     let debounceTimeout;
 
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        animeData = data;
-        renderRows();
-      });
-
-    document.getElementById("buscador").addEventListener("input", () => {
-      clearTimeout(debounceTimeout);
-      debounceTimeout = setTimeout(() => {
-        renderRows();
-      }, 300);
-    });
-
     function crearCard(anime, id) {
       const poster = anime.poster || "poster_default.png";
       const div = document.createElement("div");
       div.className = "anime-card";
       div.innerHTML = `
-        <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" />
+        <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" decoding="async" />
         <p class="mt-1 text-sm">${anime.name}</p>
       `;
       div.onclick = () => {
@@ -136,6 +127,14 @@
       return div;
     }
 
+    function renderSkeletons(container) {
+      for (let i = 0; i < 4; i++) {
+        const skeleton = document.createElement("div");
+        skeleton.className = "anime-card animate-pulse bg-zinc-700 h-[300px]";
+        container.appendChild(skeleton);
+      }
+    }
+
     function renderRows() {
       const query = (document.getElementById("buscador")?.value || "").toLowerCase();
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
@@ -149,13 +148,23 @@
 
       const yaMostrados = new Set();
 
-      recientes.forEach(id => {
-        const anime = animeData[id];
-        if (anime && anime.name.toLowerCase().includes(query)) {
-          rowRecientes.appendChild(crearCard(anime, id));
-          yaMostrados.add(id);
+      if (recientes.length > 0) {
+        recientes.forEach(id => {
+          const anime = animeData[id];
+          if (anime && anime.name.toLowerCase().includes(query)) {
+            rowRecientes.appendChild(crearCard(anime, id));
+            yaMostrados.add(id);
+          }
+        });
+        if (rowRecientes.children.length === 0) {
+          rowRecientes.innerHTML = "<p class='text-white/50'>Sin resultados recientes.</p>";
         }
-      });
+      } else {
+        rowRecientes.innerHTML = "<p class='text-white/50'>Aún no has visto nada. ¿Qué esperas, Bocchi?</p>";
+      }
+
+      let subContador = 0;
+      let dubContador = 0;
 
       Object.entries(animeData).forEach(([id, anime]) => {
         if (yaMostrados.has(id)) return;
@@ -165,10 +174,45 @@
         const hasSub = episodes.some(ep => ep.language === 0);
         const hasDub = episodes.some(ep => ep.language === 1);
 
-        if (hasSub) rowSub.appendChild(crearCard(anime, id));
-        if (hasDub) rowDub.appendChild(crearCard(anime, id));
+        if (hasSub) {
+          rowSub.appendChild(crearCard(anime, id));
+          subContador++;
+        }
+        if (hasDub) {
+          rowDub.appendChild(crearCard(anime, id));
+          dubContador++;
+        }
       });
+
+      if (subContador === 0) rowSub.innerHTML = "<p class='text-white/50'>Nada subtitulado encontrado.</p>";
+      if (dubContador === 0) rowDub.innerHTML = "<p class='text-white/50'>Nada doblado encontrado.</p>";
     }
+
+    document.getElementById("buscador").addEventListener("input", (e) => {
+      const val = e.target.value;
+      document.getElementById("clearSearch").style.display = val ? "block" : "none";
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        renderRows();
+      }, 300);
+    });
+
+    document.getElementById("clearSearch").addEventListener("click", () => {
+      document.getElementById("buscador").value = "";
+      document.getElementById("clearSearch").style.display = "none";
+      renderRows();
+    });
+
+    renderSkeletons(document.getElementById("row-recientes"));
+    renderSkeletons(document.getElementById("row-sub"));
+    renderSkeletons(document.getElementById("row-dub"));
+
+    fetch("animes_por_id.json")
+      .then(res => res.json())
+      .then(data => {
+        animeData = data;
+        renderRows();
+      });
   </script>
 </body>
-</html>
+</html> 
