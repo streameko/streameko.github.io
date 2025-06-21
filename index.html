@@ -120,7 +120,7 @@
         const index = recientes.indexOf(id);
         if (index !== -1) recientes.splice(index, 1);
         recientes.unshift(id);
-        if (recientes.length > 6) recientes.pop();
+        if (recientes.length > 30) recientes.pop();
         localStorage.setItem("recientes", JSON.stringify(recientes));
         window.location.href = `anime.html?id=${id}`;
       };
