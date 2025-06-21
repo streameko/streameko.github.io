@@ -157,10 +157,10 @@
           }
         });
         if (rowRecientes.children.length === 0) {
-          rowRecientes.innerHTML = "<p class='text-white/50'>Sin resultados recientes.</p>";
+          rowRecientes.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
         }
       } else {
-        rowRecientes.innerHTML = "<p class='text-white/50'>Aún no has visto nada. ¿Qué esperas, Bocchi?</p>";
+        rowRecientes.innerHTML = "<p class='text-white/50'>Aún no has visto nada. ¿Cambiamos eso?</p>";
       }
 
       let subContador = 0;
@@ -184,8 +184,8 @@
         }
       });
 
-      if (subContador === 0) rowSub.innerHTML = "<p class='text-white/50'>Nada subtitulado encontrado.</p>";
-      if (dubContador === 0) rowDub.innerHTML = "<p class='text-white/50'>Nada doblado encontrado.</p>";
+      if (subContador === 0) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+      if (dubContador === 0) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
     }
 
     document.getElementById("buscador").addEventListener("input", (e) => {
