@@ -103,116 +103,122 @@
   </div>
 
   <script>
-    let animeData = {};
-    let debounceTimeout;
+  let animeData = {};
+  let debounceTimeout;
 
-    function crearCard(anime, id) {
-      const poster = anime.poster || "poster_default.png";
-      const div = document.createElement("div");
-      div.className = "anime-card";
-      div.innerHTML = `
-        <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" decoding="async" />
-        <p class="mt-1 text-sm">${anime.name}</p>
-      `;
-      div.onclick = () => {
-        localStorage.setItem("selectedAnime", JSON.stringify(anime));
-        const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
-        const index = recientes.indexOf(id);
-        if (index !== -1) recientes.splice(index, 1);
-        recientes.unshift(id);
-        if (recientes.length > 30) recientes.pop();
-        localStorage.setItem("recientes", JSON.stringify(recientes));
-        window.location.href = `anime.html?id=${id}`;
-      };
-      return div;
-    }
-
-    function renderSkeletons(container) {
-      for (let i = 0; i < 4; i++) {
-        const skeleton = document.createElement("div");
-        skeleton.className = "anime-card animate-pulse bg-zinc-700 h-[300px]";
-        container.appendChild(skeleton);
-      }
-    }
-
-    function renderRows() {
-      const query = (document.getElementById("buscador")?.value || "").toLowerCase();
+  function crearCard(anime, id) {
+    const poster = anime.poster || "poster_default.png";
+    const div = document.createElement("div");
+    div.className = "anime-card";
+    div.innerHTML = `
+      <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" decoding="async" />
+      <p class="mt-1 text-sm">${anime.name}</p>
+    `;
+    div.onclick = () => {
+      localStorage.setItem("selectedAnime", JSON.stringify(anime));
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
-      const rowRecientes = document.getElementById("row-recientes");
-      const rowSub = document.getElementById("row-sub");
-      const rowDub = document.getElementById("row-dub");
+      const index = recientes.indexOf(id);
+      if (index !== -1) recientes.splice(index, 1);
+      recientes.unshift(id);
+      if (recientes.length > 30) recientes.pop();
+      localStorage.setItem("recientes", JSON.stringify(recientes));
+      window.location.href = `anime.html?id=${id}`;
+    };
+    return div;
+  }
 
-      rowRecientes.innerHTML = "";
-      rowSub.innerHTML = "";
-      rowDub.innerHTML = "";
+  function renderSkeletons(container) {
+    for (let i = 0; i < 4; i++) {
+      const skeleton = document.createElement("div");
+      skeleton.className = "anime-card animate-pulse bg-zinc-700 h-[300px]";
+      container.appendChild(skeleton);
+    }
+  }
 
-      const yaMostrados = new Set();
+  function renderRows() {
+    const query = (document.getElementById("buscador")?.value || "").toLowerCase();
+    const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+    const rowRecientes = document.getElementById("row-recientes");
+    const rowSub = document.getElementById("row-sub");
+    const rowDub = document.getElementById("row-dub");
 
-      if (recientes.length > 0) {
-        recientes.forEach(id => {
-          const anime = animeData[id];
-          if (anime && anime.name.toLowerCase().includes(query)) {
-            rowRecientes.appendChild(crearCard(anime, id));
-            yaMostrados.add(id);
-          }
-        });
-        if (rowRecientes.children.length === 0) {
-          rowRecientes.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
-        }
-      } else {
-        rowRecientes.innerHTML = "<p class='text-white/50'>Aún no has visto nada. ¿Cambiamos eso?</p>";
-      }
+    rowRecientes.innerHTML = "";
+    rowSub.innerHTML = "";
+    rowDub.innerHTML = "";
 
-      let subContador = 0;
-      let dubContador = 0;
+    const yaMostrados = new Set();
 
-      Object.entries(animeData).forEach(([id, anime]) => {
-        if (yaMostrados.has(id)) return;
-        if (!anime.name.toLowerCase().includes(query)) return;
+    if (recientes.length > 0) {
+      recientes.forEach(id => {
+        const anime = animeData[id];
+        if (!anime) return;
 
-        const episodes = anime.episodes || [];
-        const hasSub = episodes.some(ep => ep.language === 0);
-        const hasDub = episodes.some(ep => ep.language === 1);
+        const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+        if (!names.some(name => name.includes(query))) return;
 
-        if (hasSub) {
-          rowSub.appendChild(crearCard(anime, id));
-          subContador++;
-        }
-        if (hasDub) {
-          rowDub.appendChild(crearCard(anime, id));
-          dubContador++;
-        }
+        rowRecientes.appendChild(crearCard(anime, id));
+        yaMostrados.add(id);
       });
 
-      if (subContador === 0) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
-      if (dubContador === 0) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+      if (rowRecientes.children.length === 0) {
+        rowRecientes.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+      }
+    } else {
+      rowRecientes.innerHTML = "<p class='text-white/50'>Aún no has visto nada. ¿Cambiamos eso?</p>";
     }
 
-    document.getElementById("buscador").addEventListener("input", (e) => {
-      const val = e.target.value;
-      document.getElementById("clearSearch").style.display = val ? "block" : "none";
-      clearTimeout(debounceTimeout);
-      debounceTimeout = setTimeout(() => {
-        renderRows();
-      }, 300);
+    let subContador = 0;
+    let dubContador = 0;
+
+    Object.entries(animeData).forEach(([id, anime]) => {
+      if (yaMostrados.has(id)) return;
+
+      const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+      if (!names.some(name => name.includes(query))) return;
+
+      const episodes = anime.episodes || [];
+      const hasSub = episodes.some(ep => ep.language === 0);
+      const hasDub = episodes.some(ep => ep.language === 1);
+
+      if (hasSub) {
+        rowSub.appendChild(crearCard(anime, id));
+        subContador++;
+      }
+      if (hasDub) {
+        rowDub.appendChild(crearCard(anime, id));
+        dubContador++;
+      }
     });
 
-    document.getElementById("clearSearch").addEventListener("click", () => {
-      document.getElementById("buscador").value = "";
-      document.getElementById("clearSearch").style.display = "none";
+    if (subContador === 0) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+    if (dubContador === 0) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+  }
+
+  document.getElementById("buscador").addEventListener("input", (e) => {
+    const val = e.target.value;
+    document.getElementById("clearSearch").style.display = val ? "block" : "none";
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      renderRows();
+    }, 300);
+  });
+
+  document.getElementById("clearSearch").addEventListener("click", () => {
+    document.getElementById("buscador").value = "";
+    document.getElementById("clearSearch").style.display = "none";
+    renderRows();
+  });
+
+  renderSkeletons(document.getElementById("row-recientes"));
+  renderSkeletons(document.getElementById("row-sub"));
+  renderSkeletons(document.getElementById("row-dub"));
+
+  fetch("animes_por_id.json")
+    .then(res => res.json())
+    .then(data => {
+      animeData = data;
       renderRows();
     });
-
-    renderSkeletons(document.getElementById("row-recientes"));
-    renderSkeletons(document.getElementById("row-sub"));
-    renderSkeletons(document.getElementById("row-dub"));
-
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      .then(data => {
-        animeData = data;
-        renderRows();
-      });
-  </script>
+</script>
 </body>
 </html> 
