@@ -167,10 +167,10 @@ document.getElementById("closeModal").addEventListener("click", () => {
     document.getElementById("modalContent").innerHTML = "";
   }, 300);
 });
-    fetch("animes_por_id.json")
-      .then(res => res.json())
-      renderSkeletonCards();
-      .then(data => {
+fetch("animes_por_id.json")
+  .then(res => res.json())
+  .then(data => {
+    renderSkeletonCards(); // ahora sí, sin sacrificar virg... digo, código
         const anime = data[animeId];
         if (!anime) {
           document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
