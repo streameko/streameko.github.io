@@ -167,10 +167,10 @@ document.getElementById("closeModal").addEventListener("click", () => {
     document.getElementById("modalContent").innerHTML = "";
   }, 300);
 });
+  renderSkeletonCards();
 fetch("animes_por_id.json")
   .then(res => res.json())
   .then(data => {
-    renderSkeletonCards(); // ahora sí, sin sacrificar virg... digo, código
         const anime = data[animeId];
         if (!anime) {
           document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
@@ -249,6 +249,7 @@ fetch("animes_por_id.json")
       
       const container = document.getElementById("overviewContainer");
       container.style.overflow = expanded ? "visible" : "hidden";
+      limpiarSkeletons();
     });
   }
 }
@@ -268,7 +269,12 @@ fetch("animes_por_id.json")
           container.appendChild(div);
         });
       };
-
+function limpiarSkeletons() {
+  ["episodeListSub", "episodeListDub", "episodeListCas"].forEach(id => {
+    const container = document.getElementById(id);
+    container.innerHTML = "";
+  });
+}
       renderEpisodios(episodiosSub, "episodeListSub");
       renderEpisodios(episodiosDub, "episodeListDub");
       renderEpisodios(episodiosCas, "episodeListCas");
