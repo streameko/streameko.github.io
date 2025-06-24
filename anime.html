@@ -130,6 +130,13 @@
 
   videoModal.classList.remove("hidden");
 
+  // Animación de entrada
+setTimeout(() => {
+modalInner.classList.remove("scale-90", "opacity-0");
+modalInner.classList.add("scale-100", "opacity-100");
+}, 10);
+};
+
     const setActiveTab = (tab) => {
       ["sub", "dub", "cas"].forEach(type => {
         const btn = document.getElementById(`tab-${type}`);
@@ -150,6 +157,10 @@
 document.getElementById("closeModal").addEventListener("click", () => {
   const videoModal = document.getElementById("videoModal");
   const modalInner = document.getElementById("modalInner");
+
+ // Animación de salida
+modalInner.classList.remove("scale-100", "opacity-100");
+modalInner.classList.add("scale-90", "opacity-0"); 
 
 
   setTimeout(() => {
