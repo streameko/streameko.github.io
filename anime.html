@@ -243,13 +243,21 @@ document.getElementById("closeModal").addEventListener("click", () => {
   toggleButton.classList.add("hidden");
 } else {
   overviewElement.textContent = overviewText;
+
   if (overviewText.length > 180) {
     toggleButton.classList.remove("hidden");
+
     let expanded = false;
+
     toggleButton.addEventListener("click", () => {
       expanded = !expanded;
+
       overviewElement.classList.toggle("line-clamp-4");
       toggleButton.textContent = expanded ? "Ver menos" : "Ver más";
+      
+      
+      const container = document.getElementById("overviewContainer");
+      container.style.overflow = expanded ? "visible" : "hidden";
     });
   }
 }
