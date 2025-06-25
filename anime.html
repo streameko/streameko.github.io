@@ -179,7 +179,7 @@ function setActiveTab(tab) {
   });
 }
 
-fetch("animes_por_id.json")
+fetch("https://raw.githubusercontent.com/streameko/streameko.github.io/refs/heads/main/animes_por_id.json")
   .then(res => res.json())
   .then(data => {
     const anime = data[animeId];
