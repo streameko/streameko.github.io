@@ -224,7 +224,7 @@
   renderSkeletons(document.getElementById("row-sub"));
   renderSkeletons(document.getElementById("row-dub"));
 
-  fetch("animes_por_id.json")
+  fetch("https://raw.githubusercontent.com/streameko/streameko.github.io/refs/heads/main/animes_por_id.json")
     .then(res => res.json())
     .then(data => {
       animeData = data;
