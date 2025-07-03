@@ -358749,5 +358749,21 @@
         "server": "Trailer, anime proximamente julio 2025"
       }
     ]
+  },
+  "1815": {
+    "name": "DanDaDan Season 2",
+    "alternative_names": [
+      ""
+    ],
+    "poster": "https://i.postimg.cc/bY9nwQDB/poster-default.png",
+    "episodes": [
+      {
+        "episode": "1",
+        "url": "https://archive.org/download/dandadan2sub-streameko/Cap1.mp4",
+        "language": 0,
+        "server": "Tokio"
+      }
+    ],
+    "overview": "Segunda temporada de DanDaDan."
   }
 }
