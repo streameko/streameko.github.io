@@ -58,10 +58,7 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.4; }
     }
-  #streameko-player {
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 20px var(--primary);
-  }
+
 </style>
   </style>
 </head>
@@ -148,27 +145,16 @@ document.getElementById("closeModal").addEventListener("click", () => {
 });
 
 function openModal(embedUrl, episodeNum) {
-  localStorage.setItem(`ultimo_${animeId}`, episodeNum);
-  const videoModal = document.getElementById("videoModal");
-  const modalInner = document.getElementById("modalInner");
-  const modalContent = document.getElementById("modalContent");
-
-  if (embedUrl.includes("archive.org") && embedUrl.endsWith(".mp4")) {
-    modalContent.innerHTML = `
-      <video controls autoplay class="w-full h-full rounded-b-2xl bg-black" id="streameko-player">
-        <source src="${embedUrl}" type="video/mp4">
-        Tu navegador no soporta la reproducción de video.
-      </video>
-    `;
-  } else {
-    modalContent.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>`;
-  }
-
-  videoModal.classList.remove("hidden");
-  setTimeout(() => {
-    modalInner.classList.remove("scale-90", "opacity-0");
-    modalInner.classList.add("scale-100", "opacity-100");
-  }, 10);
+localStorage.setItem(ultimo_${animeId}, episodeNum);
+const videoModal = document.getElementById("videoModal");
+const modalInner = document.getElementById("modalInner");
+const modalContent = document.getElementById("modalContent");
+modalContent.innerHTML = <iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>;
+videoModal.classList.remove("hidden");
+setTimeout(() => {
+modalInner.classList.remove("scale-90", "opacity-0");
+modalInner.classList.add("scale-100", "opacity-100");
+}, 10);
 }
 
 
