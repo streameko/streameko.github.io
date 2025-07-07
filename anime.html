@@ -147,35 +147,20 @@ document.getElementById("closeModal").addEventListener("click", () => {
   }, 300);
 });
 
-async function openModal(embedUrl, episodeNum) {
+function openModal(embedUrl, episodeNum) {
   localStorage.setItem(`ultimo_${animeId}`, episodeNum);
   const videoModal = document.getElementById("videoModal");
   const modalInner = document.getElementById("modalInner");
   const modalContent = document.getElementById("modalContent");
 
-  if (embedUrl.includes("archive.org")) {
-    try {
-      const response = await fetch(embedUrl);
-      const html = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const source = doc.querySelector('video source');
-
-      if (source && source.src) {
-        modalContent.innerHTML = `
-          <video controls autoplay class="w-full h-full rounded-b-2xl bg-black" id="streameko-player">
-            <source src="${source.src}" type="video/mp4">
-            Tu navegador no soporta la reproducción de video.
-          </video>
-        `;
-      } else {
-        modalContent.innerHTML = `<p class="text-white p-6 text-center">⚠️ No se pudo cargar el video desde Archive.org.</p>`;
-      }
-    } catch (e) {
-      modalContent.innerHTML = `<p class="text-white p-6 text-center">💥 Error al cargar el video: ${e.message}</p>`;
-    }
+  if (embedUrl.includes("archive.org") && embedUrl.endsWith(".mp4")) {
+    modalContent.innerHTML = `
+      <video controls autoplay class="w-full h-full rounded-b-2xl bg-black" id="streameko-player">
+        <source src="${embedUrl}" type="video/mp4">
+        Tu navegador no soporta la reproducción de video.
+      </video>
+    `;
   } else {
-    // Embed estándar
     modalContent.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>`;
   }
 
@@ -185,6 +170,8 @@ async function openModal(embedUrl, episodeNum) {
     modalInner.classList.add("scale-100", "opacity-100");
   }, 10);
 }
+
+
 
 function setActiveTab(tab) {
   ["sub", "dub", "cas"].forEach(type => {
