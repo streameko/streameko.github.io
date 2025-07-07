@@ -145,16 +145,31 @@ document.getElementById("closeModal").addEventListener("click", () => {
 });
 
 function openModal(embedUrl, episodeNum) {
-localStorage.setItem(ultimo_${animeId}, episodeNum);
-const videoModal = document.getElementById("videoModal");
-const modalInner = document.getElementById("modalInner");
-const modalContent = document.getElementById("modalContent");
-modalContent.innerHTML = <iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>;
-videoModal.classList.remove("hidden");
-setTimeout(() => {
-modalInner.classList.remove("scale-90", "opacity-0");
-modalInner.classList.add("scale-100", "opacity-100");
-}, 10);
+  localStorage.setItem(`ultimo_${animeId}`, episodeNum);
+  const videoModal = document.getElementById("videoModal");
+  const modalInner = document.getElementById("modalInner");
+  const modalContent = document.getElementById("modalContent");
+
+  if (embedUrl.includes("archive.org")) {
+    const src = new URL(embedUrl);
+    const videoId = src.pathname.split("/").pop();
+    const customPlayer = `
+      <div class="relative w-full h-full bg-black">
+        <video id="streamekoPlayer" controls class="w-full h-full rounded-b-2xl bg-black">
+          <source src="https://archive.org/download${src.pathname}" type="video/mp4">
+          Tu navegador no soporta el video. 😢
+        </video>
+      </div>`;
+    modalContent.innerHTML = customPlayer;
+  } else {
+    modalContent.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>`;
+  }
+
+  videoModal.classList.remove("hidden");
+  setTimeout(() => {
+    modalInner.classList.remove("scale-90", "opacity-0");
+    modalInner.classList.add("scale-100", "opacity-100");
+  }, 10);
 }
 
 
