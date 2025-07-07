@@ -58,6 +58,11 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.4; }
     }
+  #streameko-player {
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 20px var(--primary);
+  }
+</style>
   </style>
 </head>
 <body class="min-h-screen font-sans"><div id="loader" class="p-6 max-w-5xl mx-auto">
@@ -142,12 +147,38 @@ document.getElementById("closeModal").addEventListener("click", () => {
   }, 300);
 });
 
-function openModal(embedUrl, episodeNum) {
+async function openModal(embedUrl, episodeNum) {
   localStorage.setItem(`ultimo_${animeId}`, episodeNum);
   const videoModal = document.getElementById("videoModal");
   const modalInner = document.getElementById("modalInner");
   const modalContent = document.getElementById("modalContent");
-  modalContent.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>`;
+
+  if (embedUrl.includes("archive.org")) {
+    try {
+      const response = await fetch(embedUrl);
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const source = doc.querySelector('video source');
+
+      if (source && source.src) {
+        modalContent.innerHTML = `
+          <video controls autoplay class="w-full h-full rounded-b-2xl bg-black" id="streameko-player">
+            <source src="${source.src}" type="video/mp4">
+            Tu navegador no soporta la reproducción de video.
+          </video>
+        `;
+      } else {
+        modalContent.innerHTML = `<p class="text-white p-6 text-center">⚠️ No se pudo cargar el video desde Archive.org.</p>`;
+      }
+    } catch (e) {
+      modalContent.innerHTML = `<p class="text-white p-6 text-center">💥 Error al cargar el video: ${e.message}</p>`;
+    }
+  } else {
+    // Embed estándar
+    modalContent.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>`;
+  }
+
   videoModal.classList.remove("hidden");
   setTimeout(() => {
     modalInner.classList.remove("scale-90", "opacity-0");
