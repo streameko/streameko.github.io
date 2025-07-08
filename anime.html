@@ -145,17 +145,17 @@ document.getElementById("closeModal").addEventListener("click", () => {
 });
 
 function openModal(embedUrl, episodeNum) {
-localStorage.setItem(ultimo_${animeId}, episodeNum);
-const videoModal = document.getElementById("videoModal");
-const modalInner = document.getElementById("modalInner");
-const modalContent = document.getElementById("modalContent");
-modalContent.innerHTML = <iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>;
-videoModal.classList.remove("hidden");
-setTimeout(() => {
-modalInner.classList.remove("scale-90", "opacity-0");
-modalInner.classList.add("scale-100", "opacity-100");
-}, 10);
-
+  localStorage.setItem(`ultimo_${animeId}`, episodeNum);
+  const videoModal = document.getElementById("videoModal");
+  const modalInner = document.getElementById("modalInner");
+  const modalContent = document.getElementById("modalContent");
+  modalContent.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>`;
+  videoModal.classList.remove("hidden");
+  setTimeout(() => {
+    modalInner.classList.remove("scale-90", "opacity-0");
+    modalInner.classList.add("scale-100", "opacity-100");
+  }, 10);
+}
 
 
 function setActiveTab(tab) {
