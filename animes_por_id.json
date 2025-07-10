@@ -358762,6 +358762,18 @@
         "episode": "1",
         "url": "https://player.vimeo.com/video/1098879419",
         "language": 0,
+        "server": "Nara"
+      },
+      {
+        "episode": "1",
+        "url": "https://archive.org/download/texttype-1815/1815-A1.mp4",
+        "language": 0,
+        "server": "Tokio"
+      },
+      {
+        "episode": "2",
+        "url": "https://archive.org/download/texttype-1815/1815-A2.mp4",
+        "language": 0,
         "server": "Tokio"
       }
     ],
