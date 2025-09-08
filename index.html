@@ -77,17 +77,28 @@
     🚧 Este es un estilo en desarrollo. Puede tener errores o cambiar sin aviso.
     <a href="stable.html" class="underline text-blue-400">Volver al estilo estable</a>
   </div>
-  <div class="bg-[#2C2F33] text-white py-4 px-6 mx-6 rounded-lg mt-4 shadow-lg border border-[#5865F2] flex flex-col sm:flex-row items-center justify-between gap-4">
-  <div class="text-sm sm:text-base max-w-xl leading-relaxed">
-    🔊 <strong>Aviso – Proyecto de Fandub en Marcha</strong> 🎙️<br />
-    Estamos trabajando en un doblaje fanmade de <em>Call of the Night (Yofukashi no Uta)</em> en español latino. 
-    Proyecto colaborativo, sin fines de lucro, hecho por y para fans del anime. Participan voces, edición, guión y más, todo con cariño y ganas de hacer algo épico. 
-    Si quieres sumarte o más info, hablamos por Discord, solo dale al botón. Esto recién comienza y sí… va a estar muy épico.
+<!-- REEMPLAZO DEL AVISO DE FANDUB POR EL CONTADOR -->
+<div class="flex justify-center gap-4 mt-6 px-6">
+  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
+    <span id="dias" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
+    <span class="text-sm text-white/70 mt-1">Días</span>
   </div>
-  <a href="https://discord.gg/fX2KGJZmWD" target="_blank" rel="noopener" class="bg-[#5865F2] hover:bg-[#4752c4] text-white font-semibold py-2 px-5 rounded-full shadow-md transition-colors whitespace-nowrap">
-    Únete en Discord
-  </a>
+  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
+    <span id="horas" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
+    <span class="text-sm text-white/70 mt-1">Horas</span>
+  </div>
+  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
+    <span id="minutos" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
+    <span class="text-sm text-white/70 mt-1">Minutos</span>
+  </div>
+  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
+    <span id="segundos" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
+    <span class="text-sm text-white/70 mt-1">Segundos</span>
+  </div>
 </div>
+
+<p class="text-center text-white/70 mt-4">⏳ Una nueva versión de Streameko se aproxima: más animes, mejor experiencia, ¡llega para quedarse!</p>
+
 
   <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>
 
@@ -230,6 +241,50 @@
       animeData = data;
       renderRows();
     });
+function iniciarContadorFortniteStyle() {
+  const diasEl = document.getElementById("dias");
+  const horasEl = document.getElementById("horas");
+  const minutosEl = document.getElementById("minutos");
+  const segundosEl = document.getElementById("segundos");
+  // Necesitamos un contenedor para el mensaje final
+  const contenedorContador = document.getElementById("contenedor-contador");
+
+  const targetDate = new Date("2025-09-30T12:00:00-06:00");
+
+  const intervalo = setInterval(actualizar, 1000);
+
+  function actualizar() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      // Borramos el intervalo para que no se siga ejecutando
+      clearInterval(intervalo);
+      // Ocultamos el contador y mostramos el mensaje épico
+      if (contenedorContador) {
+        contenedorContador.innerHTML = '<p style="font-size: 2em; text-align: center;">La nueva version será lanzada en unos momentos, F5 hasta que explote!</p>';
+      }
+      return;
+    }
+
+    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+
+    // Actualizamos los elementos solo si existen
+    if (diasEl) diasEl.textContent = String(dias).padStart(2, "0");
+    if (horasEl) horasEl.textContent = String(horas).padStart(2, "0");
+    if (minutosEl) minutosEl.textContent = String(minutos).padStart(2, "0");
+    if (segundosEl) segundosEl.textContent = String(segundos).padStart(2, "0");
+  }
+
+  // Llamada inicial para evitar un retraso de 1 segundo
+  actualizar();
+}
+
+iniciarContadorFortniteStyle();
+
 </script>
 </body>
 </html> 
