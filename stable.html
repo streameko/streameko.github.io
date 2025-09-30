@@ -4,19 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inicio – Streameko</title>
-
   <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español." />
   <meta name="keywords" content="anime, ver anime, anime gratis, anime subtitulado, anime doblado, anime online, streameko" />
   <meta name="author" content="Streameko" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#2e284b" />
   <link rel="canonical" href="https://streameko.github.io/" />
-
   <meta property="og:title" content="Streameko – Ver Anime Gratis Subtitulado y Doblado" />
   <meta property="og:description" content="Disfruta anime online sin límites. Subtitulado y doblado al español en Streameko." />
-  <meta property="og:url" content="https://streameko.github.io/" />
+  <meta property="og:url" content="https://streameko.qzz.io/" />
   <meta property="og:type" content="website" />
-
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
@@ -25,34 +22,63 @@
       --text: #ffffff;
       --primary: #a78bfa;
       --glass: rgba(255, 255, 255, 0.05);
+      --glow-color: rgba(167, 139, 250, 0.5);
     }
 
-    html, body {
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
       background-color: var(--bg);
       color: var(--text);
       transition: background-color 0.4s ease, color 0.4s ease;
+      background: linear-gradient(135deg, #231e3b, #2e284b, #3a325c);
+      background-size: 200% 200%;
+      animation: gradient-bg 15s ease infinite;
+    }
+
+    @keyframes gradient-bg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .card {
       background: var(--card);
       border-radius: 1rem;
-      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease-out; 
       opacity: 0;
       transform: translateY(10px);
-      animation: fadeInUp 0.4s ease forwards;
+      animation: fadeInUpSlow 1.6s ease-out forwards; 
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px var(--glow-color);
     }
 
     .glass {
       background: var(--glass);
       border-radius: 1rem;
-      padding: 1rem;
+      padding: 1.5rem;
       backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
-    input::placeholder {
-      color: #cfcfe0;
+    #searchInput {
+        transition: all 0.3s ease;
+        box-shadow: 0 0 0 0px var(--glow-color);
     }
-
+    
+    #searchInput:focus {
+        box-shadow: 0 0 0 3px var(--glow-color);
+        border-color: var(--primary);
+    }
+    
     .switch-container {
       background-color: var(--card);
       padding: 0.5rem 1rem;
@@ -61,14 +87,25 @@
       align-items: center;
       gap: 0.5rem;
       transition: background 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .switch-container input {
       accent-color: var(--primary);
       transform: scale(1.3);
     }
+    
+    .view-episodes-btn {
+        background: linear-gradient(45deg, #8A2BE2, #4B0082);
+        box-shadow: 0 2px 8px rgba(138, 43, 226, 0.4);
+        transition: all 0.3s ease;
+    }
+    .view-episodes-btn:hover {
+        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.6);
+        transform: scale(1.05);
+    }
 
-    @keyframes fadeInUp {
+    @keyframes fadeInUpSlow {
       to {
         opacity: 1;
         transform: translateY(0);
@@ -78,28 +115,34 @@
 </head>
 <body class="min-h-screen font-sans">
   <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-4xl font-bold text-center mb-4">Streameko</h1>
+    <h1 class="text-4xl font-bold text-center mb-4" style="text-shadow: 0 0 10px var(--glow-color);">Streameko</h1>
 
-    <div class="glass text-sm mb-6 text-center shadow max-w-3xl mx-auto p-6">
-  <p class="mb-1 font-semibold text-green-300">🔊 Aviso – Proyecto de Fandub en Marcha 🎙️</p>
-  <p>Estamos trabajando en un doblaje fanmade de <em>Call of the Night (Yofukashi no Uta)</em> en español latino.</p>
-  <p>Es un proyecto colaborativo, sin fines de lucro, hecho por y para fans del anime.</p>
-  <p>Participan voces, edición, guión y más, todo con cariño y con ganas de hacer algo épico.</p>
-  <p>Si te interesa sumarte o quieres más info, hablamos por Discord, solo dale al botón.</p>
-  <p>Esto recién comienza. Y sí... va a estar muy épico.</p>
-  <a href="https://discord.gg/fX2KGJZmWD" target="_blank" rel="noopener" class="inline-block bg-[#5865F2] hover:bg-[#4752c4] text-white font-semibold py-2 px-6 rounded-full shadow-md transition-colors whitespace-nowrap mt-4">
-    Únete en Discord
-  </a>
-  <p class="mt-2 italic text-white/80">– El equipo de Streameko</p>
-</div>
+    <div class="glass text-sm mb-6 text-center shadow max-w-3xl mx-auto">
+      <p class="text-xl font-bold text-yellow-300 mb-3">
+        ¡Atención, viajero! 🚀
+      </p>
+      <p class="text-white/90">
+        Esta versión de Streameko es como el primer episodio de un gran anime... ¡épico, pero ya hemos avanzado en la trama!
+      </p>
+      <p class="mt-2 text-white/90">
+        La aventura continúa en nuestra nueva y mejorada página. ¡Nuevos animes, más funciones y la misma pasión de siempre te esperan!
+      </p>
+      <p class="mt-4 font-semibold">
+        ¡No te quedes atrás en el arco de relleno!
+      </p>
+      <div class="mt-6">
+        <a href="index.html" class="inline-block bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition transform hover:scale-105 hover:shadow-indigo-400/50">
+          Ir a la Nueva Versión
+        </a>
+      </div>
+    </div>
 
     <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
       <div class="relative w-full max-w-md">
         <label for="searchInput" class="sr-only">Buscar anime</label>
-        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20 transition-all" />
+        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20" />
         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">🔍</span>
       </div>
-
       <label class="switch-container text-sm font-medium text-white cursor-pointer">
         <input id="dubToggle" type="checkbox">
         Solo Doblados
@@ -107,7 +150,7 @@
     </div>
 
     <div class="flex justify-end mb-2">
-      <button onclick="limpiarRecientes()" class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition">
+      <button onclick="limpiarRecientes()" class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition shadow hover:shadow-lg hover:shadow-red-500/50">
         Limpiar Recientes 🧹
       </button>
     </div>
@@ -116,34 +159,45 @@
     <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </div>
 
+  <footer class="py-8 text-center border-t border-white/10">
+  <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+</footer>
+
   <script>
     let animeData = {};
+    let debounceTimeout;
 
     fetch("animes_por_id.json")
       .then(res => res.json())
       .then(data => {
-        animeData = data;
-        document.getElementById("loader").style.display = "none";
-        renderAnimeList();
+        const delay = Math.random() * 1500 + 1500;
+        setTimeout(() => {
+            animeData = data;
+            document.getElementById("loader").style.display = "none";
+            renderAnimeList();
+        }, delay);
       });
 
     const searchInput = document.getElementById("searchInput");
     const dubToggle = document.getElementById("dubToggle");
     const animeList = document.getElementById("animeList");
 
-    searchInput.addEventListener("input", renderAnimeList);
+    searchInput.addEventListener("input", () => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(renderAnimeList, 1000); 
+    });
     dubToggle.addEventListener("change", renderAnimeList);
 
     function crearCardAnime(anime, id, extraEtiqueta = "") {
       const poster = anime.poster || "poster_default.png";
       const div = document.createElement("div");
-      div.className = "card p-4 flex flex-col items-center text-center hover:scale-[1.02] hover:shadow-xl transition-transform";
+      div.className = "card p-4 flex flex-col items-center text-center";
 
       div.innerHTML = `
-        <img src="${poster}" alt="Póster del anime ${anime.name}, imagen promocional" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px]" />
+        <img src="${poster}" alt="Póster del anime ${anime.name}" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px] shadow-lg" />
         <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
         ${extraEtiqueta}
-        <button class="bg-indigo-400 hover:bg-indigo-500 text-white px-4 py-1 rounded-full text-sm transition" onclick="viewAnime('${id}')">Ver Episodios</button>
+        <button class="view-episodes-btn text-white px-4 py-1 rounded-full text-sm transition-all duration-300" onclick="viewAnime('${id}')">Ver Episodios</button>
       `;
       return div;
     }
@@ -153,7 +207,6 @@
       const dubbedOnly = dubToggle.checked;
       animeList.innerHTML = "";
 
-      // Primero: animes recientemente vistos
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
       recientes.forEach(id => {
         const anime = animeData[id];
@@ -163,17 +216,13 @@
         animeList.appendChild(card);
       });
 
-      // Segundo: resto del catálogo filtrado
       Object.entries(animeData).forEach(([id, anime]) => {
-        if (recientes.includes(id)) return; // Ya mostrado
-
+        if (recientes.includes(id)) return;
         const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
         const matchesSearch = names.some(name => name.includes(query));
         if (!matchesSearch) return;
-
         const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
         if (dubbedOnly && !hasDub) return;
-
         const card = crearCardAnime(anime, id);
         animeList.appendChild(card);
       });
@@ -181,14 +230,12 @@
 
     function viewAnime(id) {
       localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
-
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
       const index = recientes.indexOf(id);
       if (index !== -1) recientes.splice(index, 1);
       recientes.unshift(id);
       if (recientes.length > 6) recientes.pop();
       localStorage.setItem("recientes", JSON.stringify(recientes));
-
       window.location.href = `animestable.html?id=${id}`;
     }
 

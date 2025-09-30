@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Ayudita para una Web Feliz – Streameko</title>
+  <meta name="description" content="Mi recomendación personal para navegar por toda la web de forma más linda, sin anuncios ni molestias, ¡y con seguridad!" />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#e50914" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --accent: #e50914;
+      --primary: #a78bfa;
+      --glass: rgba(255, 255, 255, 0.05);
+      --card: #1f1f1f;
+      --glow-color: rgba(167, 139, 250, 0.4);
+    }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+    .stylish-topbar { 
+      background: rgba(10, 10, 15, 0.6); 
+      backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px); 
+      border-bottom: 1px solid transparent; 
+      border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1; 
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); 
+    }
+    .logo-container { 
+      transition: transform 0.3s ease; 
+    }
+    .logo-container:hover { 
+      transform: scale(1.05); 
+    }
+    .logo-text { 
+      transition: text-shadow 0.3s ease; 
+    }
+    .logo-container:hover .logo-text { 
+      text-shadow: 0 0 10px var(--glow-color, var(--primary)); 
+    }
+    .nav-link-stylish { 
+      color: rgba(255, 255, 255, 0.8); 
+      padding: 0.5rem 1rem; 
+      border-radius: 8px; 
+      position: relative; 
+      overflow: hidden; 
+      transition: all 0.3s ease; 
+      z-index: 1; 
+    }
+    .nav-link-stylish::before { 
+      content: ''; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: var(--accent); 
+      opacity: 0; 
+      transform: scale(0.8); 
+      transition: all 0.4s ease; 
+      z-index: -1; 
+      border-radius: 8px; 
+    }
+    .nav-link-stylish:hover { 
+      color: white; 
+      transform: translateY(-2px); 
+    }
+    .nav-link-stylish:hover::before { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+
+    .is-mobile .logo-text {
+      font-size: 1.25rem;
+    }
+    .is-mobile header nav {
+      flex-direction: column;
+      gap: 0.25rem;
+      height: auto;
+      padding: 0.5rem 0;
+    }
+    .is-mobile header nav > div {
+      gap: 0.25rem;
+    }
+  
+  </style>
+</head>
+<body class="font-sans">
+
+<header class="sticky top-0 z-50 w-full stylish-topbar">
+  <div class="max-w-6xl mx-auto px-6">
+    <nav class="flex items-center justify-between h-20">
+      <a href="index.html" class="flex items-center gap-3 logo-container">
+        <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+        <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+      </a>
+      <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+        <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+        <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12 text-center">
+  <h1 class="text-4xl font-bold text-white mb-4">¡Un Internet Más Feliz y Sin Sorpresas Desagradables! ✨</h1>
+  <p class="text-lg text-white/80 mb-8">
+    Hola de nuevo~ Como te conté en el inicio, mi lucha contra los anuncios es un tema muy personal para mí. No solo quiero una Streameko limpia, ¡quiero un internet más lindo y seguro para todos! Y por eso, te comparto un secretito...
+  </p>
+
+  <div class="bg-zinc-900/70 border border-white/10 rounded-xl p-8">
+    <p class="text-white/80 mb-6">
+      Sé que hay muchísimas opciones por ahí, y la verdad, ¡puedes usar la que más te guste! Yo solo te cuento lo que a mí me ha funcionado de maravilla para mandar lejos a esos anuncios y rastreadores curiosos que andan por toda la web. Mi favorito y mi fiel compañero es:
+    </p>
+    <h2 class="text-3xl font-bold mb-2 text-red-400">uBlock Origin</h2>
+    <p class="text-white/70 mb-6">No es magia, ¡pero casi! Es una extensión súper ligera, de código abierto y poderosísima que te ayuda a navegar sin preocupaciones. ♥</p>
+    
+    <ul class="text-left list-none space-y-3 mb-8 inline-block">
+      <li class="flex items-center"><svg class="w-5 h-5 mr-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Es súper rapidito y no alenta tu navegador.</li>
+      <li class="flex items-center"><svg class="w-5 h-5 mr-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>¡Es completamente gratis y transparente!</li>
+      <li class="flex items-center"><svg class="w-5 h-5 mr-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Te protege de esos ojitos curiosos (rastreadores) y cositas malas (obvio no reemplaza los antivirus pero te ayuda jsjsjs :3).</li>
+    </ul>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto">
+  <a href="https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-red-700 transition-all transform hover:scale-105">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Chrome_icon_(September_2014).svg/1200px-Google_Chrome_icon_(September_2014).svg.png" alt="Chrome" class="w-6 h-6 object-contain"/>
+    <span>Añadir a Chrome</span>
+  </a>
+
+  <a href="https://addons.mozilla.org/es/firefox/addon/ublock-origin/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-red-700 transition-all transform hover:scale-105">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/500px-Firefox_logo%2C_2019.svg.png" alt="Firefox" class="w-6 h-6 object-contain"/>
+    <span>Añadir a Firefox</span>
+  </a>
+
+  <a href="https://microsoftedge.microsoft.com/addons/detail/ublock-origin/odfafepnkmbhccpbejgmiehpchacaeak" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-red-700 transition-all transform hover:scale-105">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Microsoft_Edge_logo_%282019%29.svg" alt="Edge" class="w-6 h-6 object-contain"/>
+    <span>Añadir a Edge</span>
+  </a>
+</div>
+
+
+    <p class="text-xs text-white/50 mt-8 italic">
+      Aclaración de KaiZ: Streameko no tiene ninguna afiliación con uBlock Origin. Esta es mi recomendación personal, de un fan para otro, para que tu experiencia en toda la web sea la mejor y más segura. ¡Prometido! :3
+    </p>
+  </div>
+
+</main>
+
+<footer class="py-8 text-center border-t border-white/10">
+  <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+</footer>
+
+<script>
+  function detectarDispositivo() {
+    const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    if (esMobile) {
+      document.body.classList.add("is-mobile");
+    }
+  }
+  detectarDispositivo();
+</script>
+
+</body>
+</html>

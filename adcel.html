@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía para Celular sin Anuncios – Streameko</title>
+  <meta name="description" content="Mi guía personal para que puedas navegar sin anuncios desde tu celular Android o iPhone." />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#e50914" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --accent: #e50914;
+      --primary: #a78bfa;
+      --glass: rgba(255, 255, 255, 0.05);
+      --card: #1f1f1f;
+      --glow-color: rgba(167, 139, 250, 0.4);
+    }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+    .stylish-topbar { 
+      background: rgba(10, 10, 15, 0.6); 
+      backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px); 
+      border-bottom: 1px solid transparent; 
+      border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1; 
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); 
+    }
+    .logo-container { 
+      transition: transform 0.3s ease; 
+    }
+    .logo-container:hover { 
+      transform: scale(1.05); 
+    }
+    .logo-text { 
+      transition: text-shadow 0.3s ease; 
+    }
+    .logo-container:hover .logo-text { 
+      text-shadow: 0 0 10px var(--glow-color, var(--primary)); 
+    }
+    .nav-link-stylish { 
+      color: rgba(255, 255, 255, 0.8); 
+      padding: 0.5rem 1rem; 
+      border-radius: 8px; 
+      position: relative; 
+      overflow: hidden; 
+      transition: all 0.3s ease; 
+      z-index: 1; 
+    }
+    .nav-link-stylish::before { 
+      content: ''; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: var(--accent); 
+      opacity: 0; 
+      transform: scale(0.8); 
+      transition: all 0.4s ease; 
+      z-index: -1; 
+      border-radius: 8px; 
+    }
+    .nav-link-stylish:hover { 
+      color: white; 
+      transform: translateY(-2px); 
+    }
+    .nav-link-stylish:hover::before { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+    .step-number { 
+      background-color: var(--accent); 
+    }
+
+    .is-mobile .logo-text {
+      font-size: 1.25rem;
+    }
+    .is-mobile header nav {
+      flex-direction: column;
+      gap: 0.25rem;
+      height: auto;
+      padding: 0.5rem 0;
+    }
+    .is-mobile header nav > div {
+      gap: 0.25rem;
+    }
+    
+  </style>
+</head>
+<body class="font-sans">
+
+<header class="sticky top-0 z-50 w-full stylish-topbar">
+  <div class="max-w-6xl mx-auto px-6">
+    <nav class="flex items-center justify-between h-20">
+      <a href="index.html" class="flex items-center gap-3 logo-container">
+        <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+        <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+      </a>
+      <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+        <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+        <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-12">
+  <div class="text-center">
+    <h1 class="text-4xl font-bold text-white mb-4">Tu Celular Libre de Anuncios ✨</h1>
+    <p class="text-lg text-white/80 mb-10">
+      ¡Hola! Sé que muchos de ustedes ven anime desde el cel. La mala noticia es que es un poquito más complicado usar extensiones ahí, ¡pero la buena es que tiene solución! Aquí te explico cómo.
+    </p>
+  </div>
+
+  <div class="bg-zinc-900/70 border border-white/10 rounded-xl p-8 mb-10">
+    <h2 class="text-2xl font-bold mb-4 text-center">Para Usuarios de Android</h2>
+    <p class="text-center text-white/70 mb-8">Chrome en Android no nos deja instalar cositas como uBlock Origin, ¡pero no pasa nada! La solución es usar un navegador que sí nos dé ese poder. ¡Te presento a tu nuevo mejor amigo!</p>
+    
+    <div class="space-y-6">
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg">1</div>
+        <div>
+          <h3 class="font-bold text-lg text-white">Descarga Firefox</h3>
+          <p class="text-white/70">Es el primer paso. Firefox es un navegador genial, gratuito y que respeta tu privacidad. Lo puedes bajar directo de la Play Store.</p>
+<a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-all transform hover:scale-105 mt-3">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_Play_2022_icon.svg/250px-Google_Play_2022_icon.svg.png" alt="Google Play" class="w-6 h-6 object-contain"/>
+  <span>Firefox en Google Play</span>
+</a>
+        </div>
+      </div>
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg">2</div>
+        <div>
+          <h3 class="font-bold text-lg text-white">Instala uBlock Origin</h3>
+          <p class="text-white/70">Abre tu nuevo navegador Firefox, ve al menú (los tres puntitos ⋮), busca la opción "Complementos" y ahí dentro, busca e instala "uBlock Origin".</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-4">
+        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg">3</div>
+        <div>
+          <h3 class="font-bold text-lg text-white">¡A Disfrutar! ♥</h3>
+          <p class="text-white/70">¡Eso es todo! Ahora, cuando navegues con Firefox en tu cel, estarás protegido de los anuncios. ¡Usa Streameko desde ahí y verás la diferencia!</p>
+        </div>
+      </div>
+    </div>
+    <p class="text-xs text-white/50 mt-8 italic">
+      Aclaración de KaiZ: Streameko no tiene ninguna afiliación con Firefox ni Brave. Esta es mi recomendación personal, de un fan para otro, para que tu experiencia en toda la web sea la mejor y más segura. ¡Prometido! :3
+    </p>
+    <p class="text-xs text-white/50 mt-3 italic">
+      ... si, es un copy paste de la aclaración de uBlock jakdjakdjakf, pero así soy yo :3
+    </p>
+  </div>
+
+  <div class="bg-zinc-900/70 border border-white/10 rounded-xl p-8">
+    <h2 class="text-2xl font-bold mb-4 text-center">Para Usuarios de iPhone/iOS</h2>
+    <p class="text-center text-white/70 mb-6">
+      Apple es un poquito más estricto y no deja instalar las mismas extensiones. ¡Pero no te preocupes! La mejor alternativa es usar un navegador que ya venga con un escudo protector integrado.
+    </p>
+    <p class="text-center text-white/70 mb-8">Mi recomendación personal para iOS es <strong>Brave Browser</strong>. Es súper rápido y bloquea anuncios y rastreadores de forma automática.</p>
+    <a href="https://apps.apple.com/app/brave-private-web-browser/id1052879175" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition-all transform hover:scale-105">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/App_Store_%28iOS%29.svg/768px-App_Store_%28iOS%29.svg.png" alt="App Store" class="w-6 h-6 object-contain"/>
+        <span>Brave Browser en la App Store</span>
+  </a>
+    <p class="text-xs text-white/50 mt-8 italic">
+      Aclaración de KaiZ: Streameko no tiene ninguna afiliación con Firefox ni Brave. Esta es mi recomendación personal, de un fan para otro, para que tu experiencia en toda la web sea la mejor y más segura. ¡Prometido! :3
+    </p>
+    <p class="text-xs text-white/50 mt-3 italic">
+      ... si, es un copy paste de la aclaración de uBlock jakdjakdjakf, pero así soy yo :3
+    </p>
+    <p class="text-xs text-white/50 mt-3 italic">
+      ... esto tambien es un copy paste del de android, me da flojera pensar en un texto nuevo así que bueh
+    </p>
+    <p class="text-xs text-white/50 mt-3 italic">
+      Solo disfruten >w<
+    </p>
+  </div>
+</div>
+
+</div>
+
+<footer class="py-8 text-center border-t border-white/10">
+  <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+</footer>
+
+<script>
+  function detectarDispositivo() {
+    const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    if (esMobile) {
+      document.body.classList.add("is-mobile");
+    }
+  }
+  detectarDispositivo();
+</script>
+
+</body>
+</html>

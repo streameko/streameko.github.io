@@ -1,282 +1,539 @@
-<!DOCTYPE html><html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ver Animes – Streameko</title>
-  <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español." />
-  <meta name="keywords" content="anime, ver anime, anime gratis, anime subtitulado, anime doblado, anime online, streameko" />
-  <meta name="author" content="Streameko" />
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#141414" />
-  <link rel="canonical" href="https://streameko.github.io/" />
-  <meta property="og:title" content="Streameko – Ver Anime Gratis Subtitulado y Doblado" />
-  <meta property="og:description" content="Disfruta anime online sin límites. Subtitulado y doblado al español en Streameko." />
-  <meta property="og:url" content="https://streameko.github.io/" />
-  <meta property="og:type" content="website" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      --bg: #141414;
-      --card: #1f1f1f;
-      --text: #ffffff;
-      --glass: rgba(255, 255, 255, 0.05);
-      --primary: #e50914;
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+    try {
+      const animeJSON = localStorage.getItem("selectedAnime");
+      if (animeJSON) {
+        const anime = JSON.parse(animeJSON);
+        document.title = `Ver ${anime.name} – Streameko`;
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.setAttribute("content", `Ver ${anime.name} en Streameko`);
+        const ogDescription = document.querySelector('meta[property="og:description"]');
+        if (ogDescription) ogDescription.setAttribute("content", anime.overview || `Disfruta de todos los episodios de ${anime.name}.`);
+      }
+    } catch (error) {
+      console.error("Error al actualizar la informacion para el navegador:", error);
+      document.title = "Streameko Fallback Page";
     }
-    html, body {
-      background-color: var(--bg);
-      color: var(--text);
+  </script>
+    <title>Ver Animes – Streameko</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fflate/umd/index.js"></script>
+    <style>
+  @keyframes modalIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.85) translateY(30px);
     }
-    .card {
-      background: var(--card);
-      border-radius: 0.5rem;
-      transition: all 0.3s ease;
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
-    .glass {
-      background: var(--glass);
-      border-radius: 0.5rem;
-      padding: 1rem;
-      backdrop-filter: blur(8px);
+  }
+  @keyframes modalOut {
+    0% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
     }
-    .tab-button {
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      font-weight: 600;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    100% {
+      opacity: 0;
+      transform: scale(0.85) translateY(30px);
     }
-    .line-clamp-3 {
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .skeleton {
-      background-color: #2c2c2c;
-      border-radius: 0.5rem;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+  }
 
-</style>
-  </style>
-</head>
-<body class="min-h-screen font-sans"><div id="loader" class="p-6 max-w-5xl mx-auto">
-  <div class="glass text-center mb-6 p-6">
-    <div class="h-8 w-3/4 mx-auto skeleton mb-2"></div>
-    <div class="h-4 w-1/2 mx-auto skeleton mb-1"></div>
-    <div class="h-4 w-1/3 mx-auto skeleton mb-3"></div>
-    <div class="h-20 w-full skeleton rounded"></div>
-  </div>
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    <div class="h-32 skeleton"></div>
-    <div class="h-32 skeleton"></div>
-    <div class="h-32 skeleton"></div>
-  </div>
+  .modal-anim {
+    animation-duration: 0.35s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
+  .modal-entering {
+    animation-name: modalIn;
+  }
 
-</div>
+  .modal-leaving {
+    animation-name: modalOut;
+  }
 
-<div class="glass text-center text-sm max-w-4xl mx-auto mt-6 mb-4 border border-yellow-400 text-yellow-300 shadow-lg p-4">
-  <p class="mb-2">⚠️ Estás usando el <span class="font-semibold text-yellow-200">estilo beta</span> de Streameko. Debido a <span class="italic">actualizaciones continuas</span>, es posible que encuentres errores o comportamientos inusuales. 🛠️</p>
-  <p class="mb-3">Si prefieres una experiencia más estable, puedes volver a la versión anterior:</p>
-  <a href="stable.html" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-4 py-2 rounded-full transition">
-    🔙 Volver al estilo estable
-  </a>
-</div>
-  <div id="nsfwModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-xl p-6 max-w-md w-full text-center text-black relative shadow-xl">
-    <h2 class="text-2xl font-bold mb-4">🫣 ¿Estás segur@?</h2>
-    <p class="mb-6">
-      Este anime está marcado como contenido para adultos.<br />
-      Si decides continuar, Streameko no se hace responsable de tus actos 🙀
-    </p>
-    <div class="flex justify-center gap-4">
-      <button id="continueBtn" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded">
-        Sí, quiero ver 🔥
-      </button>
-      <button id="exitBtn" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">
-        ¡Mejor no!
-      </button>
+  .stylish-topbar {
+    background: rgba(10, 10, 15, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .logo-container { 
+    transition: transform 0.3s ease; 
+  }
+  .logo-container:hover { 
+    transform: scale(1.05); 
+  }
+  .logo-text { 
+    transition: text-shadow 0.3s ease; 
+  }
+  .logo-container:hover .logo-text { 
+    text-shadow: 0 0 10px var(--glow-color, var(--primary)); 
+  }
+
+  .nav-link-stylish {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+  .nav-link-stylish::before {
+    content: '';
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: var(--accent);
+    opacity: 0; 
+    transform: scale(0.8);
+    transition: all 0.4s ease;
+    z-index: -1; 
+    border-radius: 8px;
+  }
+  .nav-link-stylish:hover { 
+    color: white; 
+    transform: translateY(-2px); 
+  }
+  .nav-link-stylish:hover::before { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+
+  :root {
+    --bg: #000000;
+    --text: #ffffff;
+    --accent: #e50914;
+    --primary: #a78bfa;
+    --glass: rgba(255, 255, 255, 0.05);
+    --card: #1f1f1f;
+    --glow-color: rgba(167, 139, 250, 0.4);
+  }
+  html { scroll-behavior: smooth; }
+  body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+
+  .server-badge {
+    background-color: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0 4px;
+    border-radius: 9999px;
+    margin-left: 4px;
+  }
+
+  .card {
+    background: var(--glass);
+    padding: 1rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+  .glass { background: var(--glass); border-radius: 0.5rem; padding: 1rem; backdrop-filter: blur(8px); }
+  .tab-button { padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 600; transition: background-color 0.3s ease, color 0.3s ease; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .skeleton { background-color: #2c2c2c; border-radius: 0.5rem; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .is-mobile .logo-text {
+    font-size: 1.25rem;
+  }
+  .is-mobile header nav {
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    padding: 0.75rem 0;
+    gap: 0.5rem;
+  }
+  .is-mobile h1 {
+    font-size: 1.75rem;
+  }
+  .is-mobile .nav-link-stylish {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  .is-mobile .card {
+    padding: 0.75rem;
+  }
+  .is-mobile .tab-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  @keyframes fadeInBg {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fadeOutBg {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  #videoModal.bg-entering {
+    animation: fadeInBg 0.35s forwards;
+  }
+
+  #videoModal.bg-leaving {
+    animation: fadeOutBg 0.35s forwards;
+  }
+
+    </style>
+  </head>
+  <body class="min-h-screen font-sans">
+
+    <header class="sticky top-0 z-50 w-full stylish-topbar">
+      <div class="max-w-6xl mx-auto px-6">
+        <nav class="flex items-center justify-between h-20">
+          <a href="index.html" class="flex items-center gap-3 logo-container">
+            <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+            <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+          </a>
+          <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+            <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+            <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <div id="loader" class="p-6 max-w-5xl mx-auto">
+      <div class="glass text-center mb-6 p-6">
+        <div class="h-8 w-3/4 mx-auto skeleton mb-2"></div>
+        <div class="h-4 w-1/2 mx-auto skeleton mb-1"></div>
+        <div class="h-4 w-1/3 mx-auto skeleton mb-3"></div>
+        <div class="h-20 w-full skeleton rounded"></div>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="h-32 skeleton"></div> <div class="h-32 skeleton"></div> <div class="h-32 skeleton"></div>
+      </div>
     </div>
-  </div>
-</div><div class="max-w-5xl mx-auto p-6 main-content hidden">
-  <div class="mb-4">
-    <a href="index.html" class="text-red-400 hover:underline text-sm">&larr; Volver al inicio</a>
-  </div>
-  <div class="glass text-center mb-6 p-6" id="animeHeader">
-    <h1 id="animeTitle" class="text-4xl font-bold mb-2"></h1>
-    <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
-    <p id="episodeCount" class="text-white/80 mb-3"></p>
-    <div id="overviewContainer" class="relative overflow-hidden transition-all duration-300">
-      <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line line-clamp-3 overflow-hidden transition-all duration-300"></p>
-      <button id="toggleOverview" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-3 py-1 rounded-full transition hidden">
-        Ver más
-      </button>
+
+    <div id="nsfwModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-xl p-6 max-w-md w-full text-center text-black relative shadow-xl">
+        <h2 class="text-2xl font-bold mb-4">🫣 ¿Estás segur@?</h2>
+        <p class="mb-6">Este anime está marcado como contenido para adultos.<br/>Si decides continuar, Streameko no se hace responsable de tus actos 🙀</p>
+        <div class="flex justify-center gap-4">
+          <button id="continueBtn" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded">Sí, quiero ver 🔥</button>
+          <button id="exitBtn" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">¡Mejor no!</button>
+        </div>
+      </div>
     </div>
+
+    <div class="max-w-5xl mx-auto p-6 main-content hidden">
+      <div class="glass text-center mb-6 p-6" id="animeHeader">
+        <h1 id="animeTitle" class="text-4xl font-bold mb-2"></h1>
+        <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
+        <p id="episodeCount" class="text-white/80 mb-3"></p>
+        <div id="overviewContainer" class="relative overflow-hidden transition-all duration-300">
+          
+          <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line line-clamp-3 overflow-hidden transition-all duration-300"></p>
+          <div id="adsLegend" class="text-xs text-white/70 mt-2 text-center">
+          👎 = Muchos anuncios | 👍👎 Ni muchos ni pocos
   </div>
-  <div class="card flex justify-center flex-wrap gap-3 py-4 mb-6">
-    <button id="tab-sub" class="tab-button bg-red-600 text-white">Subtitulado</button>
-    <button id="tab-dub" class="tab-button bg-red-400 text-white/80">Doblado</button>
-    <button id="tab-cas" class="tab-button bg-red-400 text-white/80">Castellano</button>
-  </div>
-  <div id="episodeListSub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
-  <div id="episodeListDub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
-  <div id="episodeListCas" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
-</div><!-- Modal de video --><div id="videoModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden transition-opacity duration-300 ease-in-out">
-  <div id="modalInner" class="relative max-w-4xl w-full mx-auto my-10 rounded-2xl bg-white overflow-hidden shadow-2xl transform scale-90 opacity-0 transition-all duration-300 ease-in-out">
-    <button id="closeModal" class="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white rounded-full w-9 h-9 flex items-center justify-center text-xl shadow-md transition-transform hover:scale-110">✖</button>
-    <div id="modalContent" class="aspect-video w-full bg-black"></div>
-  </div>
-</div><script>
-const params = new URLSearchParams(window.location.search);
-const animeId = params.get("id");
+          <button id="toggleOverview" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-3 py-1 rounded-full transition hidden">Ver más</button>
+        </div>
+      </div>
+      <div class="card flex justify-center flex-wrap gap-3 py-4 mb-6">
+        <button id="tab-sub" class="tab-button bg-red-600 text-white">Subtitulado</button>
+        <button id="tab-dub" class="tab-button bg-red-400 text-white/80">Doblado</button>
+        <button id="tab-cas" class="tab-button bg-red-400 text-white/80">Castellano</button>
+      </div>
+      <div id="episodeListSub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+      <div id="episodeListDub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
+      <div id="episodeListCas" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
+    </div>
 
-document.getElementById("closeModal").addEventListener("click", () => {
-  const videoModal = document.getElementById("videoModal");
-  const modalInner = document.getElementById("modalInner");
-  modalInner.classList.remove("scale-100", "opacity-100");
-  modalInner.classList.add("scale-90", "opacity-0");
-  setTimeout(() => {
-    videoModal.classList.add("hidden");
-    document.getElementById("modalContent").innerHTML = "";
-  }, 300);
-});
+    <div id="videoModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+      <div id="modalBox" class="relative max-w-4xl w-full mx-auto my-10 rounded-2xl bg-black overflow-hidden shadow-2xl">
+        <button id="closeModal" class="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white rounded-full w-9 h-9 flex items-center justify-center text-xl z-10">✖</button>
+        <div id="modalContent" class="aspect-video w-full bg-black"></div>
+      </div>
+    </div>
+  <footer class="py-8 text-center border-t border-white/10">
+    <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+  </footer>
 
-function openModal(embedUrl, episodeNum) {
-  localStorage.setItem(`ultimo_${animeId}`, episodeNum);
-  const videoModal = document.getElementById("videoModal");
-  const modalInner = document.getElementById("modalInner");
-  const modalContent = document.getElementById("modalContent");
-  modalContent.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full rounded-b-2xl" allowfullscreen></iframe>`;
-  videoModal.classList.remove("hidden");
-  setTimeout(() => {
-    modalInner.classList.remove("scale-90", "opacity-0");
-    modalInner.classList.add("scale-100", "opacity-100");
-  }, 10);
-}
-
-
-function setActiveTab(tab) {
-  ["sub", "dub", "cas"].forEach(type => {
-    const btn = document.getElementById(`tab-${type}`);
-    const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
-    if (btn && list) {
-      if (type === tab) {
-        btn.classList.replace("bg-red-400", "bg-red-600");
-        btn.classList.replace("text-white/80", "text-white");
-        list.classList.remove("hidden");
+  <script>
+    function detectarDispositivo() {
+      const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent) || 
+                      window.matchMedia("(max-width: 768px)").matches;
+      if (esMobile) {
+        document.body.classList.add("is-mobile");
       } else {
-        btn.classList.replace("bg-red-600", "bg-red-400");
-        btn.classList.replace("text-white", "text-white/80");
-        list.classList.add("hidden");
+        document.body.classList.remove("is-mobile");
       }
     }
-  });
-}
+    
+    detectarDispositivo();
+    window.addEventListener("resize", detectarDispositivo);
 
-fetch("https://raw.githubusercontent.com/streameko/streameko.github.io/refs/heads/main/animes_por_id.json")
-  .then(res => res.json())
-  .then(data => {
-    const anime = data[animeId];
-    if (!anime) {
-      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Anime no encontrado.</p>';
-      return;
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent) 
+            || window.matchMedia("(max-width: 768px)").matches;
     }
 
-    if ("IsH" in anime && anime.IsH === true) {
-      document.getElementById("nsfwModal").classList.remove("hidden");
-      document.getElementById("continueBtn").onclick = () => {
-        document.getElementById("nsfwModal").classList.add("hidden");
-        mostrarContenido(anime);
-        document.querySelector(".main-content").classList.remove("hidden");
-      };
-      document.getElementById("exitBtn").onclick = () => {
-        window.location.href = "index.html";
-      };
-    } else {
-      mostrarContenido(anime);
-    }
+      const params = new URLSearchParams(window.location.search);
+      const animeId = params.get("id");
 
-    document.getElementById("loader").remove();
+      const serverDisplayNames = { "Gamma": "Tokio", "Delta": "Nara", "Alpha": "Osaka", "Epsilon": "Kioto" };
+      const serverBaseUrls = { "Gamma": "https://jilliandescribecompany.com/e/", "Alpha": "https://dumbalag.com/e/", "Delta": "https://filemoon.nl/e/", "Epsilon": "https://luluvdoo.com/e/" };
+
+      const videoModal = document.getElementById("videoModal");
+      const modalContent = document.getElementById("modalContent");
+      const modalBox = document.getElementById("modalBox");
+
+      let modalAnimationInProgress = false;
+
+
+  function openModal(baseUrl, path, episodeNum) {
+    if (modalAnimationInProgress) return;
+    
+    localStorage.setItem(`ultimo_${animeId}`, episodeNum);
+
+    const targetUrl = baseUrl + path;
+    console.log("Cargando episodio desde:", targetUrl);
+
+    try {
+      modalContent.innerHTML = `
+        <iframe 
+          src="${targetUrl}" 
+          class="w-full h-full" 
+          style="border:none;"
+          allow="autoplay; fullscreen"
+          allowfullscreen>
+        </iframe>
+      `;
+      
+      modalAnimationInProgress = true;
+      videoModal.classList.remove("hidden");
+      videoModal.classList.add("bg-entering");
+      
+      modalBox.classList.remove("modal-anim", "modal-entering", "modal-leaving");
+      modalBox.classList.add("modal-anim", "modal-entering");
+
+      const handleEnterEnd = () => {
+        modalBox.removeEventListener("animationend", handleEnterEnd);
+        modalAnimationInProgress = false;
+        videoModal.classList.remove("bg-entering");
+        modalBox.classList.remove("modal-entering");
+      };
+
+      modalBox.addEventListener("animationend", handleEnterEnd);
+
+    } catch (err) {
+      console.error("Error cargando video:", err);
+      modalContent.innerHTML = `<p class="text-red-500 p-4">Error cargando el episodio. Por favor reportalo</p>`;
+      videoModal.classList.remove("hidden");
+      modalAnimationInProgress = false;
+    }
+  }
+
+  function closeModal() {
+    if (modalAnimationInProgress) return;
+
+    modalAnimationInProgress = true;
+    
+    videoModal.classList.add("bg-leaving");
+    modalBox.classList.remove("modal-entering");
+    modalBox.classList.add("modal-leaving");
+
+    const handleExitEnd = (e) => {
+      if (e.target === modalBox && e.animationName === "modalOut") {
+        modalBox.removeEventListener("animationend", handleExitEnd);
+        
+        videoModal.classList.add("hidden");
+        videoModal.classList.remove("bg-leaving");
+        modalBox.classList.remove("modal-anim", "modal-leaving");
+        modalContent.innerHTML = "";
+        modalAnimationInProgress = false;
+      }
+    };
+
+    modalBox.addEventListener("animationend", handleExitEnd);
+  }
+
+  document.getElementById("closeModal").addEventListener("click", closeModal);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !videoModal.classList.contains("hidden")) {
+      closeModal();
+    }
   });
 
-function mostrarContenido(anime) {
-  document.getElementById("animeTitle").textContent = anime.name;
-  const altNames = anime.alternative_names?.filter(n => n.trim()) || [];
-  document.getElementById("alternativeNames").textContent = altNames.length ? `También conocido como: ${altNames.join(", ")}` : "";
+  videoModal.addEventListener("click", (e) => {
+    if (e.target === videoModal) {
+      closeModal();
+    }
+  });
 
-  const episodiosSub = anime.episodes.filter(e => e.language === 0);
-  const episodiosDub = anime.episodes.filter(e => e.language === 1);
-  const episodiosCas = anime.episodes.filter(e => e.language === 2);
+      function setActiveTab(tab) {
+          ["sub", "dub", "cas"].forEach(type => {
+              const btn = document.getElementById(`tab-${type}`);
+              const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
+              if (btn && list) {
+                  const isActive = type === tab;
+                  btn.classList.toggle("bg-red-600", isActive);
+                  btn.classList.toggle("text-white", isActive);
+                  btn.classList.toggle("bg-red-400", !isActive);
+                  btn.classList.toggle("text-white/80", !isActive);
+                  list.classList.toggle("hidden", !isActive);
+              }
+          });
+      }
 
-  const episodiosUnicos = new Set(anime.episodes.map(ep => ep.episode));
-  document.getElementById("episodeCount").textContent = `${episodiosUnicos.size} episodio(s)`;
+  async function loadAnimeData() {
+      if (!animeId) { 
+          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado. Por favor reportalo</p>'; 
+          return; 
+      }
 
-  const overviewElement = document.getElementById("animeOverview");
-  const toggleButton = document.getElementById("toggleOverview");
-  let overviewText = anime.overview?.trim() || "";
+      try {
+          const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` });
 
-  if (!overviewText) {
-    overviewElement.textContent = "Este anime no tiene sinopsis disponible.";
-    toggleButton.classList.add("hidden");
-  } else {
-    overviewElement.textContent = overviewText;
-    if (overviewText.length > 180) {
-      toggleButton.classList.remove("hidden");
-      let expanded = false;
-      toggleButton.addEventListener("click", () => {
-        expanded = !expanded;
-        overviewElement.classList.toggle("line-clamp-3");
-        toggleButton.textContent = expanded ? "Ver menos" : "Ver más";
-        const container = document.getElementById("overviewContainer");
-        container.style.overflow = expanded ? "visible" : "hidden";
+          const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/anime.zip";
+          const response = await fetch(zipUrl);
+          const arrayBuffer = await response.arrayBuffer();
+          const zipData = new Uint8Array(arrayBuffer);
+
+          let db;
+          fflate.unzip(zipData, (err, files) => {
+              if (err) throw err;
+              const dbFile = files["anime.db"];
+              if (!dbFile) throw new Error("anime.db no encontrado en el zip");
+              db = new SQL.Database(dbFile);
+              mostrarAnimeDesdeDB(db);
+          });
+      } catch (error) {
+          console.error("Falló la carga desde ZIP:", error);
+          document.body.innerHTML = `<p class="text-center text-red-500 mt-10">Oops! Hubo un error al cargar: ${error.message}</p>`;
+      }
+  }
+  function mostrarAnimeDesdeDB(db) {
+      const animeRes = db.exec("SELECT name, name_alternative, overview, genres FROM animes WHERE id = :id", {':id': animeId});
+      if (!animeRes.length || !animeRes[0].values.length) { 
+          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado</p>'; 
+          return; 
+      }
+      const [name, name_alternative, overview, genres] = animeRes[0].values[0]
+      const anime = { name, name_alternative, overview, genres };
+
+      const isNsfw = anime.genres && anime.genres.toLowerCase().includes("soft-hentai");
+      if (isNsfw) {
+          document.getElementById("nsfwModal").classList.remove("hidden");
+          document.getElementById("continueBtn").onclick = () => { 
+              document.getElementById("nsfwModal").classList.add("hidden"); 
+              mostrarContenido(anime, db); 
+          };
+          document.getElementById("exitBtn").onclick = () => { window.location.href = "index.html"; };
+      } else {
+          mostrarContenido(anime, db);
+      }
+  }
+
+      function mostrarContenido(anime, db) {
+          document.getElementById("animeTitle").textContent = anime.name;
+          document.getElementById("alternativeNames").textContent = anime.name_alternative ? `También como: ${anime.name_alternative.replace(/,/g, ', ')}` : "";
+          
+          const overviewElement = document.getElementById("animeOverview");
+          const toggleButton = document.getElementById("toggleOverview");
+          let overviewText = anime.overview?.trim() || "Sinopsis no disponible.";
+          overviewElement.textContent = overviewText;
+          setTimeout(() => {
+              if (overviewElement.scrollHeight > overviewElement.clientHeight) {
+                  toggleButton.classList.remove("hidden");
+                  let expanded = false;
+                  toggleButton.addEventListener("click", () => {
+                      expanded = !expanded;
+                      overviewElement.classList.toggle("line-clamp-3");
+                      toggleButton.textContent = expanded ? "Ver menos" : "Ver más";
+                      document.getElementById("overviewContainer").style.overflow = expanded ? "visible" : "hidden";
+                  });
+              }
+          }, 100);
+          
+          const episodesQuery = `SELECT e.number, p.language, p.link, s.name as server_name FROM episodes AS e JOIN players AS p ON e.id = p.episode_id JOIN servers AS s ON p.server_id = s.id WHERE e.anime_id = :id ORDER BY p.language, CAST(e.number AS REAL)`;
+          const episodesRes = db.exec(episodesQuery, {':id': animeId});
+          const episodes = episodesRes.length ? episodesRes[0].values.map(([number, language, link, server]) => ({number, language, link, server})) : [];
+          
+          const episodiosUnicos = new Set(episodes.map(ep => ep.number));
+          document.getElementById("episodeCount").textContent = `${episodiosUnicos.size} episodio(s)`;
+
+          const episodiosSub = episodes.filter(e => e.language === 0);
+          const episodiosDub = episodes.filter(e => e.language === 1);
+          const episodiosCas = episodes.filter(e => e.language === 2);
+
+          renderEpisodios(episodiosSub, "episodeListSub");
+          renderEpisodios(episodiosDub, "episodeListDub");
+          renderEpisodios(episodiosCas, "episodeListCas");
+
+          if (!episodiosDub.length) document.getElementById("tab-dub").classList.add("hidden");
+          if (!episodiosCas.length) document.getElementById("tab-cas").classList.add("hidden");
+
+          const ultimo = localStorage.getItem(`ultimo_${animeId}`);
+          if (ultimo) {
+              const msg = document.createElement("p");
+              msg.className = "text-sm text-green-400 mt-2 text-center";
+              msg.textContent = `🌟 Último episodio visto: Episodio ${ultimo}`;
+              document.getElementById("animeHeader").appendChild(msg);
+          }
+
+          setActiveTab("sub");
+          document.getElementById("loader").remove();
+          document.querySelector(".main-content").classList.remove("hidden");
+      }
+
+      function renderEpisodios(eps, containerId) {
+          const serverAds = {
+            "Gamma": "👍👎",
+            "Alpha": "👎",
+            "Delta": "👍👎",
+            "Epsilon": "👎"
+          };
+
+          const container = document.getElementById(containerId);
+          container.innerHTML = '';
+          const grouped = {};
+          eps.forEach(ep => {
+              if (!grouped[ep.number]) grouped[ep.number] = [];
+              grouped[ep.number].push(ep);
+          });
+
+          Object.keys(grouped).sort((a, b) => Number(a) - Number(b)).forEach(num => {
+              const div = document.createElement("div");
+              div.className = "card p-4 h-full flex flex-col justify-between";
+              const buttons = grouped[num].map(v => {
+                  const displayName = serverDisplayNames[v.server] || v.server;
+                  const baseUrl = serverBaseUrls[v.server] || "";
+                  return `<button onclick="openModal('${baseUrl}', '${v.link}', ${num})" 
+                class="bg-red-500 hover:bg-red-600 text-white rounded px-3 py-1 text-sm flex items-center justify-center gap-1">
+            ${displayName} <span class="text-xs">${serverAds[v.server] || ""}</span>
+          </button>`;
+              }).join(" ");
+              div.innerHTML = `<p class="font-semibold text-white/90 mb-2">Episodio ${num}</p><div class="flex flex-wrap gap-2">${buttons}</div>`;
+              container.appendChild(div);
+          });
+      }
+
+      ["sub", "dub", "cas"].forEach(type => {
+          const tab = document.getElementById(`tab-${type}`);
+          if (tab) tab.addEventListener("click", () => setActiveTab(type));
       });
-    }
-  }
 
-  const renderEpisodios = (eps, id) => {
-    const container = document.getElementById(id);
-    const grouped = {};
-    eps.forEach(ep => {
-      if (!grouped[ep.episode]) grouped[ep.episode] = [];
-      grouped[ep.episode].push(ep);
-    });
-    Object.keys(grouped).sort((a, b) => a - b).forEach(num => {
-      const div = document.createElement("div");
-      div.className = "card p-4 h-full flex flex-col justify-between";
-      const buttons = grouped[num].map(v => `<button onclick="openModal('${v.url}', ${num})" class="bg-red-500 hover:bg-red-600 text-white rounded px-3 py-1 text-sm">Servidor ${v.server}</button>`).join(" ");
-      div.innerHTML = `<p class="font-semibold text-white/90 mb-2">Episodio ${num}</p><div class="flex flex-wrap gap-2">${buttons}</div>`;
-      container.appendChild(div);
-    });
-  };
-
-  renderEpisodios(episodiosSub, "episodeListSub");
-  renderEpisodios(episodiosDub, "episodeListDub");
-  renderEpisodios(episodiosCas, "episodeListCas");
-
-  if (!episodiosDub.length) document.getElementById("tab-dub").classList.add("hidden");
-  if (!episodiosCas.length) document.getElementById("tab-cas").classList.add("hidden");
-
-  const ultimo = localStorage.getItem(`ultimo_${animeId}`);
-  if (ultimo) {
-    const msg = document.createElement("p");
-    msg.className = "text-sm text-green-400 mt-2 text-center";
-    msg.textContent = `🌟 Último episodio visto: Episodio ${ultimo}`;
-    document.getElementById("animeHeader").appendChild(msg);
-  }
-
-  document.querySelector('meta[property="og:title"]').setAttribute("content", `Ver ${anime.name} en Streameko`);
-  document.querySelector('meta[property="og:description"]').setAttribute("content", anime.overview || "Disfruta de este anime en Streameko.");
-  document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
-
-  setActiveTab("sub");
-  document.querySelector(".main-content").classList.remove("hidden");
-}
-
-["sub", "dub", "cas"].forEach(type => {
-  document.getElementById(`tab-${type}`)?.addEventListener("click", () => setActiveTab(type));
-});
-</script></body>
-</html> 
+      loadAnimeData();
+  </script>
+  </body>
+  </html>

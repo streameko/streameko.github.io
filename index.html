@@ -3,117 +3,411 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Streameko – Estilo Experimental</title>
-  <meta name="description" content="Explora el nuevo estilo experimental de Streameko." />
+  <title>Streameko – Ver Anime Gratis Subtitulado y Doblado</title>
+  <meta name="description" content="Tu web para ver anime online gratis. Disfruta de los últimos estrenos y animes clásicos subtitulados y doblados al español latino en Streameko." />
+  <meta name="keywords" content="anime, ver anime, anime gratis, anime online, anime subtitulado, anime doblado, streameko" />
+  <meta name="author" content="Streameko" />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#000000" />
-  <meta property="og:title" content="Streameko – Estilo Experimental" />
-  <meta property="og:description" content="Explora animes recientes, subtitulados y doblados en un nuevo estilo experimental." />
-  <meta property="og:url" content="https://streameko.github.io/" />
+  <meta name="theme-color" content="#e50914" />
+  <link rel="canonical" href="https://streameko.qzz.io/" />
+
+  <meta property="og:title" content="Streameko – Tu Plataforma de Anime Gratis" />
+  <meta property="og:description" content="Disfruta de tus animes favoritos, subtitulados y doblados al español. ¡Entra y descubre los últimos episodios!" />
+  <meta property="og:url" content="https://streameko.qzz.io/" />
+  <meta property="og:site_name" content="Streameko" />
+  <meta property="og:type" content="website" />
   <meta property="og:image" content="https://i.postimg.cc/yNzkjyKW/Streameko-Logo.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="/favicon.ico" />
+  <meta name="twitter:title" content="Streameko – Tu Plataforma de Anime Gratis" />
+  <meta name="twitter:description" content="Disfruta de tus animes favoritos, subtitulados y doblados al español. ¡Entra y descubre los últimos episodios!" />
+  <meta name="twitter:image" content="https://i.postimg.cc/yNzkjyKW/Streameko-Logo.png" />
+  
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fflate/umd/index.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+
   <style>
     :root {
       --bg: #000000;
       --text: #ffffff;
       --accent: #e50914;
+      --primary: #a78bfa;
+      --glass: rgba(255, 255, 255, 0.05);
+      --card: #1f1f1f;
+      --glow-color: rgba(167, 139, 250, 0.4);
     }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-    }
-
-    .scrolling-row {
-      display: flex;
-      overflow-x: auto;
-      gap: 1rem;
-      padding: 1rem 0;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .scrolling-row::-webkit-scrollbar {
-      display: none;
-    }
-
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+    .scrolling-row { display: flex; overflow-x: auto; gap: 1rem; padding: 1rem 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .scrolling-row::-webkit-scrollbar { display: none; }
     .anime-card {
       flex: 0 0 auto;
-      width: 120px;
-      background: rgba(255, 255, 255, 0.05);
+      width: 160px;
+      background: var(--glass);
       border-radius: 0.75rem;
-      padding: 0.5rem;
       transition: transform 0.3s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      padding: 0.5rem;
+      position: relative;
     }
-
-    @media (min-width: 640px) {
-      .anime-card {
-        width: 160px;
-      }
+    .anime-card .card-link { cursor: pointer; }
+    .anime-card.skeleton { height: 300px; animation: pulse 1.5s infinite; }
+    @keyframes pulse {
+      0%, 100% { background-color: #2c2c2c; }
+      50% { background-color: #3f3f46; }
     }
-
     @media (hover: hover) {
-      .anime-card:hover {
-        transform: scale(1.1);
-        z-index: 10;
-      }
+      .anime-card:hover { transform: scale(1.08); z-index: 10; }
+      .anime-card:hover .card-link p { color: var(--accent); }
+    }
+    .anime-card p { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
-      .anime-card:hover p {
-        color: var(--accent);
-      }
+    .watchlist-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      z-index: 20;
+      background-color: rgba(0,0,0,0.6);
+      border-radius: 50%;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .watchlist-btn:hover {
+      background-color: rgba(229, 9, 20, 0.8);
+      transform: scale(1.1);
+    }
+    .watchlist-btn svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s ease, opacity 0.3s;
+    }
+    .watchlist-btn .icon-add { transform: rotate(0); opacity: 1; }
+    .watchlist-btn .icon-check { transform: rotate(-90deg); opacity: 0; position: absolute; }
+    .watchlist-btn.in-list .icon-add { transform: rotate(90deg); opacity: 0; }
+    .watchlist-btn.in-list .icon-check { transform: rotate(0); opacity: 1; }
+    
+    @keyframes pop-in {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+    .juicy-pop { animation: pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+    .limpiar-recientes-btn { background-color: rgba(220, 38, 38, 0.7); border: 1px solid rgba(255, 107, 107, 0.5); backdrop-filter: blur(5px); transition: all 0.3s ease; }
+    .limpiar-recientes-btn:hover { background-color: rgba(239, 68, 68, 0.9); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); transform: scale(1.05); }
+
+    @keyframes break-apart {
+      0% { transform: scale(1) rotate(0deg); opacity: 1; }
+      100% { transform: scale(0.5) rotate(20deg) translate(100px, -50px); opacity: 0; filter: blur(5px); }
+    }
+    .breaking { animation: break-apart 0.6s ease-out forwards; }
+    .stylish-topbar { background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid transparent; border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); }
+    .logo-container { transition: transform 0.3s ease; }
+    .logo-container:hover { transform: scale(1.05); }
+    .logo-text { transition: text-shadow 0.3s ease; }
+    .logo-container:hover .logo-text { text-shadow: 0 0 10px var(--glow-color, var(--primary)); }
+    .nav-link-stylish { color: rgba(255, 255, 255, 0.8); padding: 0.5rem 1rem; border-radius: 8px; position: relative; overflow: hidden; transition: all 0.3s ease; z-index: 1; }
+    .nav-link-stylish::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--accent); opacity: 0; transform: scale(0.8); transition: all 0.4s ease; z-index: -1; border-radius: 8px; }
+    .nav-link-stylish:hover { color: white; transform: translateY(-2px); }
+    .nav-link-stylish:hover::before { opacity: 1; transform: scale(1); }
+
+    .is-mobile .anime-card {
+      width: 160px;
+    }
+    .is-mobile header nav {
+      flex-direction: column;
+      gap: 0.25rem;
+      height: auto;
+      padding: 0.5rem 0;
+    }
+    .is-mobile header nav > div {
+      gap: 0.25rem;
+    }
+    .is-mobile .logo-text {
+      font-size: 1.25rem;
+    }
+    .is-mobile h1 {
+      font-size: 1.5rem;
+      text-align: center;
+    }
+    .is-mobile h2 {
+      font-size: 1.1rem;
+    }
+    .is-mobile .scrolling-row {
+      gap: 0.5rem;
     }
 
-    p {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
+    .delete-reciente-btn {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 20;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 50%;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.delete-reciente-btn:hover {
+  background-color: rgba(239, 68, 68, 0.8);
+  transform: scale(1.1);
+}
+.delete-reciente-btn svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease, opacity 0.3s;
+}
+
+#genre-panel {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  max-width: 380px;
+  height: 100%;
+  background-color: #141414;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+
+  opacity: 0;
+  transform: translateX(100px);
+  transition: right 0.5s cubic-bezier(0.25, 1, 0.5, 1), 
+              opacity 0.4s ease, 
+              transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#genre-panel.open {
+  right: 0;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.genre-panel-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.genre-panel-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+#close-genre-panel {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+#close-genre-panel:hover {
+  color: white;
+  transform: rotate(90deg);
+}
+
+#genre-list {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.75rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.genre-checkbox input {
+  display: none;
+}
+
+.genre-checkbox label {
+  display: block;
+  text-align: center;
+  padding: 0.6rem 0.5rem;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.genre-checkbox label:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.genre-checkbox input:checked + label {
+  background-color: var(--accent);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
+  transform: scale(1.05);
+}
+
+.genre-btn {
+  background-color: rgba(220, 38, 38, 0.7);
+  border: 1px solid rgba(255, 107, 107, 0.5);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+
   </style>
 </head>
 <body class="font-sans">
-  <div class="bg-zinc-900 text-white py-4 px-6 text-sm text-center">
-    🚧 Este es un estilo en desarrollo. Puede tener errores o cambiar sin aviso.
-    <a href="stable.html" class="underline text-blue-400">Volver al estilo estable</a>
+  <noscript>
+    <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+  <div style="color: red; font-weight: bold;">
+    ⚠️ Necesitas activar JavaScript para que este Streameko pueda funcionar.
   </div>
-<!-- REEMPLAZO DEL AVISO DE FANDUB POR EL CONTADOR -->
-<div class="flex justify-center gap-4 mt-6 px-6">
-  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
-    <span id="dias" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
-    <span class="text-sm text-white/70 mt-1">Días</span>
+  </noscript>
+
+
+
+<header class="sticky top-0 z-50 w-full stylish-topbar">
+  <div class="max-w-6xl mx-auto px-6">
+    <nav class="flex items-center justify-between h-20">
+      <a href="index.html" class="flex items-center gap-3 logo-container">
+        <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+        <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+      </a>
+      <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+        <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+        <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+      </div>
+    </nav>
   </div>
-  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
-    <span id="horas" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
-    <span class="text-sm text-white/70 mt-1">Horas</span>
+</header>
+
+<div class="bg-zinc-900 text-white py-4 px-6 text-sm text-center">
+  🚧 Este es un estilo en desarrollo. Puede tener errores o cambiar sin aviso.
+  <a href="stable.html" class="underline text-blue-400">Volver al estilo estable</a>
+</div>
+
+<h1 class="text-3xl font-bold px-6 mt-4">Streameko - Beta</h1>
+<div class="max-w-4xl mx-auto my-6 p-5 bg-zinc-800/50 border border-violet-400/30 rounded-xl shadow-lg backdrop-blur-sm overflow-hidden">
+  
+  <div class="flex justify-between items-center cursor-pointer" id="message-header">
+    <p class="font-semibold text-white/90">
+      Una nota importante de KaiZ (Advertencia: mucho texto, pero es importante para tu experiencia aquí)
+    </p>
+    <button id="toggle-message-btn" class="text-sm font-bold text-violet-300 hover:text-white transition-colors flex items-center gap-1">
+      Leer más... <svg id="arrow-icon" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+    </button>
   </div>
-  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
-    <span id="minutos" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
-    <span class="text-sm text-white/70 mt-1">Minutos</span>
-  </div>
-  <div class="contador-block flex flex-col items-center bg-[#1f1f1f] rounded-xl px-4 py-3 shadow-2xl border-2 border-[#e50914]">
-    <span id="segundos" class="text-4xl sm:text-5xl font-extrabold text-[#e50914]">00</span>
-    <span class="text-sm text-white/70 mt-1">Segundos</span>
+
+  <div id="collapsible-content" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out">
+    <div class="mt-4 pt-4 border-t border-white/10">
+      <div class="text-left">
+        <p class="text-white/80 mb-4 leading-relaxed">
+          Quiero tomarme un momento para hablar de algo con total transparencia: los anuncios en los reproductores. Sé perfectamente que no hay nada más molesto que estar en la mejor parte de un episodio y que, de la nada, ¡<strong>BAM</strong>!, un anuncio de viejas tetonas te saque por completo del momento.
+        </p>
+        <p class="text-white/80 mb-4 leading-relaxed">
+          La idea de Streameko nació precisamente de esa frustración, una frustación mia pero que muchos podrían compartir, una molestia que nos ha tocado soportar desde hace <strong>años</strong>, incluso ahora viendose en servicios legales (te hablo a ti, gran N).
+        </p>
+        <p class="text-white/80 mb-4 leading-relaxed">
+          El corazón de este proyecto es y siempre será crear un espacio hecho <strong>"¡Para la comunidad!"</strong>. Para mí, eso significa un lugar limpio, directo y hecho por fans para fans, donde puedas disfrutar sin interrupciones. Por eso nunca verás banners, pop-ups o publicidad que yo haya plantado en la página (fuera de los reproductores).
+        <p class="text-white/80 mb-4 leading-relaxed">
+          Y es aquí donde quiero ofrecerte una disculpa sincera. El objetivo principal de Streameko siempre ha sido esa experiencia 100% limpia, y me frustra mucho no haberlo conseguido todavía. Te pido perdón por los anuncios que se ven en los reproductores.
+        </p>
+        <p class="text-white/80 mb-5 leading-relaxed">
+          Es una batalla técnica que estoy librando día y noche, un "jefe final" muy terco 💢 que viene de los servidores de video externos. Prometo que estoy explorando todas las opciones y trabajando sin descanso, desde el amanecer hasta la madrugada para implementar una solución definitiva que los elimine para siempre.
+        </p>
+        <p class="text-white/80 mb-5 leading-relaxed">
+          De hecho, como parte de esa búsqueda, estoy diseñando algo nuevo en el horizonte... ✨ un proyecto a futuro donde tendré control total para garantizar una experiencia 100% libre de estas molestias. Aún es un secreto en desarrollo, ¡pero quería que supieras que el futuro se ve brillante!
+        </p>
+        <p class="text-white/80 mb-5 leading-relaxed">
+         Mientras ese día llega, si los anuncios te resultan muy molestos, una herramienta de confianza puede hacer una gran diferencia:
+        </p>
+        
+        <div class="text-center my-4">
+          <a href="adblocker.html" class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105 shadow-md shadow-red-500/30">
+            Adblocker recomendado por Streameko
+          </a>
+        </div>
+        <div class="text-center my-4">
+          <a href="adcel.html" class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105 shadow-md shadow-red-500/30">
+            Y si tienes cel picale acá
+          </a>
+        </div>
+    
+        <p class="text-white/80 mt-6 leading-relaxed">
+          Gracias por tu paciencia, por tu increíble apoyo y por ser parte de esta comunidad. De verdad, lo significa todo para mí.
+        </p>
+        
+        <p class="text-center text-sm text-white/60 mt-4 italic">-KaiZ, del equipo de Streameko</p>
+      </div>
+    </div>
   </div>
 </div>
 
-<p class="text-center text-white/70 mt-4">⏳ Una nueva versión de Streameko se aproxima: más animes, mejor experiencia, ¡llega para quedarse!</p>
-
-
-  <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>
-
   <div class="px-6 mt-6">
-    <div class="relative">
-      <input type="text" id="buscador" placeholder="Buscar anime..." class="w-full p-3 pr-10 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
-      <button id="clearSearch" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hidden">✕</button>
+    <div class="relative flex items-center">
+      <input type="text" id="buscador" placeholder="Buscar anime..." class="flex-grow p-3 pr-10 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
+      <button id="clearSearch" class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hidden">✕</button>
+      <button id="genre-btn" class="genre-btn ml-2">🎭</button>
     </div>
   </div>
 
+<div id="genre-panel">
+  <div class="genre-panel-header">
+    <h3>Elige tus géneros</h3>
+    <button id="close-genre-panel">✕</button>
+  </div>
+  <div id="genre-list">
+    </div>
+</div>
+
   <div class="px-6">
     <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-2">🕒 Recientes</h2>
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="text-xl font-semibold">🕒 Recientes</h2>
+        <button onclick="limpiarRecientes()" class="limpiar-recientes-btn text-xs text-white px-4 py-2 rounded-full font-semibold">Limpiar Recientes 🧹</button>
+      </div>
       <div id="row-recientes" class="scrolling-row"></div>
     </div>
+    
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">🔖 Mi Lista</h2>
+      <div id="row-milista" class="scrolling-row"></div>
+    </div>
+    
     <div class="mt-8">
       <h2 class="text-xl font-semibold mb-2">🇯🇵 Subtitulados</h2>
       <div id="row-sub" class="scrolling-row"></div>
@@ -124,167 +418,344 @@
     </div>
   </div>
 
-  <script>
-  let animeData = {};
-  let debounceTimeout;
+<footer class="py-8 text-center border-t border-white/10">
+  <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+</footer>
 
-  function crearCard(anime, id) {
-    const poster = anime.poster || "poster_default.png";
+<script>
+    let animeData = {}; 
+    let episodeData = {}; 
+    let debounceTimeout;
+
+    const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w342";
+
+    const lista = "mi_lista";
+
+    const listIconAdd = `<svg class="icon-add" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>`;
+    const listIconCheck = `<svg class="icon-check" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>`;
+    const deleteIcon = `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+</svg>`;
+
+    const allGenres = ['accion', 'artes-marciales', 'aventura', 'ciencia-ficcion', 'comedia', 'deportes', 'detectives', 'drama', 'ecchi', 'escolar', 'espacio', 'fantasia', 'gore', 'harem', 'historico', 'horror', 'isekai', 'josei', 'juegos', 'mahou-shoujo', 'mecha', 'militar', 'misterio', 'mitologico', 'musica', 'parodia', 'psicologico', 'recuentos-de-la-vida', 'romance', 'samurais', 'seinen', 'shoujo', 'shoujo-ai', 'shounen', 'shounen-ai', 'sobrenatural', 'soft-hentai', 'super-poderes', 'suspenso', 'vampiros'];
+    let selectedGenres = new Set();
+
+    const getMiLista = () => JSON.parse(localStorage.getItem(lista)) || [];
+    const isEnMiLista = (id) => getMiLista().includes(String(id));
+
+    function syncAllCardButtons(id) {
+        const enLista = isEnMiLista(id);
+        const allButtons = document.querySelectorAll(`.anime-card[data-anime-id="${id}"] .watchlist-btn`);
+        allButtons.forEach(btn => {
+            btn.classList.toggle('in-list', enLista);
+        });
+    }
+
+    function toggleMiLista(event, id) {
+        event.stopPropagation();
+        const miLista = getMiLista();
+        const idStr = String(id);
+        const index = miLista.indexOf(idStr);
+        
+        if (index === -1) {
+            miLista.push(idStr);
+        } else {
+            miLista.splice(index, 1);
+        }
+        localStorage.setItem(lista, JSON.stringify(miLista));
+        
+        const button = event.currentTarget;
+        button.classList.add('juicy-pop');
+        setTimeout(() => button.classList.remove('juicy-pop'), 300);
+
+        syncAllCardButtons(id);
+        updateMiListaRow();
+    }
+
+function crearCard(anime, id, esReciente = false) {
+    const posterUrl = anime.poster ? `${POSTER_BASE_URL}${anime.poster}` : "poster_default.png";
     const div = document.createElement("div");
     div.className = "anime-card";
+    div.setAttribute('data-anime-id', id);
+
+    const enMiLista = isEnMiLista(id);
+
     div.innerHTML = `
-      <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" decoding="async" />
-      <p class="mt-1 text-sm">${anime.name}</p>
+        <button onclick="toggleMiLista(event, '${id}')" class="watchlist-btn ${enMiLista ? 'in-list' : ''}" title="Añadir a Mi Lista">
+            ${listIconAdd}
+            ${listIconCheck}
+        </button>
+        ${esReciente ? `
+        <button onclick="eliminarDeRecientes(event, '${id}')" class="delete-reciente-btn" title="Eliminar de Recientes">
+            ${deleteIcon}
+        </button>` : ""}
+        <div class="card-link">
+            <img src="${posterUrl}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" decoding="async" />
+            <p class="mt-1 text-sm">${anime.name}</p>
+        </div>
     `;
-    div.onclick = () => {
-      localStorage.setItem("selectedAnime", JSON.stringify(anime));
-      const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
-      const index = recientes.indexOf(id);
-      if (index !== -1) recientes.splice(index, 1);
-      recientes.unshift(id);
-      if (recientes.length > 30) recientes.pop();
-      localStorage.setItem("recientes", JSON.stringify(recientes));
-      window.location.href = `anime.html?id=${id}`;
+
+    div.querySelector('.card-link').onclick = () => {
+        localStorage.setItem("selectedAnime", JSON.stringify({ ...anime, episodes: episodeData[id] || [] }));
+        let recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+        recientes = recientes.filter(recId => recId != id);
+        recientes.unshift(id);
+        if (recientes.length > 30) recientes.pop();
+        localStorage.setItem("recientes", JSON.stringify(recientes));
+        window.location.href = `anime.html?id=${id}`;
     };
+    
     return div;
-  }
-
-  function renderSkeletons(container) {
-    for (let i = 0; i < 4; i++) {
-      const skeleton = document.createElement("div");
-      skeleton.className = "anime-card animate-pulse bg-zinc-700 h-[300px]";
-      container.appendChild(skeleton);
-    }
-  }
-
-  function renderRows() {
-    const query = (document.getElementById("buscador")?.value || "").toLowerCase();
-    const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
-    const rowRecientes = document.getElementById("row-recientes");
-    const rowSub = document.getElementById("row-sub");
-    const rowDub = document.getElementById("row-dub");
-
-    rowRecientes.innerHTML = "";
-    rowSub.innerHTML = "";
-    rowDub.innerHTML = "";
-
-    const yaMostrados = new Set();
-
-    if (recientes.length > 0) {
-      recientes.forEach(id => {
-        const anime = animeData[id];
-        if (!anime) return;
-
-        const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
-        if (!names.some(name => name.includes(query))) return;
-
-        rowRecientes.appendChild(crearCard(anime, id));
-        yaMostrados.add(id);
-      });
-
-      if (rowRecientes.children.length === 0) {
-        rowRecientes.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
-      }
-    } else {
-      rowRecientes.innerHTML = "<p class='text-white/50'>Aún no has visto nada. ¿Cambiamos eso?</p>";
-    }
-
-    let subContador = 0;
-    let dubContador = 0;
-
-    Object.entries(animeData).forEach(([id, anime]) => {
-      if (yaMostrados.has(id)) return;
-
-      const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
-      if (!names.some(name => name.includes(query))) return;
-
-      const episodes = anime.episodes || [];
-      const hasSub = episodes.some(ep => ep.language === 0);
-      const hasDub = episodes.some(ep => ep.language === 1);
-
-      if (hasSub) {
-        rowSub.appendChild(crearCard(anime, id));
-        subContador++;
-      }
-      if (hasDub) {
-        rowDub.appendChild(crearCard(anime, id));
-        dubContador++;
-      }
-    });
-
-    if (subContador === 0) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
-    if (dubContador === 0) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
-  }
-
-  document.getElementById("buscador").addEventListener("input", (e) => {
-    const val = e.target.value;
-    document.getElementById("clearSearch").style.display = val ? "block" : "none";
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-      renderRows();
-    }, 300);
-  });
-
-  document.getElementById("clearSearch").addEventListener("click", () => {
-    document.getElementById("buscador").value = "";
-    document.getElementById("clearSearch").style.display = "none";
-    renderRows();
-  });
-
-  renderSkeletons(document.getElementById("row-recientes"));
-  renderSkeletons(document.getElementById("row-sub"));
-  renderSkeletons(document.getElementById("row-dub"));
-
-  fetch("https://raw.githubusercontent.com/streameko/streameko.github.io/refs/heads/main/animes_por_id.json")
-    .then(res => res.json())
-    .then(data => {
-      animeData = data;
-      renderRows();
-    });
-function iniciarContadorFortniteStyle() {
-  const diasEl = document.getElementById("dias");
-  const horasEl = document.getElementById("horas");
-  const minutosEl = document.getElementById("minutos");
-  const segundosEl = document.getElementById("segundos");
-  // Necesitamos un contenedor para el mensaje final
-  const contenedorContador = document.getElementById("contenedor-contador");
-
-  const targetDate = new Date("2025-09-30T00:00:00-06:00");
-
-  const intervalo = setInterval(actualizar, 1000);
-
-  function actualizar() {
-    const now = new Date();
-    const diff = targetDate - now;
-
-    if (diff <= 0) {
-      // Borramos el intervalo para que no se siga ejecutando
-      clearInterval(intervalo);
-      // Ocultamos el contador y mostramos el mensaje épico
-      if (contenedorContador) {
-        contenedorContador.innerHTML = '<p style="font-size: 2em; text-align: center;">La nueva version será lanzada en unos momentos, F5 hasta que explote!</p>';
-      }
-      return;
-    }
-
-    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const segundos = Math.floor((diff % (1000 * 60)) / 1000);
-
-    // Actualizamos los elementos solo si existen
-    if (diasEl) diasEl.textContent = String(dias).padStart(2, "0");
-    if (horasEl) horasEl.textContent = String(horas).padStart(2, "0");
-    if (minutosEl) minutosEl.textContent = String(minutos).padStart(2, "0");
-    if (segundosEl) segundosEl.textContent = String(segundos).padStart(2, "0");
-  }
-
-  // Llamada inicial para evitar un retraso de 1 segundo
-  actualizar();
 }
 
-iniciarContadorFortniteStyle();
+function eliminarDeRecientes(event, id) {
+    event.stopPropagation();
+    let recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+    recientes = recientes.filter(recId => recId != id);
+    localStorage.setItem("recientes", JSON.stringify(recientes));
+    
+    const card = event.currentTarget.closest(".anime-card");
+    card.classList.add("breaking");
+    setTimeout(() => {
+        card.remove();
+        renderRows();
+    }, 600);
+}
 
-</script>
+
+    function renderSkeletons(container) {
+      if (!container) return;
+      container.innerHTML = '';
+      for (let i = 0; i < 6; i++) {
+        const skeleton = document.createElement("div");
+        skeleton.className = "anime-card skeleton";
+        container.appendChild(skeleton);
+      }
+    }
+
+    function updateMiListaRow() {
+        const row = document.getElementById("row-milista");
+        const ids = getMiLista();
+        row.innerHTML = "";
+        if (ids.length === 0) {
+            row.innerHTML = `<p class='text-white/50'>Nada aquí, ¡agrega unos y velos!</p>`;
+            return;
+        }
+        ids.forEach(id => {
+            if(animeData[id]) {
+                row.appendChild(crearCard(animeData[id], id));
+            }
+        });
+    }
+
+function prettifyGenre(genre) {
+    const genreMap = {
+        'recuentos-de-la-vida': 'Slice of Life',
+    };
+
+
+    if (genreMap[genre]) {
+        return genreMap[genre];
+    }
+
+    return genre.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+    function toggleGenre(genre) {
+      if (selectedGenres.has(genre)) {
+        selectedGenres.delete(genre);
+      } else {
+        selectedGenres.add(genre);
+      }
+      renderGenreList();
+      renderRows();
+    }
+
+    function renderGenreList() {
+      const container = document.getElementById('genre-list');
+      container.innerHTML = '';
+      allGenres.forEach(genre => {
+        const div = document.createElement('div');
+        div.className = 'genre-checkbox';
+        div.innerHTML = `
+          <input type="checkbox" id="genre-${genre}" ${selectedGenres.has(genre) ? 'checked' : ''}>
+          <label for="genre-${genre}">${prettifyGenre(genre)}</label>
+        `;
+        div.querySelector('input').addEventListener('change', () => toggleGenre(genre));
+        container.appendChild(div);
+      });
+    }
+
+    function matchesGenres(animeGenres) {
+      if (selectedGenres.size === 0) return true;
+      return Array.from(selectedGenres).every(g => animeGenres.includes(g));
+    }
+
+    function renderRows() {
+        const query = (document.getElementById("buscador")?.value || "").toLowerCase();
+        const rowRecientes = document.getElementById("row-recientes");
+        const animesMostrados = new Set();
+        rowRecientes.innerHTML = "";
+        const recientesIds = JSON.parse(localStorage.getItem("recientes")) || [];
+recientesIds.forEach(id => {
+    const anime = animeData[id];
+    if(anime && anime.name.toLowerCase().includes(query) && matchesGenres(anime.genres || [])) {
+        rowRecientes.appendChild(crearCard(anime, id, true));
+        animesMostrados.add(String(id));
+    }
+});
+        if (rowRecientes.children.length === 0) {
+            rowRecientes.innerHTML = `<p class='text-white/50'>Aún no has visto nada, ¿cambiamos eso?</p>`;
+        }
+
+        updateMiListaRow();
+        getMiLista().forEach(id => animesMostrados.add(String(id)));
+
+        const rowSub = document.getElementById("row-sub");
+        const rowDub = document.getElementById("row-dub");
+        rowSub.innerHTML = "";
+        rowDub.innerHTML = "";
+
+        Object.entries(animeData).forEach(([id, anime]) => {
+            if (animesMostrados.has(id)) return;
+            const allNames = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+            if (allNames.some(name => name.includes(query)) && matchesGenres(anime.genres || [])) {
+                const episodes = episodeData[id] || [];
+                if (episodes.some(ep => ep.language === 0)) rowSub.appendChild(crearCard(anime, id));
+                if (episodes.some(ep => ep.language === 1)) rowDub.appendChild(crearCard(anime, id));
+            }
+        });
+
+        if (rowSub.children.length === 0 && query) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado.</p>";
+        if (rowDub.children.length === 0 && query) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado.</p>";
+    }
+    
+async function loadDatabase() {
+    try {
+        renderSkeletons(document.getElementById("row-recientes"));
+        renderSkeletons(document.getElementById("row-milista"));
+        renderSkeletons(document.getElementById("row-sub"));
+        renderSkeletons(document.getElementById("row-dub"));
+
+        const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` });
+        const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/anime.zip";
+
+        const response = await fetch(zipUrl);
+        const zipBuffer = new Uint8Array(await response.arrayBuffer());
+
+        const files = fflate.unzipSync(zipBuffer);
+
+        if (!files['anime.db']) throw new Error("No se encontró anime.db en el zip");
+
+        const db = new SQL.Database(files['anime.db']);
+        processDatabase(db);
+
+    } catch (error) {
+        console.error("Falló la carga de la DB:", error);
+        document.getElementById("row-recientes").innerHTML =
+            "<p class='text-red-500'>Error al cargar la base de datos, reintenta más tarde o reportalo.</p>";
+    }
+}
+
+    function processDatabase(db) {
+        const animesResult = db.exec("SELECT id, name, name_alternative, poster, overview, genres FROM animes");
+        if (animesResult.length > 0) {
+            animesResult[0].values.forEach(row => {
+                animeData[row[0]] = {
+                    id: row[0],
+                    name: row[1],
+                    alternative_names: row[2] ? row[2].split(',').map(n => n.trim()) : [],
+                    poster: row[3],
+                    overview: row[4],
+                    genres: row[5] ? row[5].split(',').map(g => g.trim()) : []
+                };
+            });
+        }
+
+        const episodesQuery = `SELECT e.anime_id, e.number, p.language FROM episodes AS e JOIN players AS p ON e.id = p.episode_id`;
+        const episodesResult = db.exec(episodesQuery);
+        if (episodesResult.length > 0) {
+            episodesResult[0].values.forEach(([anime_id, number, language]) => {
+                if (!episodeData[anime_id]) episodeData[anime_id] = [];
+                episodeData[anime_id].push({ episode: number, language });
+            });
+        }
+
+        renderGenreList();
+        renderRows();
+    }
+    
+    function limpiarRecientes() {
+      const cards = document.querySelectorAll('#row-recientes .anime-card');
+      if (cards.length === 0) {
+        localStorage.removeItem("recientes");
+        renderRows();
+        return;
+      }
+      cards.forEach(card => card.classList.add('breaking'));
+      setTimeout(() => {
+        localStorage.removeItem("recientes");
+        renderRows();
+      }, 600); 
+    }
+
+    document.getElementById("buscador").addEventListener("input", (e) => {
+      document.getElementById("clearSearch").style.display = e.target.value ? "block" : "none";
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(renderRows, 300);
+    });
+
+    document.getElementById("clearSearch").addEventListener("click", () => {
+      document.getElementById("buscador").value = "";
+      document.getElementById("clearSearch").style.display = "none";
+      renderRows();
+    });
+    
+    loadDatabase();
+  const header = document.getElementById('message-header');
+  const toggleBtn = document.getElementById('toggle-message-btn');
+  const content = document.getElementById('collapsible-content');
+  const arrowIcon = document.getElementById('arrow-icon');
+
+  let isExpanded = false;
+
+  const toggleMessage = () => {
+    isExpanded = !isExpanded;
+
+    if (isExpanded) {
+      content.style.maxHeight = content.scrollHeight + 'px';
+      content.style.opacity = '1';
+      toggleBtn.textContent = 'Ocultar';
+      arrowIcon.classList.add('rotate-180');
+    } else {
+      content.style.maxHeight = '0';
+      content.style.opacity = '0';
+      toggleBtn.textContent = 'Leer más...';
+      arrowIcon.classList.remove('rotate-180');
+    }
+  };
+  
+  header.addEventListener('click', toggleMessage);
+    function detectarDispositivo() {
+    const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    if (esMobile) {
+      document.body.classList.add("is-mobile");
+    }
+  }
+  detectarDispositivo();
+
+  const genrePanel = document.getElementById('genre-panel');
+  const genreBtn = document.getElementById('genre-btn');
+  const closeGenrePanel = document.getElementById('close-genre-panel');
+
+  genreBtn.addEventListener('click', () => {
+    genrePanel.classList.add('open');
+  });
+
+  closeGenrePanel.addEventListener('click', () => {
+    genrePanel.classList.remove('open');
+  });
+
+  </script>
 </body>
-</html> 
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto – Streameko</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    :root { 
+      --bg: #000000; 
+      --text: #ffffff; 
+      --accent: #e50914; 
+      --primary: #a78bfa; 
+      --glass: rgba(255, 255, 255, 0.05); 
+      --card: #1f1f1f; 
+      --glow-color: rgba(167, 139, 250, 0.4); 
+    }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+
+    .stylish-topbar {
+      background: rgba(10, 10, 15, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .logo-container {
+      transition: transform 0.3s ease;
+    }
+    .logo-container:hover {
+      transform: scale(1.05);
+    }
+    .logo-text {
+      transition: text-shadow 0.3s ease;
+    }
+    .logo-container:hover .logo-text {
+      text-shadow: 0 0 10px var(--glow-color, var(--primary));
+    }
+
+    .nav-link-stylish {
+      color: rgba(255, 255, 255, 0.8);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .nav-link-stylish::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.4s ease;
+      z-index: -1;
+      border-radius: 8px;
+    }
+
+    .nav-link-stylish:hover {
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .nav-link-stylish:hover::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .is-mobile .logo-text {
+      font-size: 1.25rem;
+    }
+    .is-mobile header nav {
+      flex-direction: column;
+      gap: 0.25rem;
+      height: auto;
+      padding: 0.5rem 0;
+    }
+    .is-mobile header nav > div {
+      gap: 0.25rem;
+    }
+
+    .form-container { 
+      background: var(--glass); 
+      border-radius: 1rem; 
+      padding: 2rem; 
+      backdrop-filter: blur(12px); 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
+    }
+    .form-input, .form-select, .form-textarea { 
+      background-color: rgba(0, 0, 0, 0.3); 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      border-radius: 0.5rem; 
+      padding: 0.75rem 1rem; 
+      width: 100%; 
+      color: var(--text); 
+      transition: all 0.3s ease; 
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { 
+      outline: none; 
+      border-color: var(--accent); 
+      box-shadow: 0 0 15px rgba(229, 9, 20, 0.4); 
+    }
+    .form-select option { 
+      background-color: #1a1a1a; 
+      color: var(--text); 
+    }
+    .submit-btn { 
+      background: var(--accent); 
+      transition: all 0.3s ease; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+    }
+    .submit-btn:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 20px rgba(229, 9, 20, 0.4); 
+    }
+    .submit-btn:disabled { 
+      opacity: 0.6; 
+      cursor: not-allowed; 
+      transform: none; 
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      color: white;
+      font-weight: 600;
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .notification.show {
+      transform: translateX(0);
+    }
+    .notification.success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: 1px solid #34d399;
+    }
+    .notification.error {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border: 1px solid #f87171;
+    }
+    .notification.loading {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border: 1px solid #60a5fa;
+    }
+  
+  </style>
+</head>
+<body class="font-sans">
+
+  <header class="sticky top-0 z-50 w-full stylish-topbar">
+    <div class="max-w-6xl mx-auto px-6">
+      <nav class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-3 logo-container">
+          <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+          <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+        </a>
+        <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+          <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+          <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto p-6 mt-10">
+    <div class="form-container">
+      <h1 class="text-3xl font-bold text-center mb-2">Contacta con Nosotros</h1>
+      <p class="text-center text-white/60 mb-8">¿Tienes algo que decir? ¡Te escuchamos!</p>
+
+      <form id="contactForm" class="space-y-6">
+        <div>
+          <label for="reason" class="block mb-2 text-sm font-semibold">Motivo del Contacto</label>
+          <select id="reason" name="reason" class="form-select">
+            <option value="">-- Selecciona una opción --</option>
+            <option value="error">He encontrado un error 🐞</option>
+            <option value="peticion">Falta un anime que me gusta 🎬</option>
+            <option value="sugerencia">Tengo una sugerencia 💡</option>
+            <option value="colaborar">Quiero colaborar / Afiliación 🤝</option>
+            <option value="dmca">Notificación de Copyright (DMCA) ⚖️</option>
+            <option value="otro">Otro motivo...</option>
+          </select>
+        </div>
+        
+        <div id="email-section" class="hidden">
+          <label for="email" class="block mb-2 text-sm font-semibold">Tu Correo <span id="email-label-optional">(Opcional)</span></label>
+          <input type="email" id="email" name="email" placeholder="tu-correo@ejemplo.com" class="form-input">
+        </div>
+
+        <div id="section-error" class="hidden space-y-6">
+          <label for="error-type" class="block text-sm font-semibold">¿Qué tipo de error es?</label>
+          <select id="error-type" name="error_type" class="form-select">
+            <option value="caido">Enlace caído / video no carga</option>
+            <option value="rendimiento">Rendimiento / La web va lenta</option>
+            <option value="visual">Error visual / La página se ve mal</option>
+            <option value="duplicado">Animes o episodios duplicados</option>
+            <option value="otro-error">Otro (describir abajo)</option>
+          </select>
+          <label for="error-message" class="block text-sm font-semibold">Descripción del Error</label>
+          <textarea id="error-message" name="error_message" rows="4" class="form-textarea" placeholder="Pega la URL de la página y describe el problema. Si es de rendimiento, dinos tu dispositivo y navegador."></textarea>
+        </div>
+
+        <div id="section-peticion" class="hidden space-y-6">
+          <label for="anime-name" class="block text-sm font-semibold">Nombre del Anime a Solicitar</label>
+          <input type="text" id="anime-name" name="anime_name" placeholder="Ej: Bocchi the Rock!" class="form-input">
+          <textarea id="peticion-details" name="peticion_details" rows="3" class="form-textarea" placeholder="Añade detalles como el año o estudio si los conoces. ¡Ayuda mucho!"></textarea>
+        </div>
+
+        <div id="section-fandub" class="hidden space-y-6">
+            <label for="fandub-message" class="block text-sm font-semibold">Tu consulta sobre el Fandub</label>
+            <textarea id="fandub-message" name="fandub_message" rows="4" class="form-textarea" placeholder="Cuéntanos si quieres participar, tienes dudas o sugerencias para el proyecto."></textarea>
+        </div>
+
+        <div id="section-sugerencia" class="hidden space-y-6">
+          <label for="sugerencia-message" class="block text-sm font-semibold">Tu Sugerencia</label>
+          <textarea id="sugerencia-message" name="sugerencia_message" rows="5" class="form-textarea" placeholder="Nos encantaría escuchar tus ideas. ¿Qué podemos mejorar o añadir?"></textarea>
+        </div>
+
+        <div id="section-colaborar" class="hidden space-y-6">
+            <label for="colaborar-message" class="block text-sm font-semibold">Propuesta de Colaboración</label>
+            <textarea id="colaborar-message" name="colaborar_message" rows="5" class="form-textarea" placeholder="Explícanos tu propuesta de colaboración, afiliación o negocio. ¡Gracias por tu interés!"></textarea>
+        </div>
+        
+        <div id="section-dmca" class="hidden text-center p-4 bg-black/20 rounded-lg border border-yellow-500/50">
+          <p class="text-white/80">Para notificaciones de Copyright (DMCA), hemos preparado un formulario específico para asegurar que tu solicitud se procese de acuerdo a la ley.
+            For copyright notifications (DMCA), we have prepared a specific form to ensure that your request is processed in accordance with the law.</p>
+          <a href="dmca.html" class="inline-block mt-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-lg transition-transform hover:scale-105">
+            Ir al Formulario DMCA
+          </a>
+            <a href="dmca.html" class="inline-block mt-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-lg transition-transform hover:scale-105">
+            Go to DMCA Form
+          </a>
+        </div>
+
+        <div id="section-otro" class="hidden space-y-6">
+          <label for="otro-subject" class="block text-sm font-semibold">Asunto</label>
+          <input type="text" id="otro-subject" name="otro_subject" placeholder="¿De qué trata tu mensaje?" class="form-input">
+          <label for="otro-message" class="block text-sm font-semibold">Mensaje</label>
+          <textarea id="otro-message" name="otro_message" rows="5" class="form-textarea" placeholder="Cuéntanos qué tienes en mente..."></textarea>
+        </div>
+        <input type="hidden" name="form_type" id="form-type" value="">
+        <input type="hidden" name="timestamp" id="timestamp" value="">
+
+        <div id="submit-button-container" class="hidden">
+          <button type="submit" id="submit-btn" class="submit-btn w-full text-white font-bold py-3 px-4 rounded-lg">
+            <span id="btn-text">Enviar Mensaje</span>
+            <span id="btn-loading" class="hidden">Enviando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="py-8 text-center border-t border-white/10">
+  <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+</footer>
+
+  <script>
+    function detectarDispositivo() {
+      const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+      if (esMobile) {
+        document.body.classList.add("is-mobile");
+      }
+    }
+    detectarDispositivo();
+
+    const EMAILJS_CONFIG = {
+      PUBLIC_KEY: 'FrHKPWtvB25RkdDEI',
+      SERVICE_ID: 'soporte_streameko',
+      TEMPLATE_ID: 'form_soporte'
+    };
+
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+
+    const reasonSelect = document.getElementById('reason');
+    const submitContainer = document.getElementById('submit-button-container');
+    const emailSection = document.getElementById('email-section');
+    const emailLabel = document.getElementById('email-label-optional');
+    const emailInput = document.getElementById('email');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnLoading = document.getElementById('btn-loading');
+    const formTypeInput = document.getElementById('form-type');
+    const timestampInput = document.getElementById('timestamp');
+
+    const formSections = {
+      error: document.getElementById('section-error'),
+      sugerencia: document.getElementById('section-sugerencia'),
+      peticion: document.getElementById('section-peticion'),
+      dmca: document.getElementById('section-dmca'),
+      otro: document.getElementById('section-otro'),
+      colaborar: document.getElementById('section-colaborar'),
+      fandub: document.getElementById('section-fandub')
+    };
+
+    reasonSelect.addEventListener('change', (event) => {
+      const selectedValue = event.target.value;
+
+      Object.values(formSections).forEach(section => {
+          if(section) section.classList.add('hidden');
+      });
+      emailSection.classList.add('hidden');
+      submitContainer.classList.add('hidden');
+      emailLabel.textContent = '(Opcional)';
+      emailInput.required = false;
+      
+      if (selectedValue) {
+        formTypeInput.value = selectedValue;
+        
+        if (selectedValue === 'dmca') {
+            formSections.dmca.classList.remove('hidden');
+            emailSection.classList.add('hidden');
+            submitContainer.classList.add('hidden');
+        } else {
+            const sectionToShow = formSections[selectedValue];
+            if (sectionToShow) {
+              sectionToShow.classList.remove('hidden');
+            }
+            emailSection.classList.remove('hidden');
+            submitContainer.classList.remove('hidden');
+
+            const requiredCases = ['colaborar', 'otro'];
+            if (requiredCases.includes(selectedValue)) {
+              emailLabel.textContent = '(Requerido)';
+              emailInput.required = true;
+            }
+        }
+      }
+    });
+    function showNotification(message, type = 'success') {
+      const existingNotifications = document.querySelectorAll('.notification');
+      existingNotifications.forEach(notif => notif.remove());
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;   
+      document.body.appendChild(notification);
+      setTimeout(() => notification.classList.add('show'), 100);
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, 5000);
+    }
+
+    function setLoadingState(loading) {
+      if (loading) {
+        submitBtn.disabled = true;
+        btnText.classList.add('hidden');
+        btnLoading.classList.remove('hidden');
+      } else {
+        submitBtn.disabled = false;
+        btnText.classList.remove('hidden');
+        btnLoading.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const reason = formData.get('reason');
+      
+      if (!reason) {
+        showNotification('Por favor selecciona un motivo de contacto', 'error');
+        return;
+      }
+
+      const requiredCases = ['colaborar', 'otro'];
+      if (requiredCases.includes(reason) && !formData.get('email')) {
+        showNotification('El correo electrónico es requerido para este tipo de consulta', 'error');
+        return;
+      }
+
+      timestampInput.value = new Date().toISOString();
+      
+      setLoadingState(true);
+      showNotification('Enviando tu mensaje... 📧', 'loading');
+
+      try {
+        const templateParams = {
+          reason: reason,
+          email: formData.get('email') || 'No proporcionado',
+          form_type: reason,
+          timestamp: timestampInput.value
+        };
+
+        switch (reason) {
+          case 'error':
+            templateParams.error_type = formData.get('error_type');
+            templateParams.error_message = formData.get('error_message');
+            templateParams.message = `Tipo: ${formData.get('error_type')}\n\nDescripción: ${formData.get('error_message')}`;
+            break;
+          
+          case 'peticion':
+            templateParams.anime_name = formData.get('anime_name');
+            templateParams.peticion_details = formData.get('peticion_details');
+            templateParams.message = `Anime solicitado: ${formData.get('anime_name')}\n\nDetalles: ${formData.get('peticion_details')}`;
+            break;
+          
+          case 'sugerencia':
+            templateParams.sugerencia_message = formData.get('sugerencia_message');
+            templateParams.message = formData.get('sugerencia_message');
+            break;
+          
+          case 'colaborar':
+            templateParams.colaborar_message = formData.get('colaborar_message');
+            templateParams.message = formData.get('colaborar_message');
+            break;
+          
+          case 'fandub':
+            templateParams.fandub_message = formData.get('fandub_message');
+            templateParams.message = formData.get('fandub_message');
+            break;
+          
+          case 'otro':
+            templateParams.otro_subject = formData.get('otro_subject');
+            templateParams.otro_message = formData.get('otro_message');
+            templateParams.subject = formData.get('otro_subject');
+            templateParams.message = formData.get('otro_message');
+            break;
+        }
+
+        const response = await emailjs.send(
+          EMAILJS_CONFIG.SERVICE_ID,
+          EMAILJS_CONFIG.TEMPLATE_ID,
+          templateParams
+        );
+
+        console.log('Email enviado exitosamente:', response);
+        
+        const successMessages = {
+          error: '✅ ¡Bug reportado! Como Bocchi enfrentando el escenario, lo solucionaremos sin sudar demasiado… bueno, eso creemos.',
+          peticion: '✅ ¡Solicitud recibida! Añadiremos tu anime favorito a la biblioteca antes de la temporada 3 de Komi-san.',
+          sugerencia: '✅ ¡Sugerencia recibida! Tus ideas brillan más que las luces de la ciudad en Call of the Night.',
+          colaborar: '✅ ¡Propuesta recibida! La revisaremos con la precisión de Subaru tratando de salvar a Rem.',
+          fandub: '✅ ¡Consulta sobre fandub recibida! Nos pondremos en contacto contigo.',
+          otro: '✅ ¡Mensaje enviado! Responderemos antes de que Ado saque su próximo hit.'
+        };
+
+        showNotification(successMessages[reason] || '✅ ¡Mensaje enviado exitosamente!', 'success');
+        
+        setTimeout(() => {
+          event.target.reset();
+          Object.values(formSections).forEach(section => {
+            if(section) section.classList.add('hidden');
+          });
+          emailSection.classList.add('hidden');
+          submitContainer.classList.add('hidden');
+          formTypeInput.value = '';
+        }, 2000);
+
+      } catch (error) {
+        console.error('Error al enviar email:', error);
+        
+        let errorMessage = '❌ Oops! Algo salió mal al enviar tu mensaje.';
+        
+        if (error.status === 422) {
+          errorMessage = '❌ Error de validación. Verifica que todos los campos estén correctos.';
+        } else if (error.status === 400) {
+          errorMessage = '❌ Error en la configuración, reporta manualmente a soporte@streameko.qzz.io';
+        }
+        
+        showNotification(errorMessage, 'error');
+      } finally {
+        setLoadingState(false);
+      }
+    });
+  </script>
+
+</body>
+</html>

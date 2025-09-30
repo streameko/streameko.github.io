@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streameko – Estilo Experimental</title>
+  <meta name="description" content="Explora el nuevo estilo experimental de Streameko." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#000000" />
+  <meta property="og:title" content="Streameko – Estilo Experimental" />
+  <meta property="og:description" content="Explora animes recientes, subtitulados y doblados en un nuevo estilo experimental." />
+  <meta property="og:url" content="https://streameko.github.io/" />
+  <meta property="og:image" content="https://i.postimg.cc/yNzkjyKW/Streameko-Logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --accent: #e50914;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .scrolling-row {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scrolling-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .anime-card {
+      flex: 0 0 auto;
+      width: 120px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 640px) {
+      .anime-card {
+        width: 160px;
+      }
+    }
+
+    @media (hover: hover) {
+      .anime-card:hover {
+        transform: scale(1.1);
+        z-index: 10;
+      }
+
+      .anime-card:hover p {
+        color: var(--accent);
+      }
+    }
+
+    p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="font-sans">
+  <div class="bg-zinc-900 text-white py-4 px-6 text-sm text-center">
+    🚧 Este es un estilo en desarrollo. Puede tener errores o cambiar sin aviso.
+    <a href="stable.html" class="underline text-blue-400">Volver al estilo estable</a>
+  </div>
+  <div class="bg-[#2C2F33] text-white py-4 px-6 mx-6 rounded-lg mt-4 shadow-lg border border-[#5865F2] flex flex-col sm:flex-row items-center justify-between gap-4">
+  <div class="text-sm sm:text-base max-w-xl leading-relaxed">
+    🔊 <strong>Aviso – Proyecto de Fandub en Marcha</strong> 🎙️<br />
+    Estamos trabajando en un doblaje fanmade de <em>Call of the Night (Yofukashi no Uta)</em> en español latino. 
+    Proyecto colaborativo, sin fines de lucro, hecho por y para fans del anime. Participan voces, edición, guión y más, todo con cariño y ganas de hacer algo épico. 
+    Si quieres sumarte o más info, hablamos por Discord, solo dale al botón. Esto recién comienza y sí… va a estar muy épico.
+  </div>
+  <a href="https://discord.gg/fX2KGJZmWD" target="_blank" rel="noopener" class="bg-[#5865F2] hover:bg-[#4752c4] text-white font-semibold py-2 px-5 rounded-full shadow-md transition-colors whitespace-nowrap">
+    Únete en Discord
+  </a>
+</div>
+
+  <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>
+
+  <div class="px-6 mt-6">
+    <div class="relative">
+      <input type="text" id="buscador" placeholder="Buscar anime..." class="w-full p-3 pr-10 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
+      <button id="clearSearch" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hidden">✕</button>
+    </div>
+  </div>
+
+  <div class="px-6">
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">🕒 Recientes</h2>
+      <div id="row-recientes" class="scrolling-row"></div>
+    </div>
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">🇯🇵 Subtitulados</h2>
+      <div id="row-sub" class="scrolling-row"></div>
+    </div>
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">🇲🇽 Doblados</h2>
+      <div id="row-dub" class="scrolling-row"></div>
+    </div>
+  </div>
+
+  <script>
+  let animeData = {};
+  let debounceTimeout;
+
+  function crearCard(anime, id) {
+    const poster = anime.poster || "poster_default.png";
+    const div = document.createElement("div");
+    div.className = "anime-card";
+    div.innerHTML = `
+      <img src="${poster}" alt="${anime.name}" class="rounded-lg w-full h-[240px] object-cover" loading="lazy" decoding="async" />
+      <p class="mt-1 text-sm">${anime.name}</p>
+    `;
+    div.onclick = () => {
+      localStorage.setItem("selectedAnime", JSON.stringify(anime));
+      const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+      const index = recientes.indexOf(id);
+      if (index !== -1) recientes.splice(index, 1);
+      recientes.unshift(id);
+      if (recientes.length > 30) recientes.pop();
+      localStorage.setItem("recientes", JSON.stringify(recientes));
+      window.location.href = `anime.html?id=${id}`;
+    };
+    return div;
+  }
+
+  function renderSkeletons(container) {
+    for (let i = 0; i < 4; i++) {
+      const skeleton = document.createElement("div");
+      skeleton.className = "anime-card animate-pulse bg-zinc-700 h-[300px]";
+      container.appendChild(skeleton);
+    }
+  }
+
+  function renderRows() {
+    const query = (document.getElementById("buscador")?.value || "").toLowerCase();
+    const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
+    const rowRecientes = document.getElementById("row-recientes");
+    const rowSub = document.getElementById("row-sub");
+    const rowDub = document.getElementById("row-dub");
+
+    rowRecientes.innerHTML = "";
+    rowSub.innerHTML = "";
+    rowDub.innerHTML = "";
+
+    const yaMostrados = new Set();
+
+    if (recientes.length > 0) {
+      recientes.forEach(id => {
+        const anime = animeData[id];
+        if (!anime) return;
+
+        const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+        if (!names.some(name => name.includes(query))) return;
+
+        rowRecientes.appendChild(crearCard(anime, id));
+        yaMostrados.add(id);
+      });
+
+      if (rowRecientes.children.length === 0) {
+        rowRecientes.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+      }
+    } else {
+      rowRecientes.innerHTML = "<p class='text-white/50'>Aún no has visto nada. ¿Cambiamos eso?</p>";
+    }
+
+    let subContador = 0;
+    let dubContador = 0;
+
+    Object.entries(animeData).forEach(([id, anime]) => {
+      if (yaMostrados.has(id)) return;
+
+      const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
+      if (!names.some(name => name.includes(query))) return;
+
+      const episodes = anime.episodes || [];
+      const hasSub = episodes.some(ep => ep.language === 0);
+      const hasDub = episodes.some(ep => ep.language === 1);
+
+      if (hasSub) {
+        rowSub.appendChild(crearCard(anime, id));
+        subContador++;
+      }
+      if (hasDub) {
+        rowDub.appendChild(crearCard(anime, id));
+        dubContador++;
+      }
+    });
+
+    if (subContador === 0) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+    if (dubContador === 0) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado. ¿Escribiste bien?</p>";
+  }
+
+  document.getElementById("buscador").addEventListener("input", (e) => {
+    const val = e.target.value;
+    document.getElementById("clearSearch").style.display = val ? "block" : "none";
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      renderRows();
+    }, 300);
+  });
+
+  document.getElementById("clearSearch").addEventListener("click", () => {
+    document.getElementById("buscador").value = "";
+    document.getElementById("clearSearch").style.display = "none";
+    renderRows();
+  });
+
+  renderSkeletons(document.getElementById("row-recientes"));
+  renderSkeletons(document.getElementById("row-sub"));
+  renderSkeletons(document.getElementById("row-dub"));
+
+  fetch("https://raw.githubusercontent.com/streameko/streameko.github.io/refs/heads/main/animes_por_id.json")
+    .then(res => res.json())
+    .then(data => {
+      animeData = data;
+      renderRows();
+    });
+</script>
+</body>
+</html> 
