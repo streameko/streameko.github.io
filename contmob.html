@@ -382,7 +382,7 @@
           case 'error':
             templateParams.error_type = formData.get('error_type');
             templateParams.error_message = formData.get('error_message');
-            templateParams.message = `Tipo: ${formData.get('error_type')}\n\nDescripción: ${formData.get('error_message')}`;
+            templateParams.message = `Tipo [APP FORM]: ${formData.get('error_type')}\n\nDescripción: ${formData.get('error_message')}`;
             break;
           
           case 'peticion':
