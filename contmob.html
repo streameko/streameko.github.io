@@ -76,6 +76,7 @@
       transform: scale(1);
     }
 
+    /* AJUSTES MÓVILES CORREGIDOS - IGUAL QUE INDEX Y ANIME */
     .is-mobile .logo-text {
       font-size: 1.25rem;
     }
@@ -190,13 +191,13 @@
           <label for="error-type" class="block text-sm font-semibold">¿Qué tipo de error es?</label>
           <select id="error-type" name="error_type" class="form-select">
             <option value="caido">Enlace caído / video no carga</option>
-            <option value="rendimiento">Rendimiento / La web va lenta</option>
-            <option value="visual">Error visual / La página se ve mal</option>
+            <option value="rendimiento">La app va lenta</option>
+            <option value="visual">La app se ve mal</option>
             <option value="duplicado">Animes o episodios duplicados</option>
             <option value="otro-error">Otro (describir abajo)</option>
           </select>
           <label for="error-message" class="block text-sm font-semibold">Descripción del Error</label>
-          <textarea id="error-message" name="error_message" rows="4" class="form-textarea" placeholder="Pega la URL de la página y describe el problema. Si es de rendimiento, dinos tu dispositivo y navegador."></textarea>
+          <textarea id="error-message" name="error_message" rows="4" class="form-textarea" placeholder="Describe el problema. Si es de rendimiento, dinos tu dispositivo y version de la app. Si es episodio caido, indica anime, episodio, y servidor"></textarea>
         </div>
 
         <div id="section-peticion" class="hidden space-y-6">
@@ -250,7 +251,9 @@
     </div>
   </main>
 
+
   <script>
+    // Detectar móvil - MISMA FUNCIÓN QUE INDEX Y ANIME
     function detectarDispositivo() {
       const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
       if (esMobile) {
@@ -378,41 +381,42 @@
           timestamp: timestampInput.value
         };
 
-        switch (reason) {
-          case 'error':
-            templateParams.error_type = formData.get('error_type');
-            templateParams.error_message = formData.get('error_message');
-            templateParams.message = `Tipo [APP FORM]: ${formData.get('error_type')}\n\nDescripción: ${formData.get('error_message')}`;
-            break;
-          
-          case 'peticion':
-            templateParams.anime_name = formData.get('anime_name');
-            templateParams.peticion_details = formData.get('peticion_details');
-            templateParams.message = `Anime solicitado: ${formData.get('anime_name')}\n\nDetalles: ${formData.get('peticion_details')}`;
-            break;
-          
-          case 'sugerencia':
-            templateParams.sugerencia_message = formData.get('sugerencia_message');
-            templateParams.message = formData.get('sugerencia_message');
-            break;
-          
-          case 'colaborar':
-            templateParams.colaborar_message = formData.get('colaborar_message');
-            templateParams.message = formData.get('colaborar_message');
-            break;
-          
-          case 'fandub':
-            templateParams.fandub_message = formData.get('fandub_message');
-            templateParams.message = formData.get('fandub_message');
-            break;
-          
-          case 'otro':
-            templateParams.otro_subject = formData.get('otro_subject');
-            templateParams.otro_message = formData.get('otro_message');
-            templateParams.subject = formData.get('otro_subject');
-            templateParams.message = formData.get('otro_message');
-            break;
-        }
+switch (reason) {
+  case 'error':
+    templateParams.error_type = formData.get('error_type');
+    templateParams.error_message = formData.get('error_message');
+    templateParams.message = `(APP FORM) Tipo: ${formData.get('error_type')}\n\nDescripción: ${formData.get('error_message')}`;
+    break;
+  
+  case 'peticion':
+    templateParams.anime_name = formData.get('anime_name');
+    templateParams.peticion_details = formData.get('peticion_details');
+    templateParams.message = `(APP FORM) Anime solicitado: ${formData.get('anime_name')}\n\nDetalles: ${formData.get('peticion_details')}`;
+    break;
+  
+  case 'sugerencia':
+    templateParams.sugerencia_message = formData.get('sugerencia_message');
+    templateParams.message = `(APP FORM) ${formData.get('sugerencia_message')}`;
+    break;
+  
+  case 'colaborar':
+    templateParams.colaborar_message = formData.get('colaborar_message');
+    templateParams.message = `(APP FORM) ${formData.get('colaborar_message')}`;
+    break;
+  
+  case 'fandub':
+    templateParams.fandub_message = formData.get('fandub_message');
+    templateParams.message = `(APP FORM) ${formData.get('fandub_message')}`;
+    break;
+  
+  case 'otro':
+    templateParams.otro_subject = formData.get('otro_subject');
+    templateParams.otro_message = formData.get('otro_message');
+    templateParams.subject = formData.get('otro_subject');
+    templateParams.message = `(APP FORM) ${formData.get('otro_message')}`;
+    break;
+}
+
 
         const response = await emailjs.send(
           EMAILJS_CONFIG.SERVICE_ID,
@@ -451,7 +455,7 @@
         if (error.status === 422) {
           errorMessage = '❌ Error de validación. Verifica que todos los campos estén correctos.';
         } else if (error.status === 400) {
-          errorMessage = '❌ Error en la configuración, reporta manualmente a soporte@streameko.qzz.io';
+          errorMessage = '❌ Error en la configuración. Contacta al administrador.';
         }
         
         showNotification(errorMessage, 'error');
