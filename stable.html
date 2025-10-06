@@ -25,17 +25,14 @@
       --glow-color: rgba(167, 139, 250, 0.5);
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
-      transition: background-color 0.4s ease, color 0.4s ease;
       background: linear-gradient(135deg, #231e3b, #2e284b, #3a325c);
       background-size: 200% 200%;
       animation: gradient-bg 15s ease infinite;
+      color: var(--text);
+      font-family: sans-serif;
     }
 
     @keyframes gradient-bg {
@@ -48,16 +45,16 @@
       background: var(--card);
       border-radius: 1rem;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.2s ease-out; 
+      transition: all 0.2s ease-out;
       opacity: 0;
       transform: translateY(10px);
-      animation: fadeInUpSlow 1.6s ease-out forwards; 
+      animation: fadeInUpSlow 1.6s ease-out forwards;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
-    
+
     .card:hover {
-        transform: translateY(-5px) scale(1.03);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px var(--glow-color);
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px var(--glow-color);
     }
 
     .glass {
@@ -67,55 +64,81 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-
-    #searchInput {
-        transition: all 0.3s ease;
-        box-shadow: 0 0 0 0px var(--glow-color);
-    }
-    
-    #searchInput:focus {
-        box-shadow: 0 0 0 3px var(--glow-color);
-        border-color: var(--primary);
-    }
-    
-    .switch-container {
-      background-color: var(--card);
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: background 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .switch-container input {
-      accent-color: var(--primary);
-      transform: scale(1.3);
-    }
-    
-    .view-episodes-btn {
-        background: linear-gradient(45deg, #8A2BE2, #4B0082);
-        box-shadow: 0 2px 8px rgba(138, 43, 226, 0.4);
-        transition: all 0.3s ease;
-    }
-    .view-episodes-btn:hover {
-        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.6);
-        transform: scale(1.05);
+      animation: fadeInUpSlow 1.2s ease-out;
     }
 
     @keyframes fadeInUpSlow {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === CONTADOR === */
+    #countdownBox {
+      position: relative;
+      margin-top: 1.5rem;
+      display: inline-block;
+      padding: 1.2rem 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(167,139,250,0.3);
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 20px rgba(167,139,250,0.3);
+      animation: fadeInUpSlow 2s ease-out;
+    }
+
+    #countdownTitle {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0.8;
+      letter-spacing: 1px;
+      margin-bottom: 0.3rem;
+    }
+
+    #countdown {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #c4b5fd;
+      text-shadow: 0 0 20px rgba(167,139,250,0.8);
+      animation: glow 2s infinite alternate ease-in-out;
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px rgba(167,139,250,0.6), 0 0 20px rgba(167,139,250,0.4); }
+      100% { text-shadow: 0 0 25px rgba(167,139,250,1), 0 0 50px rgba(167,139,250,0.8); }
+    }
+
+    .ping-dot {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #a78bfa;
+      animation: ping 1.2s infinite;
+    }
+
+    @keyframes ping {
+      0% { transform: scale(0.8); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0.8; }
+    }
+
+    .countdown-quote {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.7);
+      font-style: italic;
+      margin-top: 0.4rem;
     }
   </style>
 </head>
-<body class="min-h-screen font-sans">
+
+<body class="min-h-screen">
   <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-4xl font-bold text-center mb-4" style="text-shadow: 0 0 10px var(--glow-color);">Streameko</h1>
+    <h1 class="text-4xl font-bold text-center mb-4" style="text-shadow: 0 0 10px var(--glow-color);">
+      Streameko
+    </h1>
 
     <div class="glass text-sm mb-6 text-center shadow max-w-3xl mx-auto">
       <p class="text-xl font-bold text-yellow-300 mb-3">
@@ -130,8 +153,18 @@
       <p class="mt-4 font-semibold">
         ¡No te quedes atrás en el arco de relleno!
       </p>
+
+      <!-- 🔮 Contador estilizado -->
+      <div id="countdownBox">
+        <div id="countdownTitle">⏳ Cierre de la versión actual</div>
+        <div id="countdown"></div>
+        <div class="countdown-quote">“Incluso las mejores historias tienen su final... para dar paso a una secuela mejor.”</div>
+        <div class="ping-dot"></div>
+      </div>
+
       <div class="mt-6">
-        <a href="index.html" class="inline-block bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition transform hover:scale-105 hover:shadow-indigo-400/50">
+        <a href="index.html"
+          class="inline-block bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition transform hover:scale-105 hover:shadow-indigo-400/50">
           Ir a la Nueva Versión
         </a>
       </div>
@@ -140,7 +173,8 @@
     <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
       <div class="relative w-full max-w-md">
         <label for="searchInput" class="sr-only">Buscar anime</label>
-        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20" />
+        <input id="searchInput" type="text" placeholder="Buscar anime..."
+          class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20" />
         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">🔍</span>
       </div>
       <label class="switch-container text-sm font-medium text-white cursor-pointer">
@@ -150,7 +184,8 @@
     </div>
 
     <div class="flex justify-end mb-2">
-      <button onclick="limpiarRecientes()" class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition shadow hover:shadow-lg hover:shadow-red-500/50">
+      <button onclick="limpiarRecientes()"
+        class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition shadow hover:shadow-lg hover:shadow-red-500/50">
         Limpiar Recientes 🧹
       </button>
     </div>
@@ -160,10 +195,45 @@
   </div>
 
   <footer class="py-8 text-center border-t border-white/10">
-  <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
-</footer>
+    <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+  </footer>
 
   <script>
+    // ✨ Contador elegante
+    const endDate = new Date("May 9, 2026 00:00:00").getTime();
+    const countdownEl = document.getElementById("countdown");
+    const boxEl = document.getElementById("countdownBox");
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      if (distance <= 0) {
+        boxEl.innerHTML = `
+          <div class="text-lg text-center text-purple-300 font-semibold animate-glow">
+            💫 Esta versión ha concluido su historia.<br>
+            Gracias por formar parte del viaje de Streameko 💜
+          </div>`;
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = `
+        ${days}<span class="text-white/60 text-base font-light ml-1 mr-3">d</span>
+        ${hours}<span class="text-white/60 text-base font-light ml-1 mr-3">h</span>
+        ${minutes}<span class="text-white/60 text-base font-light ml-1 mr-3">m</span>
+        ${seconds}<span class="text-white/60 text-base font-light ml-1">s</span>
+      `;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // 🎬 Lógica original de Streameko
     let animeData = {};
     let debounceTimeout;
 
@@ -172,9 +242,9 @@
       .then(data => {
         const delay = Math.random() * 1500 + 1500;
         setTimeout(() => {
-            animeData = data;
-            document.getElementById("loader").style.display = "none";
-            renderAnimeList();
+          animeData = data;
+          document.getElementById("loader").style.display = "none";
+          renderAnimeList();
         }, delay);
       });
 
@@ -183,8 +253,8 @@
     const animeList = document.getElementById("animeList");
 
     searchInput.addEventListener("input", () => {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(renderAnimeList, 1000); 
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(renderAnimeList, 1000);
     });
     dubToggle.addEventListener("change", renderAnimeList);
 
@@ -197,8 +267,9 @@
         <img src="${poster}" alt="Póster del anime ${anime.name}" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px] shadow-lg" />
         <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
         ${extraEtiqueta}
-        <button class="view-episodes-btn text-white px-4 py-1 rounded-full text-sm transition-all duration-300" onclick="viewAnime('${id}')">Ver Episodios</button>
+        <button class="view-episodes-btn text-white px-4 py-1 rounded-full text-sm transition-all duration-300 bg-gradient-to-r from-indigo-500 to-purple-600 hover:scale-105">Ver Episodios</button>
       `;
+      div.querySelector("button").addEventListener("click", () => viewAnime(id));
       return div;
     }
 
