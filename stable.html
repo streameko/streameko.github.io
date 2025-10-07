@@ -5,215 +5,215 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inicio – Streameko</title>
   <meta name="description" content="Streameko es tu plataforma para ver anime gratis, subtitulado y doblado al español." />
+  <meta name="keywords" content="anime, ver anime, anime gratis, anime subtitulado, anime doblado, anime online, streameko" />
+  <meta name="author" content="Streameko" />
+  <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#2e284b" />
+  <link rel="canonical" href="https://streameko.github.io/" />
+  <meta property="og:title" content="Streameko – Ver Anime Gratis Subtitulado y Doblado" />
+  <meta property="og:description" content="Disfruta anime online sin límites. Subtitulado y doblado al español en Streameko." />
+  <meta property="og:url" content="https://streameko.qzz.io/" />
+  <meta property="og:type" content="website" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{
+    :root {
       --bg: #2e284b;
-      --glow-color: rgba(167,139,250,0.5);
-    }
-    html { scroll-behavior: smooth; }
-    body{
-      margin:0;
-      min-height:100vh;
-      background: linear-gradient(135deg,#231e3b,#2e284b,#3a325c);
-      color:#fff;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      --card: rgba(255, 255, 255, 0.06);
+      --text: #ffffff;
+      --primary: #a78bfa;
+      --glass: rgba(255, 255, 255, 0.05);
+      --glow-color: rgba(167, 139, 250, 0.5);
     }
 
-    /* Reusable */
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: linear-gradient(135deg, #231e3b, #2e284b, #3a325c);
+      background-size: 200% 200%;
+      animation: gradient-bg 15s ease infinite;
+      color: var(--text);
+      font-family: sans-serif;
+    }
+
+    @keyframes gradient-bg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease-out;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUpSlow 1.6s ease-out forwards;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px var(--glow-color);
+    }
+
     .glass {
-      background: rgba(255,255,255,0.05);
+      background: var(--glass);
       border-radius: 1rem;
       padding: 1.5rem;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      animation: fadeInUpSlow 1.2s ease-out;
     }
 
-    h1 { text-shadow: 0 0 10px var(--glow-color); }
+    @keyframes fadeInUpSlow {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    /* Contador box */
+    /* === CONTADOR === */
     #countdownBox {
       position: relative;
       margin-top: 1.5rem;
       display: inline-block;
       padding: 1.2rem 1.5rem;
       border-radius: 1rem;
-      border: 1px solid rgba(167,139,250,0.28);
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(167,139,250,0.3);
+      background: rgba(255,255,255,0.05);
       backdrop-filter: blur(8px);
-      box-shadow: 0 0 26px rgba(167,139,250,0.18);
-      animation: fadeInUp 700ms cubic-bezier(.2,.9,.3,1) both;
-      transform-origin: center;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(8px) scale(.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      box-shadow: 0 0 20px rgba(167,139,250,0.3);
+      animation: fadeInUpSlow 2s ease-out;
     }
 
-    #countdownTitle { font-size:.78rem; text-transform:uppercase; opacity:.85; letter-spacing:1px; }
-    #countdown { font-size:2rem; font-weight:800; color:#d6ccff; text-shadow:0 0 18px rgba(167,139,250,0.85); }
-    .countdown-quote { font-size:.78rem; color:rgba(255,255,255,.75); margin-top:.35rem; font-style:italic; }
+    #countdownTitle {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: #fff;
+      opacity: 0.8;
+      letter-spacing: 1px;
+      margin-bottom: 0.3rem;
+    }
+
+    #countdown {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #c4b5fd;
+      text-shadow: 0 0 20px rgba(167,139,250,0.8);
+      animation: glow 2s infinite alternate ease-in-out;
+    }
+
+    @keyframes glow {
+      0% { text-shadow: 0 0 10px rgba(167,139,250,0.6), 0 0 20px rgba(167,139,250,0.4); }
+      100% { text-shadow: 0 0 25px rgba(167,139,250,1), 0 0 50px rgba(167,139,250,0.8); }
+    }
 
     .ping-dot {
-      position:absolute; top:-6px; right:-6px;
-      width:12px; height:12px; border-radius:999px;
-      background: linear-gradient(180deg,#b794f4,#8b5cf6);
-      box-shadow: 0 0 18px rgba(167,139,250,0.6);
-      animation: ping 1.2s infinite ease-in-out;
-    }
-    @keyframes ping {
-      0% { transform: scale(.85); opacity:.85; }
-      50% { transform: scale(1.18); opacity:1; }
-      100% { transform: scale(.85); opacity:.85; }
-    }
-
-    /* Destruction animations */
-    .destroy-shred {
-      animation: shred 1200ms cubic-bezier(.2,.9,.3,1) forwards;
-      transform-origin: center;
-    }
-    @keyframes shred {
-      0% { opacity: 1; transform: translateY(0) rotate(0) scale(1) blur(0); filter: hue-rotate(0deg); }
-      30% { transform: translateY(-12px) rotate(-2deg) scale(.98); }
-      60% { transform: translateY(30vh) rotate(12deg) scale(.4); opacity:.2; filter: blur(6px) hue-rotate(30deg); }
-      100% { transform: translateY(120vh) rotate(30deg) scale(.1); opacity:0; filter: blur(18px) hue-rotate(60deg); }
-    }
-
-    .destroy-fade {
-      animation: fadeAway 900ms ease-in forwards;
-    }
-    @keyframes fadeAway {
-      to { opacity: 0; transform: scale(.95); filter: blur(6px); }
-    }
-
-    /* Particle-ish burst (subtle) */
-    .burst {
       position: absolute;
-      pointer-events:none;
-      left:50%; top:50%;
-      width:8px; height:8px; border-radius:4px;
-      background: radial-gradient(circle, #fff, #b794f4 40%, transparent 60%);
-      box-shadow: 0 0 24px rgba(167,139,250,0.9);
-      transform: translate(-50%,-50%) scale(0);
-      animation: burstAnim 900ms forwards;
-      mix-blend-mode: screen;
-    }
-    @keyframes burstAnim {
-      0% { transform: translate(-50%,-50%) scale(0); opacity:1; }
-      30% { transform: translate(-50%,-50%) scale(1.6); opacity:.9; }
-      100% { transform: translate(-50%,-50%) scale(6) translateY(-60px); opacity:0; }
+      top: -5px;
+      right: -5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #a78bfa;
+      animation: ping 1.2s infinite;
     }
 
-    /* New version button preserved */
-    #newVersionWrapper{
-      display:inline-block;
-      margin-top:1rem;
-    }
-    #newVersionLink{
-      display:inline-block;
-      padding: .9rem 1.3rem;
-      border-radius: 999px;
-      font-weight:700;
-      text-decoration:none;
-      color:white;
-      background: linear-gradient(90deg,#6d28d9,#8b5cf6);
-      box-shadow: 0 8px 28px rgba(139,92,246,0.26);
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-    #newVersionLink:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 18px 40px rgba(139,92,246,0.36); }
-
-    /* Full-screen minimal wrapper for after-destruction */
-    #survivorContainer{
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      pointer-events: none;
+    @keyframes ping {
+      0% { transform: scale(0.8); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0.8; }
     }
 
-    /* small helpers */
-    .hidden { display:none !important; }
-    .center-vertical { display:flex; justify-content:center; align-items:center; }
+    .countdown-quote {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.7);
+      font-style: italic;
+      margin-top: 0.4rem;
+    }
   </style>
 </head>
-<body>
+
+<body class="min-h-screen">
   <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-4xl font-bold text-center mb-4">Streameko</h1>
+    <h1 class="text-4xl font-bold text-center mb-4" style="text-shadow: 0 0 10px var(--glow-color);">
+      Streameko
+    </h1>
 
-    <div class="glass text-sm mb-6 text-center shadow max-w-3xl mx-auto" id="mainGlass">
-      <p class="text-xl font-bold text-yellow-300 mb-3">¡Atención, viajero! 🚀</p>
-      <p class="text-white/90">Esta versión de Streameko es como el primer episodio de un gran anime... ¡épico, pero ya hemos avanzado en la trama!</p>
-      <p class="mt-2 text-white/90">La aventura continúa en nuestra nueva y mejorada página. ¡Nuevos animes, más funciones y la misma pasión de siempre te esperan!</p>
-      <p class="mt-4 font-semibold">¡No te quedes atrás en el arco de relleno!</p>
+    <div class="glass text-sm mb-6 text-center shadow max-w-3xl mx-auto">
+      <p class="text-xl font-bold text-yellow-300 mb-3">
+        ¡Atención, viajero! 🚀
+      </p>
+      <p class="text-white/90">
+        Esta versión de Streameko es como el primer episodio de un gran anime... ¡épico, pero ya hemos avanzado en la trama!
+      </p>
+      <p class="mt-2 text-white/90">
+        La aventura continúa en nuestra nueva y mejorada página. ¡Nuevos animes, más funciones y la misma pasión de siempre te esperan!
+      </p>
+      <p class="mt-4 font-semibold">
+        ¡No te quedes atrás en el arco de relleno!
+      </p>
 
-      <!-- Contador estilizado -->
+      <!-- 🔮 Contador estilizado -->
       <div id="countdownBox">
         <div id="countdownTitle">⏳ Cierre de la versión actual</div>
-        <div id="countdown">--d --h --m --s</div>
+        <div id="countdown"></div>
         <div class="countdown-quote">“Incluso las mejores historias tienen su final... para dar paso a una secuela mejor.”</div>
-        <div class="ping-dot" aria-hidden="true"></div>
+        <div class="ping-dot"></div>
       </div>
 
-      <div class="mt-6" id="newVersionWrapper">
-        <a href="index.html" id="newVersionLink">Ir a la Nueva Versión</a>
+      <div class="mt-6">
+        <a href="index.html"
+          class="inline-block bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition transform hover:scale-105 hover:shadow-indigo-400/50">
+          Ir a la Nueva Versión
+        </a>
       </div>
     </div>
 
-    <!-- Buscador y controles (se destruyen) -->
-    <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center" id="controlsBlock">
+    <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-center">
       <div class="relative w-full max-w-md">
         <label for="searchInput" class="sr-only">Buscar anime</label>
-        <input id="searchInput" type="text" placeholder="Buscar anime..." class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20" />
+        <input id="searchInput" type="text" placeholder="Buscar anime..."
+          class="w-full p-3 pl-10 rounded-full bg-white/10 text-white placeholder-white/60 border border-white/20" />
         <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">🔍</span>
       </div>
       <label class="switch-container text-sm font-medium text-white cursor-pointer">
-        <input id="dubToggle" type="checkbox"> Solo Doblados
+        <input id="dubToggle" type="checkbox">
+        Solo Doblados
       </label>
     </div>
 
     <div class="flex justify-end mb-2">
-      <button onclick="limpiarRecientes()" class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition shadow" id="clearRecentBtn">Limpiar Recientes 🧹</button>
+      <button onclick="limpiarRecientes()"
+        class="text-xs text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-full transition shadow hover:shadow-lg hover:shadow-red-500/50">
+        Limpiar Recientes 🧹
+      </button>
     </div>
 
     <div id="loader" class="text-white text-center mt-10 animate-pulse">Cargando animes...</div>
     <div id="animeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </div>
 
-  <!-- Footer que también se destruirá -->
-  <footer class="py-8 text-center border-t border-white/10" id="siteFooter">
+  <footer class="py-8 text-center border-t border-white/10">
     <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
   </footer>
 
-  <!-- Contenedor para dejar el botón sobreviviente después de la destrucción -->
-  <div id="survivorContainer" aria-hidden="true"></div>
-
   <script>
-    // ================= contador ==================
+    // ✨ Contador elegante
     const endDate = new Date("May 9, 2026 00:00:00").getTime();
     const countdownEl = document.getElementById("countdown");
-    const countdownBox = document.getElementById("countdownBox");
-    const newVersionWrapper = document.getElementById("newVersionWrapper");
-    const survivorContainer = document.getElementById("survivorContainer");
-
-    let intervalId = null;
-
-    function formatTimePart(n){
-      return String(n);
-    }
+    const boxEl = document.getElementById("countdownBox");
 
     function updateCountdown() {
-      const now = Date.now();
+      const now = new Date().getTime();
       const distance = endDate - now;
 
       if (distance <= 0) {
-        clearInterval(intervalId);
-        triggerDestruction();
+        boxEl.innerHTML = `
+          <div class="text-lg text-center text-purple-300 font-semibold animate-glow">
+            💫 Esta versión ha concluido su historia.<br>
+            Gracias por formar parte del viaje de Streameko 💜
+          </div>`;
         return;
       }
 
@@ -223,110 +223,17 @@
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       countdownEl.innerHTML = `
-        ${formatTimePart(days)}<span style="opacity:.75; font-size:.9rem; margin-left:.35rem; margin-right:.55rem;">d</span>
-        ${formatTimePart(hours)}<span style="opacity:.75; font-size:.9rem; margin-left:.35rem; margin-right:.55rem;">h</span>
-        ${formatTimePart(minutes)}<span style="opacity:.75; font-size:.9rem; margin-left:.35rem; margin-right:.55rem;">m</span>
-        ${formatTimePart(seconds)}<span style="opacity:.75; font-size:.9rem; margin-left:.35rem;">s</span>
+        ${days}<span class="text-white/60 text-base font-light ml-1 mr-3">d</span>
+        ${hours}<span class="text-white/60 text-base font-light ml-1 mr-3">h</span>
+        ${minutes}<span class="text-white/60 text-base font-light ml-1 mr-3">m</span>
+        ${seconds}<span class="text-white/60 text-base font-light ml-1">s</span>
       `;
     }
 
     updateCountdown();
-    intervalId = setInterval(updateCountdown, 1000);
+    setInterval(updateCountdown, 1000);
 
-    // ============== lógica de destrucción =================
-    // Objetivo: animar y remover todo el contenido del body excepto el botón #newVersionLink.
-    function triggerDestruction(){
-      // Playful console message (por si alguien inspecciona)
-      console.log("⚠️ Contador alcanzó 0 — iniciando protocolo de cierre: 'Arco Final'.");
-
-      // 1) Crear pequeña explosión visual (burst)
-      const burst = document.createElement('div');
-      burst.className = 'burst';
-      document.body.appendChild(burst);
-
-      // 2) Seleccionar elementos a destruir (todo dentro del body excepto newVersionLink)
-      const preserve = document.getElementById('newVersionLink');
-      // Guardar wrapper loco: clonamos el botón para preservar sin dependencias
-      const preservedClone = preserve.cloneNode(true);
-      preservedClone.id = 'newVersionLink_survivor';
-      preservedClone.style.pointerEvents = 'auto';
-
-      // 3) Añadir animación de 'shred' a cada elemento objetivo
-      // Tomamos direct children del BODY para mayor control
-      const bodyChildren = Array.from(document.body.children);
-
-      bodyChildren.forEach(child => {
-        // Si el child contiene el botón que queremos preservar, lo trataremos distinto:
-        if (child.contains(preserve)) {
-          // Añadimos clase de fade a todo excepto el wrapper del botón; dentro de ese wrapper
-          // quitamos todo menos el botón.
-          // Primero, tomamos el wrapper que contiene el botón (newVersionWrapper está dentro del glass)
-          // y vaciamos su contenedor dejando solo el botón
-          const wrapper = preserve.closest('#newVersionWrapper') || preserve.parentElement;
-          // detach preservedClone into survivor container after animation
-          if (wrapper) {
-            // mark wrapper for fade and then clear inside (except button)
-            wrapper.classList.add('destroy-fade');
-            // Remove all children except the preserve node (animate them first)
-            Array.from(wrapper.children).forEach(ch => {
-              if (ch !== preserve) {
-                ch.classList?.add('destroy-shred'); // if it has classList
-              } else {
-                // hide original preserve briefly to be replaced by clone later
-                ch.style.visibility = 'hidden';
-              }
-            });
-          }
-          // Also shrink the glass that contains the wrapper a bit
-          const glass = document.getElementById('mainGlass');
-          if (glass) glass.classList.add('destroy-fade');
-        } else {
-          // Normal child: add shred animation
-          child.classList.add('destroy-shred');
-        }
-      });
-
-      // 4) After animations complete, remove nodes except show survivor button centered
-      // Duración más larga de las animaciones: shred 1200ms; fadeAway 900ms; burst 900ms
-      const cleanupDelay = 1400; // ms (slightly after animations)
-      setTimeout(() => {
-        // Clear body but preserve the survivor container
-        // Remove everything inside body
-        Array.from(document.body.children).forEach(child => {
-          // Keep the survivorContainer, but we will populate it with the preserved button
-          if (child === survivorContainer) return;
-          // remove
-          try { child.remove(); } catch(e){}
-        });
-
-        // 5) Insert preservedClone into survivorContainer and center it
-        survivorContainer.appendChild(preservedClone);
-        survivorContainer.style.pointerEvents = 'auto';
-        survivorContainer.setAttribute('aria-hidden','false');
-        survivorContainer.classList.add('center-vertical');
-        // Style survivorContainer so the button is isolated on center dark background
-        survivorContainer.style.background = 'linear-gradient(180deg, rgba(14,11,23,0.55), rgba(14,11,23,0.8))';
-        survivorContainer.style.backdropFilter = 'blur(4px)';
-        // make sure wrapper keeps pointer events for the link
-        preservedClone.style.pointerEvents = 'auto';
-        preservedClone.style.zIndex = '10000';
-
-        // 6) add a subtle entrance to the preserved button
-        preservedClone.animate([
-          { transform: 'translateY(-18px) scale(.9)', opacity: 0 },
-          { transform: 'translateY(0) scale(1)', opacity: 1 }
-        ], { duration: 600, easing: 'cubic-bezier(.2,.9,.3,1)' });
-
-        // 7) remove any intervals or listeners if needed
-        clearInterval(intervalId);
-
-        // Accessibility text: announce via title change
-        document.title = "Streameko — Versión cerrada";
-      }, cleanupDelay);
-    }
-
-    // ============== Lógica original (lista de animes, etc) =================
-    // Nota: estos elementos serán destruidos cuando llegue la hora.
+    // 🎬 Lógica original de Streameko
     let animeData = {};
     let debounceTimeout;
 
@@ -336,46 +243,39 @@
         const delay = Math.random() * 1500 + 1500;
         setTimeout(() => {
           animeData = data;
-          const loader = document.getElementById("loader");
-          if (loader) loader.style.display = "none";
+          document.getElementById("loader").style.display = "none";
           renderAnimeList();
         }, delay);
-      })
-      .catch(err => {
-        // Si falla el fetch, ocultar loader lentamente
-        const loader = document.getElementById("loader");
-        if (loader) loader.textContent = "No se pudieron cargar los animes.";
       });
 
     const searchInput = document.getElementById("searchInput");
     const dubToggle = document.getElementById("dubToggle");
     const animeList = document.getElementById("animeList");
 
-    if (searchInput) searchInput.addEventListener("input", () => {
+    searchInput.addEventListener("input", () => {
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(renderAnimeList, 1000);
     });
-    if (dubToggle) dubToggle.addEventListener("change", renderAnimeList);
+    dubToggle.addEventListener("change", renderAnimeList);
 
     function crearCardAnime(anime, id, extraEtiqueta = "") {
-      const poster = (anime && anime.poster) ? anime.poster : "poster_default.png";
+      const poster = anime.poster || "poster_default.png";
       const div = document.createElement("div");
       div.className = "card p-4 flex flex-col items-center text-center";
+
       div.innerHTML = `
-        <img src="${poster}" alt="Póster del anime ${anime?.name || ''}" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px] shadow-lg" />
-        <h2 class="font-semibold text-base mb-2">${anime?.name || 'Sin nombre'}</h2>
+        <img src="${poster}" alt="Póster del anime ${anime.name}" class="rounded-xl object-cover mb-4 w-full max-w-[200px] h-[260px] shadow-lg" />
+        <h2 class="font-semibold text-base mb-2">${anime.name}</h2>
         ${extraEtiqueta}
         <button class="view-episodes-btn text-white px-4 py-1 rounded-full text-sm transition-all duration-300 bg-gradient-to-r from-indigo-500 to-purple-600 hover:scale-105">Ver Episodios</button>
       `;
-      const btn = div.querySelector("button");
-      if (btn) btn.addEventListener("click", () => viewAnime(id));
+      div.querySelector("button").addEventListener("click", () => viewAnime(id));
       return div;
     }
 
     function renderAnimeList() {
-      if (!animeList) return;
-      const query = (searchInput?.value || '').toLowerCase();
-      const dubbedOnly = dubToggle?.checked;
+      const query = searchInput.value.toLowerCase();
+      const dubbedOnly = dubToggle.checked;
       animeList.innerHTML = "";
 
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
@@ -389,7 +289,7 @@
 
       Object.entries(animeData).forEach(([id, anime]) => {
         if (recientes.includes(id)) return;
-        const names = [anime.name, ...(anime.alternative_names || [])].map(n => (n||'').toLowerCase());
+        const names = [anime.name, ...(anime.alternative_names || [])].map(n => n.toLowerCase());
         const matchesSearch = names.some(name => name.includes(query));
         if (!matchesSearch) return;
         const hasDub = (anime.episodes || []).some(ep => ep.language === 1);
@@ -400,7 +300,6 @@
     }
 
     function viewAnime(id) {
-      if (!animeData[id]) return;
       localStorage.setItem("selectedAnime", JSON.stringify(animeData[id]));
       const recientes = JSON.parse(localStorage.getItem("recientes")) || [];
       const index = recientes.indexOf(id);
@@ -408,7 +307,6 @@
       recientes.unshift(id);
       if (recientes.length > 6) recientes.pop();
       localStorage.setItem("recientes", JSON.stringify(recientes));
-      // Navigate if page still exists
       window.location.href = `animestable.html?id=${id}`;
     }
 
@@ -416,14 +314,6 @@
       localStorage.removeItem("recientes");
       renderAnimeList();
     }
-
-    // Safety: If user manually clicks button after destruction, ensure it works
-    document.addEventListener('click', (e) => {
-      const target = e.target;
-      if (target && (target.id === 'newVersionLink' || target.id === 'newVersionLink_survivor')) {
-        // allow default navigation
-      }
-    });
   </script>
 </body>
 </html>
