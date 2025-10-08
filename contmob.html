@@ -318,34 +318,21 @@
 
     let userIP = null;
 
-async function fetchUserIP() {
-  try {
-    const response = await fetch(WORKER_URL, {
-      method: "GET",
-      headers: {
-        "User-Agent": "StreamekoApp/1.0 (Android)",
-        "X-Streameko-Client": "app",
-        "Origin": "https://app.streameko.qzz.io"
-      },
-      mode: "cors" // Crucial para poder leer la respuesta JSON
-    });
-
-    const data = await response.json();
-    
-    if (data.success) {
-      userIP = data.ip;
-      console.log("📜 Registro de Kira – IP obtenida:", userIP);
-      document.getElementById('user-ip').value = userIP;
-    } else {
-      userIP = 'No disponible';
-      console.warn("🩸 Registro de Kira – IP no disponible:", data);
+    async function fetchUserIP() {
+      try {
+        const response = await fetch(WORKER_URL);
+        const data = await response.json();
+        
+        if (data.success) {
+          userIP = data.ip;
+          document.getElementById('user-ip').value = userIP;
+        } else {
+          userIP = 'No disponible';
+        }
+      } catch (error) {
+        userIP = 'Error al obtener';
+      }
     }
-
-  } catch (error) {
-    userIP = 'Error al obtener';
-    console.error("💀 Registro de Kira – Error fetch:", error);
-  }
-}
 
     fetchUserIP();
     const reasonSelect = document.getElementById('reason');
