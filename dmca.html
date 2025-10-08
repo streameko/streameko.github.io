@@ -160,6 +160,43 @@
       background: linear-gradient(135deg, #3b82f6, #2563eb);
       border: 1px solid #60a5fa;
     }
+
+    .privacy-checkbox {
+      display: flex;
+      align-items: start;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      border-radius: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .privacy-checkbox input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .privacy-checkbox label {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+    }
+
+    .privacy-checkbox a {
+      color: var(--accent);
+      text-decoration: underline;
+      transition: color 0.2s ease;
+    }
+
+    .privacy-checkbox a:hover {
+      color: var(--primary);
+    }
+  
   </style>
 </head>
 <body class="font-sans">
@@ -256,9 +293,18 @@
             <input type="text" id="dmca-signature" name="digital_signature" class="form-input" required data-lang-placeholder="signature_placeholder">
         </div>
 
+        <div id="privacy-section" class="privacy-checkbox">
+          <input type="checkbox" id="privacy-accept" name="privacy_accept" required>
+          <label for="privacy-accept" data-lang="privacy_label">
+            Al enviar este formulario, aceptas nuestra 
+            <a href="privacidad.html" target="_blank">Política de Privacidad</a>. 
+          </label>
+        </div>
+
         <input type="hidden" name="form_type" value="dmca">
         <input type="hidden" name="timestamp" id="timestamp" value="">
         <input type="hidden" name="language" id="form-language" value="es">
+        <input type="hidden" name="user_ip" id="user-ip" value="">
         
         <div>
           <button type="submit" id="submit-btn" class="submit-btn w-full text-white font-bold py-3 px-4 rounded-lg" data-lang="submit_button">
@@ -273,14 +319,8 @@
   <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
 </footer>
 <script>
-    function detectarDispositivo() {
-      const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
-      if (esMobile) {
-        document.body.classList.add("is-mobile");
-      }
-    }
-    detectarDispositivo();
-
+    const WORKER_URL = 'https://formdata.streameko.qzz.io';
+    
     const EMAILJS_CONFIG = {
         PUBLIC_KEY_ADMIN: 'FrHKPWtvB25RkdDEI',
         SERVICE_ID_DMCA: 'dmca_streameko',
@@ -291,6 +331,34 @@
         TEMPLATE_ID_CLAIMANT_ES: 'confirmation_dmca',
         TEMPLATE_ID_CLAIMANT_EN: 'confirmation_dmca_en'
     };
+
+    function detectarDispositivo() {
+      const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+      if (esMobile) {
+        document.body.classList.add("is-mobile");
+      }
+    }
+    detectarDispositivo();
+
+    let userIP = null;
+
+    async function fetchUserIP() {
+      try {
+        const response = await fetch(WORKER_URL);
+        const data = await response.json();
+        
+        if (data.success) {
+          userIP = data.ip;
+          document.getElementById('user-ip').value = userIP;
+        } else {
+          userIP = 'No disponible';
+        }
+      } catch (error) {
+        userIP = 'Error al obtener';
+      }
+    }
+
+    fetchUserIP();
 
     const translations = {
         es: {
@@ -320,7 +388,9 @@
             statement6: "Entiendo que este formulario fue redactado originalmente en español, y si hay algún error de traducción en el formulario en inglés, la versión en español prevalecerá.",
             signature_label: "5. Firma Digital",
             signature_placeholder: "Escribe tu nombre completo como firma legal.",
-            submit_button: "Enviar Notificación DMCA"
+            submit_button: "Enviar Notificación DMCA",
+            privacy_label: "Al enviar este formulario, aceptas nuestra <a href='privacidad.html' target='_blank'>Política de Privacidad</a>.",
+            privacy_required: "Debes aceptar la Política de Privacidad para continuar"
         },
         en: {
             title: "Copyright Infringement Notification (DMCA)",
@@ -347,7 +417,9 @@
             statement6: "I understand that this form was originally written in Spanish, and if there are any translation errors in the English form, the Spanish version will prevail.",
             signature_label: "5. Digital Signature",
             signature_placeholder: "Type your full name as a legal signature.",
-            submit_button: "Send DMCA Notification"
+            submit_button: "Send DMCA Notification",
+            privacy_label: "By submitting this form, you accept our <a href='privacy.html' target='_blank'>Privacy Policy</a>.",
+            privacy_required: "You must accept the Privacy Policy to proceed"
         }
     };
 
@@ -358,6 +430,7 @@
     const btnText = document.getElementById('btn-text');
     const btnLoading = document.getElementById('btn-loading');
     const timestampInput = document.getElementById('timestamp');
+    const privacyCheckbox = document.getElementById('privacy-accept');
 
     function setLanguage(lang) {
         document.documentElement.lang = lang;
@@ -440,7 +513,17 @@
             return;
         }
 
+        if (!privacyCheckbox.checked) {
+            const message = translations[currentLang].privacy_required;
+            showNotification(message, 'error');
+            return;
+        }
+
         timestampInput.value = new Date().toISOString();
+        
+        if (!userIP) {
+            await fetchUserIP();
+        }
         
         setLoadingState(true);
         const loadingMessage = currentLang === 'es' ? 
@@ -459,6 +542,7 @@
                 claim_evidence: formData.get('claim_evidence') || 'No se proporcionaron pruebas.',
                 digital_signature: formData.get('digital_signature'),
                 timestamp: timestampInput.value,
+                user_ip: userIP || 'No disponible',
                 statements_accepted: 'Todas las declaraciones bajo juramento han sido aceptadas',
                 message: `NOTIFICACIÓN DMCA / DMCA NOTIFICATION
                 
@@ -482,6 +566,7 @@ ${formData.get('claim_evidence') || 'No se proporcionaron pruebas.'}
 ${formData.get('digital_signature')}
 
 Fecha/Date: ${new Date().toLocaleString()}
+IP: ${userIP || 'No disponible'}
 Formulario enviado desde: ${window.location.href}`
             };
 
@@ -533,23 +618,12 @@ Formulario enviado desde: ${window.location.href}`
                 '❌ Error al enviar la notificación DMCA. Intenta de nuevo.' :
                 '❌ Error sending DMCA notification. Please try again.';
             
-            if (error.status === 422) {
-                errorMessage = currentLang === 'es' ? 
-                    '❌ Error de validación. Verifica que todos los campos estén correctos.' :
-                    '❌ Validation error. Please check that all fields are correct.';
-            } else if (error.status === 400) {
-                errorMessage = currentLang === 'es' ? 
-                    '❌ Error en la configuración, reclama manualmente a dmca@streameko.qzz.io' :
-                    '❌ Configuration error, please make a manual claim to dmca@streameko.qzz.io';
-            }
-            
             showNotification(errorMessage, 'error');
         } finally {
             setLoadingState(false);
         }
     });
-
-</script>
+  </script>
 
 </body>
 </html>

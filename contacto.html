@@ -157,6 +157,42 @@
       background: linear-gradient(135deg, #3b82f6, #2563eb);
       border: 1px solid #60a5fa;
     }
+
+    .privacy-checkbox {
+      display: flex;
+      align-items: start;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: rgba(167, 139, 250, 0.1);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      border-radius: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .privacy-checkbox input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .privacy-checkbox label {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+    }
+
+    .privacy-checkbox a {
+      color: var(--accent);
+      text-decoration: underline;
+      transition: color 0.2s ease;
+    }
+
+    .privacy-checkbox a:hover {
+      color: var(--primary);
+    }
   
   </style>
 </head>
@@ -252,8 +288,18 @@
           <label for="otro-message" class="block text-sm font-semibold">Mensaje</label>
           <textarea id="otro-message" name="otro_message" rows="5" class="form-textarea" placeholder="Cuéntanos qué tienes en mente..."></textarea>
         </div>
+
+        <div id="privacy-section" class="hidden privacy-checkbox">
+          <input type="checkbox" id="privacy-accept" name="privacy_accept" required>
+          <label for="privacy-accept">
+            Al enviar este formulario, aceptas nuestra 
+            <a href="privacidad.html" target="_blank">Política de Privacidad</a>. 
+          </label>
+        </div>
+
         <input type="hidden" name="form_type" id="form-type" value="">
         <input type="hidden" name="timestamp" id="timestamp" value="">
+        <input type="hidden" name="user_ip" id="user-ip" value="">
 
         <div id="submit-button-container" class="hidden">
           <button type="submit" id="submit-btn" class="submit-btn w-full text-white font-bold py-3 px-4 rounded-lg">
@@ -270,14 +316,8 @@
 </footer>
 
   <script>
-    function detectarDispositivo() {
-      const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
-      if (esMobile) {
-        document.body.classList.add("is-mobile");
-      }
-    }
-    detectarDispositivo();
-
+    const WORKER_URL = 'https://formdata.streameko.qzz.io';
+    
     const EMAILJS_CONFIG = {
       PUBLIC_KEY: 'FrHKPWtvB25RkdDEI',
       SERVICE_ID: 'soporte_streameko',
@@ -286,6 +326,34 @@
 
     emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
 
+    function detectarDispositivo() {
+      const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+      if (esMobile) {
+        document.body.classList.add("is-mobile");
+      }
+    }
+    detectarDispositivo();
+
+
+    let userIP = null;
+
+    async function fetchUserIP() {
+      try {
+        const response = await fetch(WORKER_URL);
+        const data = await response.json();
+        
+        if (data.success) {
+          userIP = data.ip;
+          document.getElementById('user-ip').value = userIP;
+        } else {
+          userIP = 'No disponible';
+        }
+      } catch (error) {
+        userIP = 'Error al obtener';
+      }
+    }
+
+    fetchUserIP();
     const reasonSelect = document.getElementById('reason');
     const submitContainer = document.getElementById('submit-button-container');
     const emailSection = document.getElementById('email-section');
@@ -296,6 +364,8 @@
     const btnLoading = document.getElementById('btn-loading');
     const formTypeInput = document.getElementById('form-type');
     const timestampInput = document.getElementById('timestamp');
+    const privacySection = document.getElementById('privacy-section');
+    const privacyCheckbox = document.getElementById('privacy-accept');
 
     const formSections = {
       error: document.getElementById('section-error'),
@@ -315,6 +385,7 @@
       });
       emailSection.classList.add('hidden');
       submitContainer.classList.add('hidden');
+      privacySection.classList.add('hidden');
       emailLabel.textContent = '(Opcional)';
       emailInput.required = false;
       
@@ -325,6 +396,7 @@
             formSections.dmca.classList.remove('hidden');
             emailSection.classList.add('hidden');
             submitContainer.classList.add('hidden');
+            privacySection.classList.add('hidden');
         } else {
             const sectionToShow = formSections[selectedValue];
             if (sectionToShow) {
@@ -332,6 +404,7 @@
             }
             emailSection.classList.remove('hidden');
             submitContainer.classList.remove('hidden');
+            privacySection.classList.remove('hidden');
 
             const requiredCases = ['colaborar', 'otro'];
             if (requiredCases.includes(selectedValue)) {
@@ -341,6 +414,7 @@
         }
       }
     });
+
     function showNotification(message, type = 'success') {
       const existingNotifications = document.querySelectorAll('.notification');
       existingNotifications.forEach(notif => notif.remove());
@@ -378,6 +452,11 @@
         return;
       }
 
+      if (!privacyCheckbox.checked) {
+        showNotification('Debes aceptar la Política de Privacidad para continuar', 'error');
+        return;
+      }
+
       const requiredCases = ['colaborar', 'otro'];
       if (requiredCases.includes(reason) && !formData.get('email')) {
         showNotification('El correo electrónico es requerido para este tipo de consulta', 'error');
@@ -385,6 +464,10 @@
       }
 
       timestampInput.value = new Date().toISOString();
+      
+      if (!userIP) {
+        await fetchUserIP();
+      }
       
       setLoadingState(true);
       showNotification('Enviando tu mensaje... 📧', 'loading');
@@ -394,42 +477,43 @@
           reason: reason,
           email: formData.get('email') || 'No proporcionado',
           form_type: reason,
-          timestamp: timestampInput.value
+          timestamp: timestampInput.value,
+          user_ip: userIP || 'No disponible'
         };
 
         switch (reason) {
           case 'error':
             templateParams.error_type = formData.get('error_type');
             templateParams.error_message = formData.get('error_message');
-            templateParams.message = `Tipo: ${formData.get('error_type')}\n\nDescripción: ${formData.get('error_message')}`;
+            templateParams.message = `Tipo: ${formData.get('error_type')}\n\nDescripción: ${formData.get('error_message')}\n\nIP: ${userIP || 'No disponible'}`;
             break;
           
           case 'peticion':
             templateParams.anime_name = formData.get('anime_name');
             templateParams.peticion_details = formData.get('peticion_details');
-            templateParams.message = `Anime solicitado: ${formData.get('anime_name')}\n\nDetalles: ${formData.get('peticion_details')}`;
+            templateParams.message = `Anime solicitado: ${formData.get('anime_name')}\n\nDetalles: ${formData.get('peticion_details')}\n\nIP: ${userIP || 'No disponible'}`;
             break;
           
           case 'sugerencia':
             templateParams.sugerencia_message = formData.get('sugerencia_message');
-            templateParams.message = formData.get('sugerencia_message');
+            templateParams.message = formData.get('sugerencia_message') + `\n\nIP: ${userIP || 'No disponible'}`;
             break;
           
           case 'colaborar':
             templateParams.colaborar_message = formData.get('colaborar_message');
-            templateParams.message = formData.get('colaborar_message');
+            templateParams.message = formData.get('colaborar_message') + `\n\nIP: ${userIP || 'No disponible'}`;
             break;
           
           case 'fandub':
             templateParams.fandub_message = formData.get('fandub_message');
-            templateParams.message = formData.get('fandub_message');
+            templateParams.message = formData.get('fandub_message') + `\n\nIP: ${userIP || 'No disponible'}`;
             break;
           
           case 'otro':
             templateParams.otro_subject = formData.get('otro_subject');
             templateParams.otro_message = formData.get('otro_message');
             templateParams.subject = formData.get('otro_subject');
-            templateParams.message = formData.get('otro_message');
+            templateParams.message = formData.get('otro_message') + `\n\nIP: ${userIP || 'No disponible'}`;
             break;
         }
 
@@ -459,6 +543,7 @@
           });
           emailSection.classList.add('hidden');
           submitContainer.classList.add('hidden');
+          privacySection.classList.add('hidden');
           formTypeInput.value = '';
         }, 2000);
 

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidad – Streameko</title>
+  <meta name="description" content="En Streameko, tu privacidad es tan sagrada como un maratón de anime. Descubre cómo manejamos la mínima información necesaria para operar." />
+  <meta name="keywords" content="privacidad, streameko, politica de privacidad, datos, seguridad" />
+  <meta name="author" content="Streameko" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#e50914" />
+  <link rel="canonical" href="https://app.streameko.qzz.io/privacidad.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://app.streameko.qzz.io/privacidad.html" />
+  <meta property="og:title" content="Política de Privacidad – Streameko" />
+  <meta property="og:description" content="Transparencia total. La app no recolecta datos. Solo manejamos información si tú decides contactarnos o en casos de reclamos DMCA." />
+  <meta property="og:image" content="https://i.postimg.cc/yNzkjyKW/Streameko-Logo.png" />
+
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://app.streameko.qzz.io/privacidad.html" />
+  <meta property="twitter:title" content="Política de Privacidad – Streameko" />
+  <meta property="twitter:description" content="Transparencia total. La app no recolecta datos. Solo manejamos información si tú decides contactarnos o en casos de reclamos DMCA." />
+  <meta property="twitter:image" content="https://i.postimg.cc/yNzkjyKW/Streameko-Logo.png" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --accent: #e50914;
+      --glass: rgba(255, 255, 255, 0.05);
+      --card: #1f1f1f;
+      --glow-color: rgba(229, 9, 20, 0.5);
+    }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+    
+    .stylish-topbar { background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid transparent; border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); }
+    .logo-container:hover { transform: scale(1.05); transition: transform 0.3s ease; }
+    .logo-container:hover .logo-text { text-shadow: 0 0 10px var(--glow-color); transition: text-shadow 0.3s ease; }
+    .nav-link-stylish { color: rgba(255, 255, 255, 0.8); padding: 0.5rem 1rem; border-radius: 8px; position: relative; overflow: hidden; transition: all 0.3s ease; z-index: 1; }
+    .nav-link-stylish::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--accent); opacity: 0; transform: scale(0.8); transition: all 0.4s ease; z-index: -1; border-radius: 8px; }
+    .nav-link-stylish:hover { color: white; transform: translateY(-2px); }
+    .nav-link-stylish:hover::before { opacity: 1; transform: scale(1); }
+    
+    .cta-button { background-color: var(--accent); transition: all 0.3s ease; box-shadow: 0 0 20px var(--glow-color); }
+    .cta-button:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 0 35px var(--glow-color); }
+
+    .privacy-content h2 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--accent);
+    }
+    .privacy-content h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    .privacy-content p, .privacy-content ul {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.75;
+        margin-bottom: 1rem;
+    }
+    .privacy-content ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+    }
+     .privacy-content li {
+        margin-bottom: 0.5rem;
+     }
+    .privacy-content strong {
+        color: var(--text);
+        font-weight: 600;
+        
+    }
+     .privacy-content a {
+        color: var(--accent);
+        text-decoration: underline;
+        transition: color 0.2s ease;
+     }
+     .privacy-content a:hover {
+        color: #ff3b47;
+     }
+
+    #mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
+    }
+    #mobile-menu.menu-open {
+      max-height: 500px;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="font-sans">
+
+<header class="sticky top-0 z-50 w-full stylish-topbar">
+  <div class="max-w-6xl mx-auto px-6">
+    <nav class="flex items-center justify-between h-20">
+      <a href="index.html" class="flex items-center gap-3 logo-container">
+        <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+        <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+      </a>
+              <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+          <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+          <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+        </div>
+      
+
+
+      <div class="md:hidden">
+
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+
+
+<main class="max-w-4xl mx-auto px-6 py-12 md:py-20">
+
+  <section class="privacy-content">
+    <h1 class="text-4xl font-black tracking-tight md:text-5xl mb-4 text-center">
+      Política de Privacidad
+    </h1>
+    <p class="text-center text-white/60 mb-12">Última actualización: 07 de octubre de 2025</p>
+
+<p>En Streameko, tu privacidad es tan importante como el próximo capítulo de tu anime favorito. Nuestra filosofía es simple: <strong>no queremos tus datos</strong>. La web está diseñada desde cero para no recolectar, almacenar ni compartir ninguna información personal tuya. Así de fácil.</p>
+
+    <div class="bg-zinc-900/50 border border-red-500/30 rounded-lg p-6 my-8">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2">
+        <span>🚩</span> "Si algo es gratis, tú eres el producto"
+      </h3>
+      <p class="text-white/80">Conoces ese dicho, ¿verdad? Pues aquí no aplica. Streameko es gratis porque nos gusta el anime tanto como a ti, no porque queramos convertirte en datos para vender. Sin chinos rastreándote, sin algoritmos espiándote. Solo una web limpia hecha por fans para fans.</p>
+    </div>
+    <h2>1. La Información que NO Recopilamos</h2>
+    <p>Seamos brutalmente honestos: la web de Streameko <strong>no recopila absolutamente nada</strong>. No nos interesa:</p>
+    <ul>
+      <li>Tu nombre, correo electrónico, o cualquier dato de contacto (excepto en los casos mencionados en el punto 2).</li>
+      <li>Tu ubicación.</li>
+      <li>Tus hábitos de visualización, animes favoritos o historial.</li>
+      <li>Ningún tipo de dato de telemetría o análisis de uso.</li>
+    </ul>
+    <p>Cuando usas Streameko, eres un fantasma. Un ninja feliz viendo anime. Disfruta de la libertad.</p>
+
+    <h2>2. La Poca Información que SÍ Podríamos Tener</h2>
+    <p>Hay dos situaciones muy específicas en las que podríamos tener acceso a tus datos, y en la mayoría de los casos, es porque <strong>tú nos los proporcionas voluntariamente</strong>.</p>
+    
+    <h3>A. Si nos Contactas o presentas un Formulario</h3>
+    <p>En la mayoría de los casos de contacto, proporcionar tu correo electrónico es <strong>opcional</strong>. Si decides no ingresarlo, nosotros no lo veremos. Si decides enviarnos un correo electrónico directamente (<a href="mailto:soporte@streameko.qzz.io">soporte@streameko.qzz.io</a>) o usaste una opción de contacto que así lo requiera, es obvio que veremos tu dirección de correo y cualquier otra información que incluyas en tu mensaje. Usaremos esta información con un único propósito: <strong>responder a tu consulta</strong>.</p>
+    
+    <p class="mt-4">
+      <strong>Recolección de Dirección IP por Seguridad:</strong>
+      Al enviar cualquier formulario en nuestro servicio (por ejemplo, contacto o reclamo DMCA), nuestro sistema <strong>recopila automáticamente la dirección IP</strong> desde la que se realiza el envío.
+      Esta información se obtiene <strong>únicamente por razones de seguridad del servicio y de nuestros usuarios</strong>, permitiéndonos prevenir abusos, spam, fraudes o ataques maliciosos a la plataforma. No utilizamos esta IP para rastrear tus hábitos de navegación o ubicación geográfica fuera de esta función de seguridad (solo la tenemos cuando envías un formulario).
+    </p>
+
+    
+    <h3>B. Si presentas un Reclamo DMCA</h3>
+    <p>La ley es la ley. Si eres titular de derechos de autor y presentas un reclamo formal por DMCA (Digital Millennium Copyright Act), necesitaremos cierta información para procesarlo legalmente. Esto incluye:</p>
+    <ul>
+      <li>Tu nombre completo.</li>
+      <li>Tu dirección de correo electrónico.</li>
+      <li>Pruebas que acrediten que eres el titular de los derechos o que actúas en su nombre.</li>
+    </ul>
+    <p>Esta información es estrictamente confidencial. Solo se usará para gestionar el reclamo y comunicarnos contigo al respecto. Permanecerá segura en nuestro buzón de correo, lejos de ojos curiosos.</p>
+
+    <h2>3. Uso, Almacenamiento y Retención de Datos</h2>
+    <p>La (poca) información que nos proporcionas se almacena de forma segura en nuestro proveedor de correo electrónico o en los registros de seguridad de nuestro servidor. <strong>jamás la compartiremos con terceros, anunciantes o cualquier otra entidad externa</strong>, a menos que sea estrictamente requerido por una orden judicial legítima.</p>
+    
+    <h3>Política de Retención y Eliminación Anual</h3>
+    <p>
+      Nuestro compromiso con tu privacidad incluye una política de <strong>eliminación activa de datos</strong>. Al inicio de cada año calendario, los datos (incluyendo correos de contacto e IPs de formularios) de todos los usuarios son eliminados de forma permanente.
+    </p>
+    <p>
+      Las <strong>únicas excepciones</strong> a esta eliminación son los datos de aquellos usuarios que:
+    </p>
+    <ul>
+      <li>Actualmente presenten un bloqueo activo o restricción en el servicio por abuso del servicio.</li>
+      <li>Se requiera su retención por un período más largo para cumplir con la ley o una orden judicial legítima.</li>
+      <li>Hayan iniciado un reclamo DMCA, en cuyo caso sus datos se conservarán indefinidamente por motivos de gestión, solo serán eliminados si el reclamante lo solicita explícitamente y el reclamo haya sido retirado, rechazado o resuelto de lo contrario aunque el reclamo sea retirado, rechazado o resuelto, los datos se conservarán indefinidamente.</li>
+      <li>Hayan iniciado un proceso legal contra Streameko, en cuyo caso sus datos se conservarán indefinidamente hasta que el solicitante solicite su eliminación y el proceso legal haya concluido.</li>
+      <li>Sean usuarios que hayan solicitado mantener sus datos por un período más largo o mas corto, en cuyo caso sus datos se conservarán hasta la fecha solicitada.</li>
+      <li>Por favor tengan en cuenta que lo que menos nos gusta es almacenar datos, por lo que si no hay una razón legal o justificada para conservarlos, serán eliminados al inicio del año calendario.</li>
+
+    <h2>4. Cambios en esta Política</h2>
+    <p>Si alguna vez realizamos un cambio en esta política (lo cual es poco probable, dado que nuestra política es no tener datos), lo actualizaremos en esta misma página. Te recomendamos revisarla de vez en cuando, por si acaso.</p>
+
+    <h2>5. ¿Preguntas?</h2>
+    <p>Si tienes alguna duda sobre esta política o simplemente quieres charlar sobre por qué Bocchi es el mejor personaje de la historia (sería interesante hablar de eso...), no dudes en <a href="contacto.html">contactarnos</a>.</p>
+
+  </section>
+
+  <p class="text-center text-white/40 text-xs mt-12 italic">
+  Hecho con café, insomnio y mucho amor por el anime. ☕💻
+</p>
+
+
+</main>
+
+<footer class="py-8 text-center border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+    <div class="flex gap-4 items-center">
+    </div>
+  </div>
+</footer>
+
+<script>
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+  const toggleMenu = () => {
+    const isOpen = mobileMenu.classList.toggle('menu-open');
+    if (isOpen) {
+      iconOpen.style.transform = 'scale(0) rotate(-90deg)';
+      iconClose.style.transform = 'scale(1) rotate(0)';
+    } else {
+      iconOpen.style.transform = 'scale(1) rotate(0)';
+      iconClose.style.transform = 'scale(0) rotate(90deg)';
+    }
+  };
+
+  if(mobileMenuButton) {
+      mobileMenuButton.addEventListener('click', toggleMenu);
+  }
+  
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('menu-open')) toggleMenu();
+    });
+  });
+</script>
+
+</body>
+</html>
