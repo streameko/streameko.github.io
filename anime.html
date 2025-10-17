@@ -524,6 +524,17 @@ async function secureFetch(url, options = {}) {
   }
   return originalFetch(url, options);
 }
+const originalPlayM3u8 = window.playM3u8;
+
+window.playM3u8 = function(proxyUrl) {
+  if (proxyUrl.startsWith("http://toby.hidencloud.com")) {
+    const encoded = encodeURIComponent(proxyUrl);
+    const proxiedUrl = `https://api.codetabs.com/v1/proxy/?quest=${encoded}`;
+    console.log("[HLS Proxy] Reescribiendo a HTTPS:", proxiedUrl);
+    return originalPlayM3u8(proxiedUrl);
+  }
+  return originalPlayM3u8(proxyUrl);
+};
 
 window.fetch = new Proxy(originalFetch, {
   apply(target, thisArg, args) {
