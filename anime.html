@@ -508,44 +508,6 @@ body { background-color: var(--bg); color: var(--text); font-family: sans-serif;
     <p id="footer-text" class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
   </footer>
   <script>
-    const USE_HTTPS_PROXY = true;
-
-    const PUBLIC_PROXY = "https://api.codetabs.com/v1/proxy/?quest="; 
-
-const originalFetch = window.fetch;
-
-async function secureFetch(url, options = {}) {
-  if (url.startsWith("http://toby.hidencloud.com")) {
-    const encoded = encodeURIComponent(url);
-    const proxy = "https://api.codetabs.com/v1/proxy/?quest=";
-    const proxiedUrl = `${proxy}${encoded}`;
-    console.log("[Proxy] Reenviando vía HTTPS:", proxiedUrl);
-    return originalFetch(proxiedUrl, options);
-  }
-  return originalFetch(url, options);
-}
-const originalPlayM3u8 = window.playM3u8;
-
-window.playM3u8 = function(proxyUrl) {
-  if (proxyUrl.startsWith("http://toby.hidencloud.com")) {
-    const encoded = encodeURIComponent(proxyUrl);
-    const proxiedUrl = `https://api.codetabs.com/v1/proxy/?quest=${encoded}`;
-    console.log("[HLS Proxy] Reescribiendo a HTTPS:", proxiedUrl);
-    return originalPlayM3u8(proxiedUrl);
-  }
-  return originalPlayM3u8(proxyUrl);
-};
-
-window.fetch = new Proxy(originalFetch, {
-  apply(target, thisArg, args) {
-    const [url, opts] = args;
-    if (typeof url === "string" && url.includes("toby.hidencloud.com")) {
-      return secureFetch(url, opts);
-    }
-    return Reflect.apply(target, thisArg, args);
-  }
-});
-
   const SCRAPER_URL = "http://toby.hidencloud.com:24672/scrape";
   const PROXY_URL = "http://toby.hidencloud.com:24672/proxy"; 
   const SCANNABLE_SERVERS = ["Alpha", "Delta"];
