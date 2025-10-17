@@ -1,314 +1,1001 @@
-  <!DOCTYPE html>
-  <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-    try {
-      const animeJSON = localStorage.getItem("selectedAnime");
-      if (animeJSON) {
-        const anime = JSON.parse(animeJSON);
-        document.title = `Ver ${anime.name} – Streameko`;
-        const ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) ogTitle.setAttribute("content", `Ver ${anime.name} en Streameko`);
-        const ogDescription = document.querySelector('meta[property="og:description"]');
-        if (ogDescription) ogDescription.setAttribute("content", anime.overview || `Disfruta de todos los episodios de ${anime.name}.`);
-      }
-    } catch (error) {
-      console.error("Error al actualizar la informacion para el navegador:", error);
-      document.title = "Streameko Fallback Page";
-    }
-  </script>
-    <title>Ver Animes – Streameko</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fflate/umd/index.js"></script>
-    <style>
-  @keyframes modalIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.85) translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
-  @keyframes modalOut {
-    0% {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(0.85) translateY(30px);
-    }
-  }
-
-  .modal-anim {
-    animation-duration: 0.35s;
-    animation-fill-mode: forwards;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .modal-entering {
-    animation-name: modalIn;
-  }
-
-  .modal-leaving {
-    animation-name: modalOut;
-  }
-
-  .stylish-topbar {
-    background: rgba(10, 10, 15, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid transparent;
-    border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-  }
-
-  .logo-container { 
-    transition: transform 0.3s ease; 
-  }
-  .logo-container:hover { 
-    transform: scale(1.05); 
-  }
-  .logo-text { 
-    transition: text-shadow 0.3s ease; 
-  }
-  .logo-container:hover .logo-text { 
-    text-shadow: 0 0 10px var(--glow-color, var(--primary)); 
-  }
-
-  .nav-link-stylish {
-    color: rgba(255, 255, 255, 0.8);
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    z-index: 1;
-  }
-  .nav-link-stylish::before {
-    content: '';
-    position: absolute;
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    background: var(--accent);
-    opacity: 0; 
-    transform: scale(0.8);
-    transition: all 0.4s ease;
-    z-index: -1; 
-    border-radius: 8px;
-  }
-  .nav-link-stylish:hover { 
-    color: white; 
-    transform: translateY(-2px); 
-  }
-  .nav-link-stylish:hover::before { 
-    opacity: 1; 
-    transform: scale(1); 
-  }
-
-  :root {
-    --bg: #000000;
-    --text: #ffffff;
-    --accent: #e50914;
-    --primary: #a78bfa;
-    --glass: rgba(255, 255, 255, 0.05);
-    --card: #1f1f1f;
-    --glow-color: rgba(167, 139, 250, 0.4);
-  }
-  html { scroll-behavior: smooth; }
-  body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
-
-  .server-badge {
-    background-color: rgba(255,255,255,0.15);
-    color: white;
-    font-size: 0.65rem;
-    font-weight: 600;
-    padding: 0 4px;
-    border-radius: 9999px;
-    margin-left: 4px;
-  }
-
-  .card {
-    background: var(--glass);
-    padding: 1rem;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-  }
-  .glass { background: var(--glass); border-radius: 0.5rem; padding: 1rem; backdrop-filter: blur(8px); }
-  .tab-button { padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 600; transition: background-color 0.3s ease, color 0.3s ease; }
-  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .skeleton { background-color: #2c2c2c; border-radius: 0.5rem; animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-  .is-mobile .logo-text {
-    font-size: 1.25rem;
-  }
-  .is-mobile header nav {
-    flex-direction: column;
-    justify-content: center;
-    height: auto;
-    padding: 0.75rem 0;
-    gap: 0.5rem;
-  }
-  .is-mobile h1 {
-    font-size: 1.75rem;
-  }
-  .is-mobile .nav-link-stylish {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.85rem;
-  }
-  .is-mobile .card {
-    padding: 0.75rem;
-  }
-  .is-mobile .tab-button {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.85rem;
-  }
-
-  @keyframes fadeInBg {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  @keyframes fadeOutBg {
-    from { opacity: 1; }
-    to   { opacity: 0; }
-  }
-
-  #videoModal.bg-entering {
-    animation: fadeInBg 0.35s forwards;
-  }
-
-  #videoModal.bg-leaving {
-    animation: fadeOutBg 0.35s forwards;
-  }
-
-    </style>
-  </head>
-  <body class="min-h-screen font-sans">
-
-    <header class="sticky top-0 z-50 w-full stylish-topbar">
-      <div class="max-w-6xl mx-auto px-6">
-        <nav class="flex items-center justify-between h-20">
-          <a href="index.html" class="flex items-center gap-3 logo-container">
-            <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
-            <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
-          </a>
-          <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
-            <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
-            <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
-          </div>
-        </nav>
-      </div>
-    </header>
-
-    <div id="loader" class="p-6 max-w-5xl mx-auto">
-      <div class="glass text-center mb-6 p-6">
-        <div class="h-8 w-3/4 mx-auto skeleton mb-2"></div>
-        <div class="h-4 w-1/2 mx-auto skeleton mb-1"></div>
-        <div class="h-4 w-1/3 mx-auto skeleton mb-3"></div>
-        <div class="h-20 w-full skeleton rounded"></div>
-      </div>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div class="h-32 skeleton"></div> <div class="h-32 skeleton"></div> <div class="h-32 skeleton"></div>
-      </div>
-    </div>
-
-    <div id="nsfwModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-xl p-6 max-w-md w-full text-center text-black relative shadow-xl">
-        <h2 class="text-2xl font-bold mb-4">🫣 ¿Estás segur@?</h2>
-        <p class="mb-6">Este anime está marcado como contenido para adultos.<br/>Si decides continuar, Streameko no se hace responsable de tus actos 🙀</p>
-        <div class="flex justify-center gap-4">
-          <button id="continueBtn" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded">Sí, quiero ver 🔥</button>
-          <button id="exitBtn" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">¡Mejor no!</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="max-w-5xl mx-auto p-6 main-content hidden">
-      <div class="glass text-center mb-6 p-6" id="animeHeader">
-        <h1 id="animeTitle" class="text-4xl font-bold mb-2"></h1>
-        <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
-        <p id="episodeCount" class="text-white/80 mb-3"></p>
-        <div id="overviewContainer" class="relative overflow-hidden transition-all duration-300">
-          
-          <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line line-clamp-3 overflow-hidden transition-all duration-300"></p>
-          <div id="adsLegend" class="text-xs text-white/70 mt-2 text-center">
-          👎 = Muchos anuncios | 👍👎 Ni muchos ni pocos
-  </div>
-          <button id="toggleOverview" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-3 py-1 rounded-full transition hidden">Ver más</button>
-        </div>
-      </div>
-      <div class="card flex justify-center flex-wrap gap-3 py-4 mb-6">
-        <button id="tab-sub" class="tab-button bg-red-600 text-white">Subtitulado</button>
-        <button id="tab-dub" class="tab-button bg-red-400 text-white/80">Doblado</button>
-        <button id="tab-cas" class="tab-button bg-red-400 text-white/80">Castellano</button>
-      </div>
-      <div id="episodeListSub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
-      <div id="episodeListDub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
-      <div id="episodeListCas" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
-    </div>
-
-    <div id="videoModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
-      <div id="modalBox" class="relative max-w-4xl w-full mx-auto my-10 rounded-2xl bg-black overflow-hidden shadow-2xl">
-        <button id="closeModal" class="absolute top-3 right-3 bg-red-500 hover:bg-red-600 text-white rounded-full w-9 h-9 flex items-center justify-center text-xl z-10">✖</button>
-        <div id="modalContent" class="aspect-video w-full bg-black"></div>
-      </div>
-    </div>
-  <footer class="py-8 text-center border-t border-white/10">
-    <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
-  </footer>
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
-    function detectarDispositivo() {
-      const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent) || 
-                      window.matchMedia("(max-width: 768px)").matches;
-      if (esMobile) {
-        document.body.classList.add("is-mobile");
-      } else {
-        document.body.classList.remove("is-mobile");
+  try {
+    const animeJSON = localStorage.getItem("selectedAnime");
+    if (animeJSON) {
+      const anime = JSON.parse(animeJSON);
+      document.title = `Ver ${anime.name} – Streameko`;
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute("content", `Ver ${anime.name} en Streameko`);
+      const ogDescription = document.querySelector('meta[property="og:description"]');
+      if (ogDescription) ogDescription.setAttribute("content", anime.overview || `Disfruta de todos los episodios de ${anime.name}.`);
+    }
+  } catch (error) {
+    console.error("Error al actualizar la informacion para el navegador:", error);
+    document.title = "Streameko Fallback Page";
+  }
+</script>
+  <title>Ver Animes – Streameko</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fflate/umd/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script> 
+  <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+  <style>
+@keyframes modalIn {
+  0% { opacity: 0; transform: scale(0.85) translateY(30px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes modalOut {
+  0% { opacity: 1; transform: scale(1) translateY(0); }
+  100% { opacity: 0; transform: scale(0.85) translateY(30px); }
+}
+
+.modal-anim {
+  animation-duration: 0.35s;
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-entering { animation-name: modalIn; }
+.modal-leaving { animation-name: modalOut; }
+
+.stylish-topbar {
+  background: rgba(10, 10, 15, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+.logo-container { transition: transform 0.3s ease; }
+.logo-container:hover { transform: scale(1.05); }
+.logo-text { transition: text-shadow 0.3s ease; }
+.logo-container:hover .logo-text { text-shadow: 0 0 10px var(--glow-color, var(--primary)); }
+
+.nav-link-stylish {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+.nav-link-stylish::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--accent);
+  opacity: 0; 
+  transform: scale(0.8);
+  transition: all 0.4s ease;
+  z-index: -1; 
+  border-radius: 8px;
+}
+.nav-link-stylish:hover { color: white; transform: translateY(-2px); }
+.nav-link-stylish:hover::before { opacity: 1; transform: scale(1); }
+
+:root {
+  --bg: #000000;
+  --text: #ffffff;
+  --accent: #e50914;
+  --primary: #a78bfa;
+  --glass: rgba(255, 255, 255, 0.05);
+  --card: #1f1f1f;
+  --glow-color: rgba(167, 139, 250, 0.4);
+}
+html { scroll-behavior: smooth; }
+body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+
+.card {
+  background: var(--glass);
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+.glass { background: var(--glass); border-radius: 0.5rem; padding: 1rem; backdrop-filter: blur(8px); }
+.tab-button { padding: 0.5rem 1rem; border-radius: 9999px; font-weight: 600; transition: background-color 0.3s ease, color 0.3s ease; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.skeleton { background-color: #2c2c2c; border-radius: 0.5rem; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.is-mobile .logo-text { font-size: 1.25rem; }
+.is-mobile header nav { flex-direction: column; justify-content: center; height: auto; padding: 0.75rem 0; gap: 0.5rem; }
+.is-mobile h1 { font-size: 1.75rem; }
+.is-mobile .nav-link-stylish { padding: 0.25rem 0.5rem; font-size: 0.85rem; }
+.is-mobile .card { padding: 0.75rem; }
+.is-mobile .tab-button { padding: 0.4rem 0.75rem; font-size: 0.85rem; }
+
+@keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOutBg { from { opacity: 1; } to { opacity: 0; } }
+#videoModal.bg-entering { animation: fadeInBg 0.35s forwards; }
+#videoModal.bg-leaving { animation: fadeOutBg 0.35s forwards; }
+
+@keyframes slideIn {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(400px); opacity: 0; }
+}
+
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 152, 0, 0.95);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  max-width: 350px;
+  animation: slideIn 0.3s ease-out;
+  backdrop-filter: blur(10px);
+}
+.toast-notification.hiding { animation: slideOut 0.3s ease-in forwards; }
+.toast-notification .toast-title { font-weight: bold; margin-bottom: 0.5rem; font-size: 1rem; }
+.toast-notification .toast-message { font-size: 0.875rem; line-height: 1.4; }
+
+.video-container { position: relative; width: 100%; height: 100%; background: #000; }
+.video-container video { width: 100%; height: 100%; object-fit: contain; }
+
+.video-controls {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+  padding: 20px 20px 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 30;
+}
+.video-container:hover .video-controls,
+.video-controls.show { opacity: 1; }
+
+.progress-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 12px;
+  transition: height 0.2s ease;
+}
+.progress-container:hover { height: 8px; }
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #e50914 0%, #ff1a1a 100%);
+  border-radius: 3px;
+  position: relative;
+  transition: width 0.1s linear;
+}
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  right: -6px; top: 50%;
+  transform: translateY(-50%);
+  width: 14px; height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+.progress-container:hover .progress-bar::after { opacity: 1; }
+
+.buffer-bar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.controls-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.controls-left, .controls-right { display: flex; align-items: center; gap: 8px; }
+
+.control-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.control-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.1); }
+.control-btn svg { width: 24px; height: 24px; }
+.control-btn.play-btn svg { width: 28px; height: 28px; }
+
+.time-display { color: white; font-size: 13px; font-weight: 500; min-width: 100px; user-select: none; }
+
+.volume-container { display: flex; align-items: center; gap: 8px; }
+.volume-slider {
+  width: 0; opacity: 0;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.volume-container:hover .volume-slider { width: 80px; opacity: 1; }
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px; height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.volume-slider::-moz-range-thumb {
+  width: 12px; height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.buffering-indicator {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 25;
+}
+.buffering-indicator.show { display: block; }
+.buffering-spinner {
+  width: 50px; height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #e50914;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.pause-overlay {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 80px; height: 80px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+  z-index: 20;
+}
+.pause-overlay.show { animation: pausePulse 0.3s ease; }
+@keyframes pausePulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(0); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+.pause-overlay svg { width: 40px; height: 40px; color: white; }
+.cast-btn {
+  position: relative;
+}
+
+.cast-btn.casting {
+  color: #4285f4 !important;
+}
+
+.cast-btn.casting::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: #4285f4;
+  border-radius: 50%;
+  animation: pulse-cast 1.5s infinite;
+}
+
+@keyframes pulse-cast {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.5; transform: translateX(-50%) scale(1.3); }
+}
+  </style>
+</head>
+<body class="min-h-screen font-sans">
+
+  <header class="sticky top-0 z-50 w-full stylish-topbar">
+    <div class="max-w-6xl mx-auto px-6">
+      <nav class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-3 logo-container">
+          <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+          <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+        </a>
+        <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+          <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+          <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+
+<a href="donar.html" class="nav-link-stylish"><span>Donar</span></a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div id="loader" class="p-6 max-w-5xl mx-auto">
+    <div class="glass text-center mb-6 p-6">
+      <div class="h-8 w-3/4 mx-auto skeleton mb-2"></div>
+      <div class="h-4 w-1/2 mx-auto skeleton mb-1"></div>
+      <div class="h-4 w-1/3 mx-auto skeleton mb-3"></div>
+      <div class="h-20 w-full skeleton rounded"></div>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="h-32 skeleton"></div>
+      <div class="h-32 skeleton"></div>
+      <div class="h-32 skeleton"></div>
+    </div>
+  </div>
+
+  <div id="nsfwModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full text-center text-black relative shadow-xl">
+      <h2 class="text-2xl font-bold mb-4">🫣 ¿Estás segur@?</h2>
+      <p class="mb-6">Este anime está marcado como contenido para adultos.<br/>Si decides continuar, Streameko no se hace responsable de tus actos 🙀</p>
+      <div class="flex justify-center gap-4">
+        <button id="continueBtn" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded">Sí, quiero ver 🔥</button>
+        <button id="exitBtn" class="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded">¡Mejor no!</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto p-6 main-content hidden">
+    <div class="glass text-center mb-6 p-6" id="animeHeader">
+      <h1 id="animeTitle" class="text-4xl font-bold mb-2"></h1>
+      <p id="alternativeNames" class="text-sm text-white/60 mb-1"></p>
+      <p id="episodeCount" class="text-white/80 mb-3"></p>
+      <div id="overviewContainer" class="relative overflow-hidden transition-all duration-300">
+        <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line line-clamp-3 overflow-hidden transition-all duration-300"></p>
+        <div id="adsLegend" class="text-xs text-white/70 mt-2 text-center">
+        ¡Nara y Osaka ahora están disponibles sin anuncios!
+        </div>
+        <button id="toggleOverview" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-3 py-1 rounded-full transition hidden">Ver más</button>
+      </div>
+    </div>
+    <div class="card flex justify-center flex-wrap gap-3 py-4 mb-6">
+      <button id="tab-sub" class="tab-button bg-red-600 text-white">Subtitulado</button>
+      <button id="tab-dub" class="tab-button bg-red-400 text-white/80">Doblado</button>
+      <button id="tab-cas" class="tab-button bg-red-400 text-white/80">Castellano</button>
+    </div>
+    <div id="episodeListSub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <div id="episodeListDub" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
+    <div id="episodeListCas" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
+  </div>
+
+  <div id="videoModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+    <div id="modalBox" class="relative max-w-6xl w-full mx-auto my-8 rounded-2xl overflow-hidden shadow-2xl">
+      <div class="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-black/80 to-transparent p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-white font-semibold text-sm" id="videoTitle">Reproduciendo...</p>
+            <p class="text-white/60 text-xs" id="videoSubtitle">Streameko Player</p>
+          </div>
+        </div>
+        <button id="closeModal" class="bg-white/10 hover:bg-red-600 backdrop-blur-sm text-white rounded-lg w-10 h-10 flex items-center justify-center transition-all duration-200 hover:scale-110">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div id="modalContent" class="relative aspect-video w-full bg-gradient-to-br from-gray-900 via-black to-gray-900">
+        <div id="loadingOverlay" class="absolute inset-0 flex items-center justify-center">
+          <div class="text-center">
+            <div class="relative w-20 h-20 mx-auto mb-6">
+              <div class="absolute inset-0 border-4 border-red-600/30 rounded-full"></div>
+              <div class="absolute inset-0 border-4 border-transparent border-t-red-600 rounded-full animate-spin"></div>
+              <div class="absolute inset-2 border-4 border-transparent border-t-red-400 rounded-full animate-spin" style="animation-duration: 0.8s; animation-direction: reverse;"></div>
+            </div>
+            <p id="loadingMessage" class="text-white/80 font-medium text-lg">Cargando video...</p>
+            <p class="text-white/40 text-sm mt-2">Preparando la mejor experiencia</p>
+            
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+              <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+              <div class="absolute bottom-1/3 left-1/3 w-2 h-2 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+              <div class="absolute bottom-1/4 right-1/3 w-2 h-2 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.6s;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div id="videoContainer" class="video-container hidden">
+          <video id="videoPlayer" class="w-full h-full object-contain"></video>
+          
+          <div id="bufferingIndicator" class="buffering-indicator">
+            <div class="buffering-spinner"></div>
+          </div>
+          
+          <div id="pauseOverlay" class="pause-overlay">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+              <path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/>
+            </svg>
+          </div>
+          
+          <div id="videoControls" class="video-controls">
+            <div id="progressContainer" class="progress-container">
+              <div id="bufferBar" class="buffer-bar" style="width: 0%"></div>
+              <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+            </div>
+            
+            <div class="controls-row">
+              <div class="controls-left">
+                <button id="playPauseBtn" class="control-btn play-btn" title="Reproducir/Pausar">
+                  <svg id="playIcon" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
+                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                  </svg>
+                  <svg id="pauseIcon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z"/>
+                  </svg>
+                </button>
+                
+                <div class="volume-container">
+                  <button id="volumeBtn" class="control-btn" title="Silenciar">
+                    <svg id="volumeIcon" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10.5 3.75a.75.75 0 00-1.264-.546L5.203 7H2.667a.75.75 0 00-.75.75v4.5c0 .414.336.75.75.75h2.536l4.033 3.796a.75.75 0 001.264-.546V3.75zM16.45 5.05a.75.75 0 00-1.06 1.061 5.5 5.5 0 010 7.778.75.75 0 101.06 1.06 7 7 0 000-9.899z"/>
+                      <path d="M14.329 7.172a.75.75 0 00-1.061 1.06 2.5 2.5 0 010 3.536.75.75 0 001.06 1.06 4 4 0 000-5.656z"/>
+                    </svg>
+                    <svg id="mutedIcon" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
+                      <path d="M10.047 3.062a.75.75 0 01.453.688v12.5a.75.75 0 01-1.264.546L5.203 13H2.667a.75.75 0 01-.75-.75v-4.5a.75.75 0 01.75-.75h2.536l4.033-3.796a.75.75 0 01.811-.142zM13.78 7.22a.75.75 0 10-1.06 1.06L14.44 10l-1.72 1.72a.75.75 0 001.06 1.06l1.72-1.72 1.72 1.72a.75.75 0 101.06-1.06L16.56 10l1.72-1.72a.75.75 0 00-1.06-1.06L15.5 8.94l-1.72-1.72z"/>
+                    </svg>
+                  </button>
+                  <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100">
+                </div>
+                
+                <span id="timeDisplay" class="time-display">0:00 / 0:00</span>
+              </div>
+              
+              <div class="controls-right">
+                <button id="pipBtn" class="control-btn" title="Picture in Picture">
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 3.75A1.75 1.75 0 013.75 2h12.5A1.75 1.75 0 0118 3.75v8.5A1.75 1.75 0 0116.25 14h-5.5v2.25h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3V14h-5.5A1.75 1.75 0 012 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H3.75z"/>
+                    <path d="M11 6.5a.5.5 0 01.5-.5h4a.5.5 0 01.5.5v3a.5.5 0 01-.5.5h-4a.5.5 0 01-.5-.5v-3z"/>
+                  </svg>
+                </button>
+                <button id="castBtn" class="control-btn cast-btn" title="Transmitir a TV">
+                  <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm18-7H5v1.63c3.96 1.28 7.09 4.41 8.37 8.37H19V7zM1 10v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                  </svg>
+                </button>
+                
+                <button id="fullscreenBtn" class="control-btn" title="Pantalla completa">
+                  <svg id="fullscreenIcon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3.75 3A1.75 1.75 0 002 4.75v3.5a.75.75 0 001.5 0v-3.5a.25.25 0 01.25-.25h3.5a.75.75 0 000-1.5h-3.5zM12.25 3a.75.75 0 000 1.5h3.5a.25.25 0 01.25.25v3.5a.75.75 0 001.5 0v-3.5A1.75 1.75 0 0016.25 3h-4zM3.5 12.25a.75.75 0 00-1.5 0v3.5c0 .966.784 1.75 1.75 1.75h3.5a.75.75 0 000-1.5h-3.5a.25.25 0 01-.25-.25v-3.5zM17.5 12.25a.75.75 0 00-1.5 0v3.5a.25.25 0 01-.25.25h-3.5a.75.75 0 000 1.5h3.5A1.75 1.75 0 0018 16.25v-4z"/>
+                  </svg>
+                  <svg id="exitFullscreenIcon" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
+                    <path d="M3.28 2.22a.75.75 0 00-1.06 1.06L5.44 6.5H2.75a.75.75 0 000 1.5h4.5A.75.75 0 008 7.25v-4.5a.75.75 0 00-1.5 0v2.69L3.28 2.22zM13.5 2.75a.75.75 0 00-1.5 0v4.5c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-2.69l3.22-3.22a.75.75 0 00-1.06-1.06L13.5 5.44V2.75zM3.75 12a.75.75 0 000 1.5h2.69l-3.22 3.22a.75.75 0 101.06 1.06l3.22-3.22v2.69a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5zM12 12.75a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-2.69l3.22 3.22a.75.75 0 11-1.06 1.06l-3.22-3.22v2.69a.75.75 0 01-1.5 0v-4.5z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-600"></div>
+    </div>
+  </div>
+
+  <footer class="py-8 text-center border-t border-white/10">
+    <p id="footer-text" class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+  </footer>
+  <script>
+  const SCRAPER_URL = "http://toby.hidencloud.com:24672/scrape";
+  const PROXY_URL = "http://toby.hidencloud.com:24672/proxy"; 
+  const SCANNABLE_SERVERS = ["Alpha", "Delta"];
+  let castSession = null;
+  let castPlayer = null;
+  let castContext = null;
+  let modalAnimationInProgress = false;
+  let hlsInstance = null;
+  window['__onGCastApiAvailable'] = function(isAvailable) {
+  if (isAvailable) {
+    initializeCastApi();
+  }
+};
+
+function initializeCastApi() {
+  castContext = cast.framework.CastContext.getInstance();
+  
+  castContext.setOptions({
+    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+  });
+
+  castContext.addEventListener(
+    cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+    (event) => {
+      switch (event.sessionState) {
+        case cast.framework.SessionState.SESSION_STARTED:
+          console.log('[Cast] Sesión iniciada');
+          onCastSessionStarted();
+          break;
+        case cast.framework.SessionState.SESSION_ENDED:
+          console.log('[Cast] Sesión terminada');
+          onCastSessionEnded();
+          break;
       }
+    }
+  );
+
+  console.log('[Cast] API inicializada correctamente');
+}
+
+function onCastSessionStarted() {
+  const castBtn = document.getElementById('castBtn');
+  if (castBtn) {
+    castBtn.classList.add('casting');
+  }
+  
+  castSession = castContext.getCurrentSession();
+  
+  const video = document.getElementById('videoPlayer');
+  if (video && video.src) {
+    loadMediaToCast(video.src);
+  }
+}
+
+function onCastSessionEnded() {
+  const castBtn = document.getElementById('castBtn');
+  if (castBtn) {
+    castBtn.classList.remove('casting');
+  }
+  castSession = null;
+  castPlayer = null;
+}
+
+function loadMediaToCast(mediaUrl) {
+  if (!castSession) {
+    console.error('[Cast] No hay sesión activa');
+    return;
+  }
+
+  const mediaInfo = new chrome.cast.media.MediaInfo(mediaUrl, 'application/x-mpegURL');
+  
+  const animeTitle = document.getElementById('videoTitle')?.textContent || 'Streameko';
+  const episodeInfo = document.getElementById('videoSubtitle')?.textContent || '';
+  
+  mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
+  mediaInfo.metadata.title = animeTitle;
+  mediaInfo.metadata.subtitle = episodeInfo;
+  
+  const request = new chrome.cast.media.LoadRequest(mediaInfo);
+  request.autoplay = true;
+  request.currentTime = 0;
+
+  castSession.loadMedia(request).then(
+    () => {
+      console.log('[Cast] Media cargado exitosamente');
+      showToast('📺 Transmitiendo', 'El video se está reproduciendo en tu TV', 3000);
+      
+      const video = document.getElementById('videoPlayer');
+      if (video) video.pause();
+    },
+    (errorCode) => {
+      console.error('[Cast] Error al cargar media:', errorCode);
+      showToast('❌ Error de Cast', 'No se pudo transmitir el video', 3000);
+    }
+  );
+}
+
+function initCastButton() {
+  const castBtn = document.getElementById('castBtn');
+  if (!castBtn) return;
+
+  castBtn.addEventListener('click', () => {
+    if (!castContext) {
+      showToast('⚠️ Cast no disponible', 'Chromecast no está disponible en este navegador', 3000);
+      return;
+    }
+
+    const session = castContext.getCurrentSession();
+    
+    if (session) {
+      session.endSession(true);
+    } else {
+      castContext.requestSession().then(
+        () => {
+          console.log('[Cast] Sesión solicitada');
+        },
+        (error) => {
+          if (error !== 'cancel') {
+            console.error('[Cast] Error al solicitar sesión:', error);
+            showToast('❌ Error', 'No se pudo conectar con el dispositivo Cast', 3000);
+          }
+        }
+      );
+    }
+  });
+}
+
+  function detectarDispositivo() {
+    const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent) || 
+                    window.matchMedia("(max-width: 768px)").matches;
+    if (esMobile) {
+      document.body.classList.add("is-mobile");
+    } else {
+      document.body.classList.remove("is-mobile");
+    }
+  }
+  
+  detectarDispositivo();
+  window.addEventListener("resize", detectarDispositivo);
+
+  function isMobile() {
+    return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent) 
+          || window.matchMedia("(max-width: 768px)").matches;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const animeId = params.get("id");
+
+  const serverDisplayNames = { "Gamma": "Tokio", "Delta": "Nara", "Alpha": "Osaka", "Epsilon": "Kioto" };
+  const serverBaseUrls = { 
+    "Gamma": "https://jilliandescribecompany.com/e/", 
+    "Alpha": "https://dumbalag.com/e/", 
+    "Delta": "https://filemoon.sx/e/", 
+    "Epsilon": "https://luluvdoo.com/e/" 
+  };
+
+  function cleanupVideo() {
+    const videoPlayer = document.getElementById("videoPlayer");
+    const videoContainer = document.getElementById("videoContainer");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    
+    if (hlsInstance) {
+      hlsInstance.destroy();
+      hlsInstance = null;
+      console.log("[Cleanup] HLS.js destruido");
     }
     
-    detectarDispositivo();
-    window.addEventListener("resize", detectarDispositivo);
-
-    function isMobile() {
-      return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent) 
-            || window.matchMedia("(max-width: 768px)").matches;
+    if (videoPlayer) {
+      videoPlayer.pause();
+      videoPlayer.removeAttribute('src');
+      videoPlayer.load();
+      console.log("[Cleanup] Video player limpiado");
     }
+    
+    if (videoContainer) {
+      videoContainer.classList.add("hidden");
+    }
+    
+    if (loadingOverlay) {
+      loadingOverlay.classList.remove("hidden");
+    }
+  }
 
-      const params = new URLSearchParams(window.location.search);
-      const animeId = params.get("id");
+  function updateVideoInfo(episodeNum, serverName) {
+    const videoTitle = document.getElementById("videoTitle");
+    const videoSubtitle = document.getElementById("videoSubtitle");
+    
+    if (videoTitle) {
+      videoTitle.textContent = `Episodio ${episodeNum}`;
+    }
+    if (videoSubtitle) {
+      videoSubtitle.textContent = `Servidor: ${serverName}`;
+    }
+  }
 
-      const serverDisplayNames = { "Gamma": "Tokio", "Delta": "Nara", "Alpha": "Osaka", "Epsilon": "Kioto" };
-      const serverBaseUrls = { "Gamma": "https://jilliandescribecompany.com/e/", "Alpha": "https://dumbalag.com/e/", "Delta": "https://filemoon.sx/e/", "Epsilon": "https://luluvdoo.com/e/" };
+  function showToast(title, message, duration = 5000) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+      <div class="toast-title">${title}</div>
+      <div class="toast-message">${message}</div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.classList.add('hiding');
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 300);
+    }, duration);
+  }
 
-      const videoModal = document.getElementById("videoModal");
-      const modalContent = document.getElementById("modalContent");
-      const modalBox = document.getElementById("modalBox");
+  function playM3u8(proxyUrl) {
+    console.log("[Player] Iniciando reproducción con:", proxyUrl);
+    
+    const videoContainer = document.getElementById("videoContainer");
+    const videoPlayer = document.getElementById("videoPlayer");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    
+    cleanupVideo();
+    
+    if (Hls.isSupported()) {
+      hlsInstance = new Hls({
+        debug: false,
+        enableWorker: true,
+        lowLatencyMode: true,
+        backBufferLength: 90,
+        maxBufferLength: 30,
+        maxMaxBufferLength: 600,
+        maxBufferSize: 60 * 1000 * 1000,
+        maxBufferHole: 0.5,
+      });
+      
+      hlsInstance.loadSource(proxyUrl);
+      hlsInstance.attachMedia(videoPlayer);
+      
+      hlsInstance.on(Hls.Events.MANIFEST_PARSED, function () {
+        console.log("[HLS] Manifest parseado, iniciando reproducción");
+        
+        if (loadingOverlay) loadingOverlay.classList.add("hidden");
+        videoContainer.classList.remove("hidden");
+        
+        initCustomControls();
+        
+        videoPlayer.play().catch(e => {
+          console.log("[Player] Autoplay bloqueado:", e);
+        });
+      });
+      
+      hlsInstance.on(Hls.Events.ERROR, function (event, data) {
+        console.error("[HLS Error]", data);
+        
+        if (data.fatal) {
+          switch(data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.error("[HLS] Error de red fatal, intentando recuperar...");
+              hlsInstance.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.error("[HLS] Error de media fatal, intentando recuperar...");
+              hlsInstance.recoverMediaError();
+              break;
+            default:
+              console.error("[HLS] Error fatal irrecuperable");
+              cleanupVideo();
+              videoContainer.classList.add("hidden");
+              if (loadingOverlay) {
+                loadingOverlay.classList.remove("hidden");
+                loadingOverlay.innerHTML = `
+                  <div class="text-center p-8">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <p class="text-red-500 font-semibold text-lg mb-2">Error Fatal</p>
+                    <p class="text-white/60 text-sm">No se pudo reproducir el video. Intenta otro servidor.</p>
+                  </div>
+                `;
+              }
+              break;
+          }
+        }
+      });
+      
+    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+      console.log("[Player] Usando soporte nativo HLS");
+      videoPlayer.src = proxyUrl;
+      videoPlayer.addEventListener('loadedmetadata', function() {
+        if (loadingOverlay) loadingOverlay.classList.add("hidden");
+        videoContainer.classList.remove("hidden");
+        initCustomControls();
+        videoPlayer.play().catch(e => console.log("[Player] Autoplay bloqueado:", e));
+      });
+    } else {
+      if (loadingOverlay) {
+        loadingOverlay.innerHTML = `
+          <div class="text-center p-8">
+            <svg class="w-16 h-16 mx-auto mb-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <p class="text-yellow-500 font-semibold text-lg mb-2">Navegador no compatible</p>
+            <p class="text-white/60 text-sm">Tu navegador no soporta reproducción HLS.</p>
+          </div>
+        `;
+      }
+    }
+  }
 
-      let modalAnimationInProgress = false;
-
-
-  function openModal(baseUrl, path, episodeNum) {
-    if (modalAnimationInProgress) return;
+  async function openModal(server, path, episodeNum) {
+    if (modalAnimationInProgress) {
+      console.log("[Modal] Animación en progreso, ignorando click");
+      return;
+    }
+    
+    console.log(`[Modal] Abriendo episodio ${episodeNum} en servidor ${server}`);
     
     localStorage.setItem(`ultimo_${animeId}`, episodeNum);
+    
+    const videoModal = document.getElementById("videoModal");
+    const modalContent = document.getElementById("modalContent");
+    const modalBox = document.getElementById("modalBox");
+    
+    const serverDisplayName = serverDisplayNames[server] || server;
+    updateVideoInfo(episodeNum, serverDisplayName);
+    
+    cleanupVideo();
+    
+    modalContent.innerHTML = `
+      <div id="loadingOverlay" class="absolute inset-0 flex items-center justify-center">
+        <div class="text-center">
+          <div class="relative w-20 h-20 mx-auto mb-6">
+            <div class="absolute inset-0 border-4 border-red-600/30 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-transparent border-t-red-600 rounded-full animate-spin"></div>
+            <div class="absolute inset-2 border-4 border-transparent border-t-red-400 rounded-full animate-spin" style="animation-duration: 0.8s; animation-direction: reverse;"></div>
+          </div>
+          <p id="loadingMessage" class="text-white/80 font-medium text-lg">Cargando video...</p>
+          <p class="text-white/40 text-sm mt-2">Preparando la mejor experiencia</p>
+          
+          <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+            <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+            <div class="absolute bottom-1/3 left-1/3 w-2 h-2 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-2 h-2 bg-red-500 rounded-full animate-pulse" style="animation-delay: 0.6s;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="videoContainer" class="video-container hidden">
+        <video id="videoPlayer" class="w-full h-full object-contain"></video>
+        
+        <div id="bufferingIndicator" class="buffering-indicator">
+          <div class="buffering-spinner"></div>
+        </div>
+        
+        <div id="pauseOverlay" class="pause-overlay">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"/>
+          </svg>
+        </div>
+        
+        <div id="videoControls" class="video-controls">
+          <div id="progressContainer" class="progress-container">
+            <div id="bufferBar" class="buffer-bar" style="width: 0%"></div>
+            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+          </div>
+          
+          <div class="controls-row">
+            <div class="controls-left">
+              <button id="playPauseBtn" class="control-btn play-btn" title="Reproducir/Pausar">
+                <svg id="playIcon" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
+                  <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                </svg>
+                <svg id="pauseIcon" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z"/>
+                </svg>
+              </button>
+              
+              <div class="volume-container">
+                <button id="volumeBtn" class="control-btn" title="Silenciar">
+                  <svg id="volumeIcon" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.5 3.75a.75.75 0 00-1.264-.546L5.203 7H2.667a.75.75 0 00-.75.75v4.5c0 .414.336.75.75.75h2.536l4.033 3.796a.75.75 0 001.264-.546V3.75zM16.45 5.05a.75.75 0 00-1.06 1.061 5.5 5.5 0 010 7.778.75.75 0 101.06 1.06 7 7 0 000-9.899z"/>
+                    <path d="M14.329 7.172a.75.75 0 00-1.061 1.06 2.5 2.5 0 010 3.536.75.75 0 001.06 1.06 4 4 0 000-5.656z"/>
+                  </svg>
+                  <svg id="mutedIcon" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
+                    <path d="M10.047 3.062a.75.75 0 01.453.688v12.5a.75.75 0 01-1.264.546L5.203 13H2.667a.75.75 0 01-.75-.75v-4.5a.75.75 0 01.75-.75h2.536l4.033-3.796a.75.75 0 01.811-.142zM13.78 7.22a.75.75 0 10-1.06 1.06L14.44 10l-1.72 1.72a.75.75 0 001.06 1.06l1.72-1.72 1.72 1.72a.75.75 0 101.06-1.06L16.56 10l1.72-1.72a.75.75 0 00-1.06-1.06L15.5 8.94l-1.72-1.72z"/>
+                  </svg>
+                </button>
+                <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100">
+              </div>
+              
+              <span id="timeDisplay" class="time-display">0:00 / 0:00</span>
+            </div>
+            
+            <div class="controls-right">
+              <button id="pipBtn" class="control-btn" title="Picture in Picture">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 3.75A1.75 1.75 0 013.75 2h12.5A1.75 1.75 0 0118 3.75v8.5A1.75 1.75 0 0116.25 14h-5.5v2.25h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3V14h-5.5A1.75 1.75 0 012 12.25v-8.5zm1.75-.25a.25.25 0 00-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25v-8.5a.25.25 0 00-.25-.25H3.75z"/>
+                  <path d="M11 6.5a.5.5 0 01.5-.5h4a.5.5 0 01.5.5v3a.5.5 0 01-.5.5h-4a.5.5 0 01-.5-.5v-3z"/>
+                </svg>
+              </button>
+                              <button id="castBtn" class="control-btn cast-btn" title="Transmitir a TV">
+                  <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm18-7H5v1.63c3.96 1.28 7.09 4.41 8.37 8.37H19V7zM1 10v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                  </svg>
+                </button>
+              
+              <button id="fullscreenBtn" class="control-btn" title="Pantalla completa">
+                <svg id="fullscreenIcon" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M3.75 3A1.75 1.75 0 002 4.75v3.5a.75.75 0 001.5 0v-3.5a.25.25 0 01.25-.25h3.5a.75.75 0 000-1.5h-3.5zM12.25 3a.75.75 0 000 1.5h3.5a.25.25 0 01.25.25v3.5a.75.75 0 001.5 0v-3.5A1.75 1.75 0 0016.25 3h-4zM3.5 12.25a.75.75 0 00-1.5 0v3.5c0 .966.784 1.75 1.75 1.75h3.5a.75.75 0 000-1.5h-3.5a.25.25 0 01-.25-.25v-3.5zM17.5 12.25a.75.75 0 00-1.5 0v3.5a.25.25 0 01-.25.25h-3.5a.75.75 0 000 1.5h3.5A1.75 1.75 0 0018 16.25v-4z"/>
+                </svg>
+                <svg id="exitFullscreenIcon" fill="currentColor" viewBox="0 0 20 20" style="display: none;">
+                  <path d="M3.28 2.22a.75.75 0 00-1.06 1.06L5.44 6.5H2.75a.75.75 0 000 1.5h4.5A.75.75 0 008 7.25v-4.5a.75.75 0 00-1.5 0v2.69L3.28 2.22zM13.5 2.75a.75.75 0 00-1.5 0v4.5c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-2.69l3.22-3.22a.75.75 0 00-1.06-1.06L13.5 5.44V2.75zM3.75 12a.75.75 0 000 1.5h2.69l-3.22 3.22a.75.75 0 101.06 1.06l3.22-3.22v2.69a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5zM12 12.75a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-2.69l3.22 3.22a.75.75 0 11-1.06 1.06l-3.22-3.22v2.69a.75.75 0 01-1.5 0v-4.5z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    modalAnimationInProgress = true;
+    videoModal.classList.remove("hidden");
+    videoModal.classList.add("bg-entering");
+    modalBox.classList.remove("modal-anim", "modal-entering", "modal-leaving");
+    modalBox.classList.add("modal-anim", "modal-entering");
+    
+    const handleEnterEnd = () => {
+      modalBox.removeEventListener("animationend", handleEnterEnd);
+      modalAnimationInProgress = false;
+      videoModal.classList.remove("bg-entering");
+      modalBox.classList.remove("modal-entering");
+    };
+    modalBox.addEventListener("animationend", handleEnterEnd);
 
-    const targetUrl = baseUrl + path;
-    console.log("Cargando episodio desde:", targetUrl);
+    if (SCANNABLE_SERVERS.includes(server)) {
+      const rawUrl = serverBaseUrls[server] + path;
+      console.log(`[Streameko] Servidor Scannable (${server}). Scrapeando: ${rawUrl}`);
 
-    try {
-      modalContent.innerHTML = `
+      try {
+        const urlToScrape = encodeURIComponent(rawUrl);
+        const fetchUrl = `${SCRAPER_URL}?url=${urlToScrape}`;
+        
+        const response = await fetch(fetchUrl);
+        const data = await response.json();
+
+        if (data.status === 'Success' && data.m3u8Url) {
+          console.log("[Scraper] ✅ M3U8 obtenido:", data.m3u8Url);
+          
+          const encodedM3u8 = encodeURIComponent(data.m3u8Url);
+          const proxyUrl = `${PROXY_URL}?m3u8=${encodedM3u8}`;
+          console.log("[Streameko] Usando Proxy para HLS:", proxyUrl);
+
+          playM3u8(proxyUrl);
+        } else {
+          throw new Error(`Scraper falló: ${data.message || 'Error desconocido'}`);
+        }
+      } catch (err) {
+        console.error("[Error] Fallo en scraper:", err);
+        
+        showToast(
+          '⚠️ Modo de respaldo activado',
+          'Anuncios podrían mostrarse al usar el reproductor externo.'
+        );
+        
+        const targetUrl = serverBaseUrls[server] + path;
+        
+        document.getElementById("modalContent").innerHTML = `
+          <iframe 
+            src="${targetUrl}" 
+            class="w-full h-full" 
+            style="border:none;"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+          </iframe>
+        `;
+      }
+    } else {
+      showToast(
+        'ℹ️ Reproductor externo',
+        'Anuncios podrían mostrarse al usar el reproductor externo.',
+        4000
+      );
+      
+      const targetUrl = serverBaseUrls[server] + path;
+      console.log(`[Streameko] Servidor NO scannable (${server}). iFrame: ${targetUrl}`);
+      
+      document.getElementById("modalContent").innerHTML = `
         <iframe 
           src="${targetUrl}" 
           class="w-full h-full" 
@@ -317,36 +1004,23 @@
           allowfullscreen>
         </iframe>
       `;
-      
-      modalAnimationInProgress = true;
-      videoModal.classList.remove("hidden");
-      videoModal.classList.add("bg-entering");
-      
-      modalBox.classList.remove("modal-anim", "modal-entering", "modal-leaving");
-      modalBox.classList.add("modal-anim", "modal-entering");
-
-      const handleEnterEnd = () => {
-        modalBox.removeEventListener("animationend", handleEnterEnd);
-        modalAnimationInProgress = false;
-        videoModal.classList.remove("bg-entering");
-        modalBox.classList.remove("modal-entering");
-      };
-
-      modalBox.addEventListener("animationend", handleEnterEnd);
-
-    } catch (err) {
-      console.error("Error cargando video:", err);
-      modalContent.innerHTML = `<p class="text-red-500 p-4">Error cargando el episodio. Por favor reportalo</p>`;
-      videoModal.classList.remove("hidden");
-      modalAnimationInProgress = false;
     }
   }
 
   function closeModal() {
-    if (modalAnimationInProgress) return;
+    if (modalAnimationInProgress) {
+      console.log("[Modal] Animación en progreso, ignorando cierre");
+      return;
+    }
 
-    modalAnimationInProgress = true;
+    console.log("[Modal] Cerrando modal");
     
+    cleanupVideo();
+
+    const videoModal = document.getElementById("videoModal");
+    const modalBox = document.getElementById("modalBox");
+    
+    modalAnimationInProgress = true;
     videoModal.classList.add("bg-leaving");
     modalBox.classList.remove("modal-entering");
     modalBox.classList.add("modal-leaving");
@@ -358,182 +1032,362 @@
         videoModal.classList.add("hidden");
         videoModal.classList.remove("bg-leaving");
         modalBox.classList.remove("modal-anim", "modal-leaving");
-        modalContent.innerHTML = "";
+        
         modalAnimationInProgress = false;
+        console.log("[Modal] Modal cerrado completamente");
       }
     };
 
     modalBox.addEventListener("animationend", handleExitEnd);
   }
-
   document.getElementById("closeModal").addEventListener("click", closeModal);
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !videoModal.classList.contains("hidden")) {
+    if (e.key === "Escape" && !document.getElementById("videoModal").classList.contains("hidden")) {
       closeModal();
     }
   });
 
-  videoModal.addEventListener("click", (e) => {
-    if (e.target === videoModal) {
+  document.getElementById("videoModal").addEventListener("click", (e) => {
+    if (e.target === document.getElementById("videoModal")) {
       closeModal();
     }
   });
-
-      function setActiveTab(tab) {
-          ["sub", "dub", "cas"].forEach(type => {
-              const btn = document.getElementById(`tab-${type}`);
-              const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
-              if (btn && list) {
-                  const isActive = type === tab;
-                  btn.classList.toggle("bg-red-600", isActive);
-                  btn.classList.toggle("text-white", isActive);
-                  btn.classList.toggle("bg-red-400", !isActive);
-                  btn.classList.toggle("text-white/80", !isActive);
-                  list.classList.toggle("hidden", !isActive);
-              }
-          });
+  
+  function setActiveTab(tab) {
+    ["sub", "dub", "cas"].forEach(type => {
+      const btn = document.getElementById(`tab-${type}`);
+      const list = document.getElementById(`episodeList${type.charAt(0).toUpperCase() + type.slice(1)}`);
+      if (btn && list) {
+        const isActive = type === tab;
+        btn.classList.toggle("bg-red-600", isActive);
+        btn.classList.toggle("text-white", isActive);
+        btn.classList.toggle("bg-red-400", !isActive);
+        btn.classList.toggle("text-white/80", !isActive);
+        list.classList.toggle("hidden", !isActive);
       }
-
+    });
+  }
   async function loadAnimeData() {
-      if (!animeId) { 
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado. Por favor reportalo</p>'; 
-          return; 
-      }
+    if (!animeId) { 
+      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado. Por favor reportalo</p>'; 
+      return; 
+    }
 
-      try {
-          const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` });
+    try {
+      const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` });
 
-          const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/anime.zip";
-          const response = await fetch(zipUrl);
-          const arrayBuffer = await response.arrayBuffer();
-          const zipData = new Uint8Array(arrayBuffer);
+      const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/anime.zip";
+      const response = await fetch(zipUrl);
+      const arrayBuffer = await response.arrayBuffer();
+      const zipData = new Uint8Array(arrayBuffer);
 
-          let db;
-          fflate.unzip(zipData, (err, files) => {
-              if (err) throw err;
-              const dbFile = files["anime.db"];
-              if (!dbFile) throw new Error("anime.db no encontrado en el zip");
-              db = new SQL.Database(dbFile);
-              mostrarAnimeDesdeDB(db);
-          });
-      } catch (error) {
-          console.error("Falló la carga desde ZIP:", error);
-          document.body.innerHTML = `<p class="text-center text-red-500 mt-10">Oops! Hubo un error al cargar: ${error.message}</p>`;
-      }
-  }
-  function mostrarAnimeDesdeDB(db) {
-      const animeRes = db.exec("SELECT name, name_alternative, overview, genres FROM animes WHERE id = :id", {':id': animeId});
-      if (!animeRes.length || !animeRes[0].values.length) { 
-          document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado</p>'; 
-          return; 
-      }
-      const [name, name_alternative, overview, genres] = animeRes[0].values[0]
-      const anime = { name, name_alternative, overview, genres };
-
-      const isNsfw = anime.genres && anime.genres.toLowerCase().includes("soft-hentai");
-      if (isNsfw) {
-          document.getElementById("nsfwModal").classList.remove("hidden");
-          document.getElementById("continueBtn").onclick = () => { 
-              document.getElementById("nsfwModal").classList.add("hidden"); 
-              mostrarContenido(anime, db); 
-          };
-          document.getElementById("exitBtn").onclick = () => { window.location.href = "index.html"; };
-      } else {
-          mostrarContenido(anime, db);
-      }
-  }
-
-      function mostrarContenido(anime, db) {
-          document.getElementById("animeTitle").textContent = anime.name;
-          document.getElementById("alternativeNames").textContent = anime.name_alternative ? `También como: ${anime.name_alternative.replace(/,/g, ', ')}` : "";
-          
-          const overviewElement = document.getElementById("animeOverview");
-          const toggleButton = document.getElementById("toggleOverview");
-          let overviewText = anime.overview?.trim() || "Sinopsis no disponible.";
-          overviewElement.textContent = overviewText;
-          setTimeout(() => {
-              if (overviewElement.scrollHeight > overviewElement.clientHeight) {
-                  toggleButton.classList.remove("hidden");
-                  let expanded = false;
-                  toggleButton.addEventListener("click", () => {
-                      expanded = !expanded;
-                      overviewElement.classList.toggle("line-clamp-3");
-                      toggleButton.textContent = expanded ? "Ver menos" : "Ver más";
-                      document.getElementById("overviewContainer").style.overflow = expanded ? "visible" : "hidden";
-                  });
-              }
-          }, 100);
-          
-          const episodesQuery = `SELECT e.number, p.language, p.link, s.name as server_name FROM episodes AS e JOIN players AS p ON e.id = p.episode_id JOIN servers AS s ON p.server_id = s.id WHERE e.anime_id = :id ORDER BY p.language, CAST(e.number AS REAL)`;
-          const episodesRes = db.exec(episodesQuery, {':id': animeId});
-          const episodes = episodesRes.length ? episodesRes[0].values.map(([number, language, link, server]) => ({number, language, link, server})) : [];
-          
-          const episodiosUnicos = new Set(episodes.map(ep => ep.number));
-          document.getElementById("episodeCount").textContent = `${episodiosUnicos.size} episodio(s)`;
-
-          const episodiosSub = episodes.filter(e => e.language === 0);
-          const episodiosDub = episodes.filter(e => e.language === 1);
-          const episodiosCas = episodes.filter(e => e.language === 2);
-
-          renderEpisodios(episodiosSub, "episodeListSub");
-          renderEpisodios(episodiosDub, "episodeListDub");
-          renderEpisodios(episodiosCas, "episodeListCas");
-
-          if (!episodiosDub.length) document.getElementById("tab-dub").classList.add("hidden");
-          if (!episodiosCas.length) document.getElementById("tab-cas").classList.add("hidden");
-
-          const ultimo = localStorage.getItem(`ultimo_${animeId}`);
-          if (ultimo) {
-              const msg = document.createElement("p");
-              msg.className = "text-sm text-green-400 mt-2 text-center";
-              msg.textContent = `🌟 Último episodio visto: Episodio ${ultimo}`;
-              document.getElementById("animeHeader").appendChild(msg);
-          }
-
-          setActiveTab("sub");
-          document.getElementById("loader").remove();
-          document.querySelector(".main-content").classList.remove("hidden");
-      }
-
-      function renderEpisodios(eps, containerId) {
-          const serverAds = {
-            "Gamma": "👍👎",
-            "Alpha": "👎",
-            "Delta": "👍👎",
-            "Epsilon": "👎"
-          };
-
-          const container = document.getElementById(containerId);
-          container.innerHTML = '';
-          const grouped = {};
-          eps.forEach(ep => {
-              if (!grouped[ep.number]) grouped[ep.number] = [];
-              grouped[ep.number].push(ep);
-          });
-
-          Object.keys(grouped).sort((a, b) => Number(a) - Number(b)).forEach(num => {
-              const div = document.createElement("div");
-              div.className = "card p-4 h-full flex flex-col justify-between";
-              const buttons = grouped[num].map(v => {
-                  const displayName = serverDisplayNames[v.server] || v.server;
-                  const baseUrl = serverBaseUrls[v.server] || "";
-                  return `<button onclick="openModal('${baseUrl}', '${v.link}', ${num})" 
-                class="bg-red-500 hover:bg-red-600 text-white rounded px-3 py-1 text-sm flex items-center justify-center gap-1">
-            ${displayName} <span class="text-xs">${serverAds[v.server] || ""}</span>
-          </button>`;
-              }).join(" ");
-              div.innerHTML = `<p class="font-semibold text-white/90 mb-2">Episodio ${num}</p><div class="flex flex-wrap gap-2">${buttons}</div>`;
-              container.appendChild(div);
-          });
-      }
-
-      ["sub", "dub", "cas"].forEach(type => {
-          const tab = document.getElementById(`tab-${type}`);
-          if (tab) tab.addEventListener("click", () => setActiveTab(type));
+      let db;
+      fflate.unzip(zipData, (err, files) => {
+        if (err) throw err;
+        const dbFile = files["anime.db"];
+        if (!dbFile) throw new Error("anime.db no encontrado en el zip");
+        db = new SQL.Database(dbFile);
+        mostrarAnimeDesdeDB(db);
       });
+    } catch (error) {
+      console.error("Falló la carga desde ZIP:", error);
+      document.body.innerHTML = `<p class="text-center text-red-500 mt-10">Oops! Hubo un error al cargar: ${error.message}</p>`;
+    }
+  }
 
-      loadAnimeData();
-  </script>
-  </body>
-  </html>
+  function mostrarAnimeDesdeDB(db) {
+    const animeRes = db.exec("SELECT name, name_alternative, overview, genres FROM animes WHERE id = :id", {':id': animeId});
+    if (!animeRes.length || !animeRes[0].values.length) { 
+      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado</p>'; 
+      return; 
+    }
+    const [name, name_alternative, overview, genres] = animeRes[0].values[0]
+    const anime = { name, name_alternative, overview, genres };
+
+    const isNsfw = anime.genres && anime.genres.toLowerCase().includes("soft-hentai");
+    if (isNsfw) {
+      document.getElementById("nsfwModal").classList.remove("hidden");
+      document.getElementById("continueBtn").onclick = () => { 
+        document.getElementById("nsfwModal").classList.add("hidden"); 
+        mostrarContenido(anime, db); 
+      };
+      document.getElementById("exitBtn").onclick = () => { window.location.href = "index.html"; };
+    } else {
+      mostrarContenido(anime, db);
+    }
+  }
+
+  function mostrarContenido(anime, db) {
+    document.getElementById("animeTitle").textContent = anime.name;
+    document.getElementById("alternativeNames").textContent = anime.name_alternative ? `También como: ${anime.name_alternative.replace(/,/g, ', ')}` : "";
+    
+    const overviewElement = document.getElementById("animeOverview");
+    const toggleButton = document.getElementById("toggleOverview");
+    let overviewText = anime.overview?.trim() || "Sinopsis no disponible.";
+    overviewElement.textContent = overviewText;
+    setTimeout(() => {
+      if (overviewElement.scrollHeight > overviewElement.clientHeight) {
+        toggleButton.classList.remove("hidden");
+        let expanded = false;
+        toggleButton.addEventListener("click", () => {
+          expanded = !expanded;
+          overviewElement.classList.toggle("line-clamp-3");
+          toggleButton.textContent = expanded ? "Ver menos" : "Ver más";
+          document.getElementById("overviewContainer").style.overflow = expanded ? "visible" : "hidden";
+        });
+      }
+    }, 100);
+    
+    const episodesQuery = `SELECT e.number, p.language, p.link, s.name as server_name FROM episodes AS e JOIN players AS p ON e.id = p.episode_id JOIN servers AS s ON p.server_id = s.id WHERE e.anime_id = :id ORDER BY p.language, CAST(e.number AS REAL)`;
+    const episodesRes = db.exec(episodesQuery, {':id': animeId});
+    const episodes = episodesRes.length ? episodesRes[0].values.map(([number, language, link, server]) => ({number, language, link, server})) : [];
+    
+    const episodiosUnicos = new Set(episodes.map(ep => ep.number));
+    document.getElementById("episodeCount").textContent = `${episodiosUnicos.size} episodio(s)`;
+
+    const episodiosSub = episodes.filter(e => e.language === 0);
+    const episodiosDub = episodes.filter(e => e.language === 1);
+    const episodiosCas = episodes.filter(e => e.language === 2);
+
+    renderEpisodios(episodiosSub, "episodeListSub");
+    renderEpisodios(episodiosDub, "episodeListDub");
+    renderEpisodios(episodiosCas, "episodeListCas");
+
+    if (!episodiosDub.length) document.getElementById("tab-dub").classList.add("hidden");
+    if (!episodiosCas.length) document.getElementById("tab-cas").classList.add("hidden");
+
+    const ultimo = localStorage.getItem(`ultimo_${animeId}`);
+    if (ultimo) {
+      const msg = document.createElement("p");
+      msg.className = "text-sm text-green-400 mt-2 text-center";
+      msg.textContent = `🌟 Último episodio visto: Episodio ${ultimo}`;
+      document.getElementById("animeHeader").appendChild(msg);
+    }
+
+    setActiveTab("sub");
+    document.getElementById("loader").remove();
+    document.querySelector(".main-content").classList.remove("hidden");
+  }
+
+  function renderEpisodios(eps, containerId) {
+
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const grouped = {};
+    eps.forEach(ep => {
+      if (!grouped[ep.number]) grouped[ep.number] = [];
+      grouped[ep.number].push(ep);
+    });
+
+    Object.keys(grouped).sort((a, b) => Number(a) - Number(b)).forEach(num => {
+      const div = document.createElement("div");
+      div.className = "card p-4 h-full flex flex-col justify-between";
+      const buttons = grouped[num].map(v => {
+        const displayName = serverDisplayNames[v.server] || v.server;
+        return `<button onclick="openModal('${v.server}', '${v.link}', ${num})" 
+          class="bg-red-500 hover:bg-red-600 text-white rounded px-3 py-1 text-sm flex items-center justify-center gap-1">
+          ${displayName}
+        </button>`;
+      }).join(" ");
+      div.innerHTML = `<p class="font-semibold text-white/90 mb-2">Episodio ${num}</p><div class="flex flex-wrap gap-2">${buttons}</div>`;
+      container.appendChild(div);
+    });
+  }
+
+  ["sub", "dub", "cas"].forEach(type => {
+    const tab = document.getElementById(`tab-${type}`);
+    if (tab) tab.addEventListener("click", () => setActiveTab(type));
+  });
+
+  loadAnimeData();
+
+  function initCustomControls() {
+    const video = document.getElementById('videoPlayer');
+    const videoContainer = document.getElementById('videoContainer');
+    const videoControls = document.getElementById('videoControls');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const bufferBar = document.getElementById('bufferBar');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const volumeBtn = document.getElementById('volumeBtn');
+    const volumeIcon = document.getElementById('volumeIcon');
+    const mutedIcon = document.getElementById('mutedIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const fullscreenIcon = document.getElementById('fullscreenIcon');
+    const exitFullscreenIcon = document.getElementById('exitFullscreenIcon');
+    const pipBtn = document.getElementById('pipBtn');
+    const pauseOverlay = document.getElementById('pauseOverlay');
+    const bufferingIndicator = document.getElementById('bufferingIndicator');
+
+    if (!video) return;
+
+    let controlsTimeout;
+
+    const showControls = () => {
+      videoControls.classList.add('show');
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(() => {
+        if (!video.paused) {
+          videoControls.classList.remove('show');
+        }
+      }, 3000);
+    };
+
+    videoContainer.addEventListener('mousemove', showControls);
+    videoContainer.addEventListener('click', (e) => {
+      if (e.target === video || e.target === videoContainer) {
+        togglePlayPause();
+      }
+    });
+
+    const togglePlayPause = () => {
+      if (video.paused) {
+        video.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      } else {
+        video.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        pauseOverlay.classList.add('show');
+        setTimeout(() => pauseOverlay.classList.remove('show'), 300);
+      }
+    };
+
+    playPauseBtn.addEventListener('click', togglePlayPause);
+
+    video.addEventListener('timeupdate', () => {
+      const percent = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = percent + '%';
+      
+      const current = formatTime(video.currentTime);
+      const duration = formatTime(video.duration);
+      timeDisplay.textContent = current + ' / ' + duration;
+    });
+
+    video.addEventListener('progress', () => {
+      if (video.buffered.length > 0) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        const duration = video.duration;
+        const bufferPercent = (bufferedEnd / duration) * 100;
+        bufferBar.style.width = bufferPercent + '%';
+      }
+    });
+
+    progressContainer.addEventListener('click', (e) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      video.currentTime = percent * video.duration;
+    });
+
+    volumeBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      if (video.muted) {
+        volumeIcon.style.display = 'none';
+        mutedIcon.style.display = 'block';
+        volumeSlider.value = 0;
+      } else {
+        volumeIcon.style.display = 'block';
+        mutedIcon.style.display = 'none';
+        volumeSlider.value = video.volume * 100;
+      }
+    });
+
+    volumeSlider.addEventListener('input', (e) => {
+      video.volume = e.target.value / 100;
+      video.muted = e.target.value == 0;
+      if (video.muted) {
+        volumeIcon.style.display = 'none';
+        mutedIcon.style.display = 'block';
+      } else {
+        volumeIcon.style.display = 'block';
+        mutedIcon.style.display = 'none';
+      }
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        videoContainer.requestFullscreen();
+        fullscreenIcon.style.display = 'none';
+        exitFullscreenIcon.style.display = 'block';
+      } else {
+        document.exitFullscreen();
+        fullscreenIcon.style.display = 'block';
+        exitFullscreenIcon.style.display = 'none';
+      }
+    });
+
+    pipBtn.addEventListener('click', async () => {
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else {
+          await video.requestPictureInPicture();
+        }
+      } catch (err) {
+        console.log('PiP no soportado:', err);
+      }
+    });
+
+    video.addEventListener('waiting', () => {
+      bufferingIndicator.classList.add('show');
+    });
+
+    video.addEventListener('canplay', () => {
+      bufferingIndicator.classList.remove('show');
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (videoContainer.classList.contains('hidden')) return;
+      
+      switch(e.key) {
+        case ' ':
+        case 'k':
+          e.preventDefault();
+          togglePlayPause();
+          break;
+        case 'f':
+          e.preventDefault();
+          fullscreenBtn.click();
+          break;
+        case 'm':
+          e.preventDefault();
+          volumeBtn.click();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          video.currentTime -= 5;
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          video.currentTime += 5;
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          video.volume = Math.min(1, video.volume + 0.1);
+          volumeSlider.value = video.volume * 100;
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          video.volume = Math.max(0, video.volume - 0.1);
+          volumeSlider.value = video.volume * 100;
+          break;
+      }
+    });
+    initCastButton();
+  }
+
+  function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }
+</script>
+</body>
+</html>

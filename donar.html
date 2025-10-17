@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apoya la Comunidad – Streameko</title>
+  <meta name="description" content="Ayuda a mantener Streameko a flote. Tu soporte mantiene nuestra web sin anuncios ni interrupciones." />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="theme-color" content="#e50914" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --accent: #e50914;
+      --primary: #a78bfa;
+      --glass: rgba(255, 255, 255, 0.05);
+      --card: #1f1f1f;
+      --glow-color: rgba(167, 139, 250, 0.4);
+    }
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+    .stylish-topbar { 
+      background: rgba(10, 10, 15, 0.6); 
+      backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px); 
+      border-bottom: 1px solid transparent; 
+      border-image: linear-gradient(to right, transparent, var(--accent), transparent) 1; 
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); 
+    }
+    .logo-container { 
+      transition: transform 0.3s ease; 
+    }
+    .logo-container:hover { 
+      transform: scale(1.05); 
+    }
+    .logo-text { 
+      transition: text-shadow 0.3s ease; 
+    }
+    .logo-container:hover .logo-text { 
+      text-shadow: 0 0 10px var(--glow-color, var(--primary)); 
+    }
+    .nav-link-stylish { 
+      color: rgba(255, 255, 255, 0.8); 
+      padding: 0.5rem 1rem; 
+      border-radius: 8px; 
+      position: relative; 
+      overflow: hidden; 
+      transition: all 0.3s ease; 
+      z-index: 1; 
+    }
+    .nav-link-stylish::before { 
+      content: ''; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: var(--accent); 
+      opacity: 0; 
+      transform: scale(0.8); 
+      transition: all 0.4s ease; 
+      z-index: -1; 
+      border-radius: 8px; 
+    }
+    .nav-link-stylish:hover { 
+      color: white; 
+      transform: translateY(-2px); 
+    }
+    .nav-link-stylish:hover::before { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+
+    .is-mobile .logo-text {
+      font-size: 1.25rem;
+    }
+    .is-mobile header nav {
+      flex-direction: column;
+      gap: 0.25rem;
+      height: auto;
+      padding: 0.5rem 0;
+    }
+    .is-mobile header nav > div {
+      gap: 0.25rem;
+    }
+
+    .benefit-card {
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(229, 9, 20, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(229, 9, 20, 0.3);
+    }
+
+    .donor-card {
+      background: rgba(31, 31, 31, 0.8);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      transition: all 0.3s ease;
+    }
+    .donor-card:hover {
+      transform: scale(1.05);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px var(--glow-color);
+    }
+
+    .donate-btn {
+      background: linear-gradient(135deg, #e50914, #b20710);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .donate-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    .donate-btn:hover::before {
+      left: 100%;
+    }
+    .donate-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 40px rgba(229, 9, 20, 0.6);
+    }
+  </style>
+</head>
+<body class="font-sans">
+
+<header class="sticky top-0 z-50 w-full stylish-topbar">
+  <div class="max-w-6xl mx-auto px-6">
+    <nav class="flex items-center justify-between h-20">
+      <a href="index.html" class="flex items-center gap-3 logo-container">
+        <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
+        <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
+      </a>
+      <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+        <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
+        <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
+        <a href="donar.html" class="nav-link-stylish"><span>Donar</span></a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-6 py-12">
+  
+  <div class="text-center mb-12">
+    <h1 class="text-5xl font-bold text-white mb-4">✨ Apoya el Futuro de Streameko ✨</h1>
+    <p class="text-xl text-white/80 max-w-3xl mx-auto">
+      Streameko existe gracias a la pasión por el anime y el deseo de una web sin interrupciones. Para mantener esta experiencia de alta calidad, libre de anuncios y siempre actualizada, necesitamos tu apoyo. ¡Tu donación es la clave! ♥
+    </p>
+  </div>
+
+  <div class="bg-zinc-900/70 border border-white/10 rounded-xl p-8 mb-12">
+    <h2 class="text-3xl font-bold text-center mb-6 text-red-400">¿Por qué es vital tu soporte?</h2>
+    <p class="text-white/80 text-lg mb-6 text-center max-w-2xl mx-auto">
+      Podríamos llenar Streameko de publicidad invasiva, pero eso arruinaría la experiencia. Tu donación nos permite cubrir los costos operativos esenciales para que tú y la comunidad disfruten del contenido con fluidez y sin preocupaciones.
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <div class="bg-black/40 p-6 rounded-lg border border-red-500/30">
+        <h3 class="text-xl font-bold mb-3 text-red-400">💸 Los Costos de Mantenimiento</h3>
+        <ul class="space-y-2 text-white/70 list-disc list-inside">
+          <li>Servidores robustos para una experiencia sin anuncios.</li>
+          <li>Inversión en nuevas funcionalidades y mejoras de la experiencia de usuario.</li>
+          <li>El combustible (café) de KaiZ (yo) para las largas noches de trabajo. (es broma, todo para Streameko)</li>
+        </ul>
+      </div>
+      <div class="bg-black/40 p-6 rounded-lg border border-purple-500/30">
+        <h3 class="text-xl font-bold mb-3 text-purple-400">✅ Lo que Garantizamos</h3>
+        <ul class="space-y-2 text-white/70 list-disc list-inside">
+          <li>Cero anuncios molestos e invasivos.</li>
+          <li>Calidad y velocidad constante del servicio.</li>
+          <li>Actualizaciones regulares de contenido (ya lo hago, pero así me motivan mas :3)</li>
+          <li>¡Una pagina para la comunidad!.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-12">
+    <h2 class="text-3xl font-bold text-center mb-8 text-white">🎁 Reconocimiento para Donadores 🎁</h2>
+    <p class="text-center text-white/70 mb-8 max-w-2xl mx-auto">
+      Tu generosidad es lo que impulsa este proyecto. Como agradecimiento, los donadores reciben estos beneficios exclusivos:
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <div class="benefit-card rounded-xl p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="text-4xl text-red-400">📝</div>
+          <h3 class="text-xl font-bold text-white">Contenido Exclusivo en Buymeacoffee</h3>
+        </div>
+        <p class="text-white/70">
+          Acceso a posts y notas privadas con actualizaciones detalladas, encuestas exclusivas y vislumbres del desarrollo.
+        </p>
+      </div>
+
+      <div class="benefit-card rounded-xl p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="text-4xl text-purple-400">⭐</div>
+          <h3 class="text-xl font-bold text-white">Mención de Honor en la Web</h3>
+        </div>
+        <p class="text-white/70">
+          Tu nombre (o alias) aparecerá en esta misma página, en la sección de donadores, como un miembro fundamental de la comunidad.
+        </p>
+      </div>
+
+      <div class="benefit-card rounded-xl p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="text-4xl text-yellow-400">🚀</div>
+          <h3 class="text-xl font-bold text-white">Acceso Anticipado (Beta)</h3>
+        </div>
+        <p class="text-white/70">
+          Obtén la oportunidad de probar nuevas funciones y mejoras de la plataforma antes de su lanzamiento oficial (solo si están estables).
+        </p>
+      </div>
+
+      <div class="benefit-card rounded-xl p-6">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="text-4xl text-green-400">👍</div>
+          <h3 class="text-xl font-bold text-white">Prioridad en Sugerencias</h3>
+        </div>
+        <p class="text-white/70">
+          Tus ideas y reportes de errores serán revisados con prioridad para moldear el futuro y las mejoras de Streameko.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="text-center mb-12">
+    <a href="https://buymeacoffee.com/streameko" target="_blank" rel="noopener noreferrer" class="donate-btn inline-flex items-center gap-3 text-white font-bold text-2xl py-4 px-10 rounded-xl">
+      <span>☕</span>
+      <span>Invita un Café a Streameko</span>
+      <span>→</span>
+    </a>
+    <p class="text-white/50 mt-4 text-sm">
+      (O varios, no me quejo y lo agracezco mucho)
+    </p>
+  </div>
+
+  <div class="bg-gradient-to-br from-purple-900/20 to-red-900/20 border border-white/10 rounded-xl p-8">
+    <h2 class="text-3xl font-bold text-center mb-4 text-white">🌟 Miembros que Impulsan el Proyecto 🌟</h2>
+    <p class="text-center text-white/70 mb-8">
+      Un enorme agradecimiento a aquellos que hacen posible que Streameko siga funcionando sin interrupciones y con la mejor calidad.
+    </p>
+    
+    <div id="donors-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <!--<div class="donor-card rounded-lg p-4 text-center">
+        <div class="text-3xl mb-2">🌟</div>
+        <p class="text-white font-semibold text-sm">donatorplaceholder</p>
+      </div>-->
+      <div class="donor-card rounded-lg p-4 text-center">
+        <div class="text-3xl mb-2">👤</div>
+        <p class="text-white/50 text-sm">¿Tu nombre aquí?</p>
+      </div>
+    </div>
+    
+    <p class="text-center text-white/50 text-sm mt-6 italic">
+      Esta lista se actualiza periódicamente. Si donaste y tu nombre no aparece, por favor usa la página de <a href="contacto.html" class="text-red-400 hover:text-red-300 underline">contacto</a>.
+    </p>
+  </div>
+
+  <div class="mt-12 bg-black/40 border border-yellow-500/30 rounded-xl p-6">
+    <h3 class="text-xl font-bold mb-3 text-yellow-400 flex items-center gap-2">
+      <span>⚠️</span>
+      <span>Aviso Importante</span>
+    </h3>
+    <p class="text-white/70 mb-3">
+      La donación es un acto completamente voluntario y opcional. Es una muestra de soporte al proyecto. <strong>Streameko siempre será gratis y accesible para todos</strong> ¡Gracias por ser parte de la comunidad!
+    </p>
+  </div>
+
+</main>
+
+<footer class="py-8 text-center border-t border-white/10 mt-12">
+  <p class="text-white/50">© 2025 Streameko. ¡Para la comunidad!</p>
+</footer>
+
+<script>
+  function detectarDispositivo() {
+    const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    if (esMobile) {
+      document.body.classList.add("is-mobile");
+    }
+  }
+  detectarDispositivo();
+</script>
+
+</body>
+</html>
