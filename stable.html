@@ -258,7 +258,10 @@
     dubToggle.addEventListener("change", renderAnimeList);
 
     function crearCardAnime(anime, id, extraEtiqueta = "") {
-      const poster = anime.poster || "poster_default.png";
+      const poster = anime.poster 
+  ? `https://image.tmdb.org/t/p/w342/${anime.poster}` 
+  : "poster_default.png";
+
       const div = document.createElement("div");
       div.className = "card p-4 flex flex-col items-center text-center";
 
