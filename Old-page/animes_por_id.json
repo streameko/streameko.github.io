@@ -555225,6 +555225,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 6,
+        "url": "https://mikaylaarealike.com/b6bc0jhqmjfq",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/nfj9l4rq0d8y",
         "language": 0,
@@ -555251,6 +555257,12 @@
       {
         "episode": 5,
         "url": "https://filemoon.sx/qyucqss5wbvo",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 6,
+        "url": "https://filemoon.sx/p8kjkz1s4z9j",
         "language": 0,
         "server": "Delta"
       }
@@ -556691,6 +556703,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 5,
+        "url": "https://mikaylaarealike.com/djp6xi9kvbka",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/ry8fdcqwsz10",
         "language": 0,
@@ -556711,6 +556729,12 @@
       {
         "episode": 4,
         "url": "https://filemoon.sx/f1gst23wndfm",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 5,
+        "url": "https://filemoon.sx/wah1x8swp6oq",
         "language": 0,
         "server": "Delta"
       }
@@ -556803,6 +556827,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 5,
+        "url": "https://mikaylaarealike.com/ndsrehcgy239",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/9ioibk0ptsbf",
         "language": 0,
@@ -556823,6 +556853,12 @@
       {
         "episode": 4,
         "url": "https://filemoon.sx/34nnj8hcckff",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 5,
+        "url": "https://filemoon.sx/3e0qb5wqy40v",
         "language": 0,
         "server": "Delta"
       }
@@ -556871,6 +556907,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 5,
+        "url": "https://mikaylaarealike.com/dzfjm5kbjv8i",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/nrdfedcy35p0",
         "language": 0,
@@ -556904,6 +556946,12 @@
         "episode": 1,
         "url": "https://filemoon.sx/2qfwj95wqgmv",
         "language": 2,
+        "server": "Delta"
+      },
+      {
+        "episode": 5,
+        "url": "https://filemoon.sx/lsqqm4j7rae9",
+        "language": 0,
         "server": "Delta"
       }
     ],
@@ -557001,6 +557049,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 5,
+        "url": "https://mikaylaarealike.com/cmzyvulthr18",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/nnjftdkgfp25",
         "language": 0,
@@ -557028,6 +557082,12 @@
         "episode": 1,
         "url": "https://filemoon.sx/mkl4ngp4catb",
         "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 5,
+        "url": "https://filemoon.sx/3f6uxjf61ocb",
+        "language": 0,
         "server": "Delta"
       }
     ],
@@ -558778,5 +558838,12 @@
     "alternative_names": [],
     "poster": "/h1eHsHPlPlyMmZywAigTgYFzFrM.jpg",
     "overview": "Érase una vez que los Siete Grandes gobernaban sus propios territorios en Twisted-Wonderland, un mundo de magia y maravillas. Sus hazañas eran tan legendarias que el colegio Cuervo Nocturno, una prestigiosa escuela de magia, basó sus siete dormitorios en su honor: la Reina de Corazones, el Rey de las Bestias, la Bruja del Mar, el Hechicero de las Arenas, la Bella Reina, el Rey del Inframundo y la Bruja de Espinas. Sin embargo, Yuken, un alumno de instituto, ignoraba que este mundo existía hasta que, repentinamente, se ve transportado en medio de la ceremonia de ingreso."
+  },
+  "2096": {
+    "name": "Love Live! Nijigasaki Gakuen School Idol Doukoukai: Kanketsu-hen",
+    "episodes": [],
+    "alternative_names": [],
+    "poster": "/10TCK99AXCTiS8KtbGgtEPeyw8f.jpg",
+    "overview": "La escuela Nijigasaki High School se encuentra en Odaiba, Tokio y es popular debido a su estilo de escuela gratuita y sus diversas especialidades. La historia se centra en los miembros del club de idols escolares en Nijigasaki y su intento de evitar la abolición del club."
   }
 }
