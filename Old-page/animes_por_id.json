@@ -555629,6 +555629,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/3vwg4utk4roo",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/n2d8p1c9g7j5",
         "language": 0,
@@ -555667,6 +555673,12 @@
       {
         "episode": 7,
         "url": "https://filemoon.sx/e/yirje0mrzgur",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 8,
+        "url": "https://filemoon.sx/e/gv685w0fn8zz",
         "language": 0,
         "server": "Delta"
       }
@@ -556355,6 +556367,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 4,
+        "url": "https://christopheruntilpoint.com/e/pssltkzpmdxq",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/ushp29zetzwd",
         "language": 0,
@@ -556412,6 +556430,12 @@
         "episode": 7,
         "url": "https://filemoon.sx/e/zr3xqaa599nn",
         "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 4,
+        "url": "https://filemoon.sx/e/h0yljpw0tksa",
+        "language": 1,
         "server": "Delta"
       }
     ],
@@ -560005,6 +560029,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/5xdwrhlbpmhd",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/6s6k7pu87rc5",
         "language": 0,
@@ -560069,6 +560099,12 @@
         "url": "https://filemoon.sx/e/pgdmsd3fgqyh",
         "language": 0,
         "server": "Delta"
+      },
+      {
+        "episode": 6,
+        "url": "https://filemoon.sx/e/rscvxmjp9poh",
+        "language": 1,
+        "server": "Delta"
       }
     ],
     "alternative_names": [],
@@ -560109,6 +560145,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/pirckkhh7dav",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/bi6pu1sbp06o",
         "language": 0,
@@ -560135,6 +560177,12 @@
       {
         "episode": 5,
         "url": "https://filemoon.sx/e/tp7klhaxqd93",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 6,
+        "url": "https://filemoon.sx/e/tow02rlp1nsh",
         "language": 0,
         "server": "Delta"
       }
@@ -560323,6 +560371,18 @@
         "server": "Gamma"
       },
       {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/ebuapagb8ssk",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/kmct6msixjgp",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/1jwx5j3e6sr5",
         "language": 0,
@@ -560416,6 +560476,18 @@
         "episode": 6,
         "url": "https://filemoon.sx/e/8qjg8qbe40rs",
         "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 6,
+        "url": "https://filemoon.sx/e/keoptfjjefx3",
+        "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 6,
+        "url": "https://filemoon.sx/e/v0h2zsopldxu",
+        "language": 2,
         "server": "Delta"
       }
     ],
@@ -560851,6 +560923,24 @@
         "server": "Gamma"
       },
       {
+        "episode": 3,
+        "url": "https://christopheruntilpoint.com/e/x75e34dtlrmy",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 3,
+        "url": "https://christopheruntilpoint.com/e/kqiudxp0vvja",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 3,
+        "url": "https://christopheruntilpoint.com/e/7a8rb2gmg06k",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/zygk0mtvp03w",
         "language": 0,
@@ -560883,6 +560973,24 @@
       {
         "episode": 2,
         "url": "https://filemoon.sx/e/iq70lkqtfo6d",
+        "language": 2,
+        "server": "Delta"
+      },
+      {
+        "episode": 3,
+        "url": "https://filemoon.sx/e/gcuho37bru6o",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 3,
+        "url": "https://filemoon.sx/e/bhq7fy52jfv7",
+        "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 3,
+        "url": "https://filemoon.sx/e/tnyo4uhtsvkj",
         "language": 2,
         "server": "Delta"
       }
