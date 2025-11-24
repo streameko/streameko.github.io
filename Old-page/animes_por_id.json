@@ -550451,6 +550451,18 @@
         "server": "Gamma"
       },
       {
+        "episode": 17,
+        "url": "https://christopheruntilpoint.com/e/ew6mkv0nwxcj",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 17,
+        "url": "https://christopheruntilpoint.com/e/gdlzcnokx2qn",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/c1souj4y09my",
         "language": 0,
@@ -550760,6 +550772,18 @@
         "episode": 20,
         "url": "https://filemoon.sx/e/a2kfkog5qxxc",
         "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 17,
+        "url": "https://filemoon.sx/e/e9z9f6qw8rch",
+        "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 17,
+        "url": "https://filemoon.sx/e/x7cdqch7dek7",
+        "language": 2,
         "server": "Delta"
       }
     ],
@@ -560611,6 +560635,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 5,
+        "url": "https://christopheruntilpoint.com/e/vqg7hetzlbzp",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/m9dj1lxsp1lc",
         "language": 0,
@@ -560680,6 +560710,12 @@
         "episode": 8,
         "url": "https://filemoon.sx/e/5oz5if7uxt42",
         "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 5,
+        "url": "https://filemoon.sx/e/ctyww2vz3hk0",
+        "language": 1,
         "server": "Delta"
       }
     ],
@@ -562327,6 +562363,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 7,
+        "url": "https://christopheruntilpoint.com/e/r5nfvttzvx0z",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/xlimk6vxkawf",
         "language": 0,
@@ -562359,6 +562401,12 @@
       {
         "episode": 6,
         "url": "https://filemoon.sx/e/4w6gnehdhywl",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 7,
+        "url": "https://filemoon.sx/e/t0obow5hkzxe",
         "language": 0,
         "server": "Delta"
       }
