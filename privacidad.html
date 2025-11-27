@@ -92,18 +92,21 @@
      .privacy-content a:hover {
         color: #ff3b47;
      }
-
-    #mobile-menu {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
+    .is-mobile .logo-text {
+      font-size: 1.25rem;
     }
-    #mobile-menu.menu-open {
-      max-height: 500px;
-      opacity: 1;
-      transform: translateY(0);
+    .is-mobile header nav {
+      flex-direction: column;
+      gap: 0.25rem;
+      height: auto;
+      padding: 0.5rem 0;
+    }
+    .is-mobile header nav > div {
+      gap: 0.25rem;
+    }
+    .is-mobile .nav-link-stylish {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -111,29 +114,20 @@
 
 <header class="sticky top-0 z-50 w-full stylish-topbar">
   <div class="max-w-6xl mx-auto px-6">
-    <nav class="flex items-center justify-between h-20">
+    <nav class="flex items-center justify-between h-20 transition-all duration-300">
       <a href="index.html" class="flex items-center gap-3 logo-container">
         <img src="favicon.ico" alt="Logo de Streameko" class="h-9 w-9">
         <span class="text-2xl font-bold tracking-wider text-white logo-text">STREAMEKO</span>
       </a>
-              <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
+      
+      <div class="flex items-center gap-2 text-sm md:text-base font-semibold">
           <a href="index.html" class="nav-link-stylish"><span>Inicio</span></a>
           <a href="contacto.html" class="nav-link-stylish"><span>Contacto</span></a>
-
-<a href="donar.html" class="nav-link-stylish"><span>Donar</span></a>
-        </div>
-      
-
-
-      <div class="md:hidden">
-
-          </svg>
-        </button>
+          <a href="donar.html" class="nav-link-stylish"><span>Donar</span></a>
       </div>
     </nav>
   </div>
-
-
+</header>
 
 <main class="max-w-4xl mx-auto px-6 py-12 md:py-20">
 
@@ -143,7 +137,7 @@
     </h1>
     <p class="text-center text-white/60 mb-12">Última actualización: 07 de octubre de 2025</p>
 
-<p>En Streameko, tu privacidad es tan importante como el próximo capítulo de tu anime favorito. Nuestra filosofía es simple: <strong>no queremos tus datos</strong>. La web está diseñada desde cero para no recolectar, almacenar ni compartir ninguna información personal tuya. Así de fácil.</p>
+    <p>En Streameko, tu privacidad es tan importante como el próximo capítulo de tu anime favorito. Nuestra filosofía es simple: <strong>no queremos tus datos</strong>. La web está diseñada desde cero para no recolectar, almacenar ni compartir ninguna información personal tuya. Así de fácil.</p>
 
     <div class="bg-zinc-900/50 border border-red-500/30 rounded-lg p-6 my-8">
       <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2">
@@ -196,10 +190,11 @@
     <ul>
       <li>Actualmente presenten un bloqueo activo o restricción en el servicio por abuso del servicio.</li>
       <li>Se requiera su retención por un período más largo para cumplir con la ley o una orden judicial legítima.</li>
-      <li>Hayan iniciado un reclamo DMCA, en cuyo caso sus datos se conservarán indefinidamente por motivos de gestión, solo serán eliminados si el reclamante lo solicita explícitamente y el reclamo haya sido retirado, rechazado o resuelto de lo contrario aunque el reclamo sea retirado, rechazado o resuelto, los datos se conservarán indefinidamente.</li>
+      <li>Hayan iniciado un reclamo DMCA, en cuyo caso sus datos se conservarán indefinidamente por motivos de gestión, solo serán eliminados si el reclamante lo solicita explícitamente y el reclamo haya sido retirado, rechazado o resuelto. De lo contrario, aunque el reclamo sea retirado, rechazado o resuelto, los datos se conservarán indefinidamente.</li>
       <li>Hayan iniciado un proceso legal contra Streameko, en cuyo caso sus datos se conservarán indefinidamente hasta que el solicitante solicite su eliminación y el proceso legal haya concluido.</li>
       <li>Sean usuarios que hayan solicitado mantener sus datos por un período más largo o mas corto, en cuyo caso sus datos se conservarán hasta la fecha solicitada.</li>
-      <li>Por favor tengan en cuenta que lo que menos nos gusta es almacenar datos, por lo que si no hay una razón legal o justificada para conservarlos, serán eliminados al inicio del año calendario.</li>
+    </ul>
+      <p>Por favor tengan en cuenta que lo que menos nos gusta es almacenar datos, por lo que si no hay una razón legal o justificada para conservarlos, serán eliminados al inicio del año calendario.</p>
 
     <h2>4. Cambios en esta Política</h2>
     <p>Si alguna vez realizamos un cambio en esta política (lo cual es poco probable, dado que nuestra política es no tener datos), lo actualizaremos en esta misma página. Te recomendamos revisarla de vez en cuando, por si acaso.</p>
@@ -225,32 +220,13 @@
 </footer>
 
 <script>
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const iconOpen = document.getElementById('icon-open');
-  const iconClose = document.getElementById('icon-close');
-  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-
-  const toggleMenu = () => {
-    const isOpen = mobileMenu.classList.toggle('menu-open');
-    if (isOpen) {
-      iconOpen.style.transform = 'scale(0) rotate(-90deg)';
-      iconClose.style.transform = 'scale(1) rotate(0)';
-    } else {
-      iconOpen.style.transform = 'scale(1) rotate(0)';
-      iconClose.style.transform = 'scale(0) rotate(90deg)';
+  function detectarDispositivo() {
+    const esMobile = /Mobi|Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    if (esMobile) {
+      document.body.classList.add("is-mobile");
     }
-  };
-
-  if(mobileMenuButton) {
-      mobileMenuButton.addEventListener('click', toggleMenu);
   }
-  
-  mobileNavLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      if (mobileMenu.classList.contains('menu-open')) toggleMenu();
-    });
-  });
+  detectarDispositivo();
 </script>
 
 </body>
