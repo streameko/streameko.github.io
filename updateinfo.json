@@ -1,0 +1,18 @@
+{
+  "update_info": {
+    "info": {
+      "added": [
+        "Primera version estable de la app, bueno, a medias ajajaja esto no lo verá el usuario comun, es para mi prueba interna."
+      ],
+      "fixed": [
+        "Corregidos varios enlaces",
+        "Corregido servidor Tokio",
+        "Corregido sistema de descargas Kioto"
+      ],
+      "changed": [
+        "Herobrine ha sido eliminado."
+      ]
+    },
+    "priority": 0
+  }
+}
