@@ -11271,6 +11271,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 1151,
+        "url": "https://christopheruntilpoint.com/e/ihyrnoqbis1q",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/4bp7xl1qc13b",
         "language": 1,
@@ -22529,6 +22535,12 @@
       {
         "episode": 1129,
         "url": "https://filemoon.sx/e/kbvgajuqu0ce",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 1151,
+        "url": "https://filemoon.sx/e/em5eo8kp8oh9",
         "language": 0,
         "server": "Delta"
       }
@@ -187378,290 +187390,434 @@
     "episodes": [
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/rwiebdloplih",
+        "url": "https://christopheruntilpoint.com/e/ye5wqvgmrip1",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/7lib5wppxh8n",
+        "url": "https://christopheruntilpoint.com/e/3fgfzcykbvu5",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 2,
-        "url": "https://christopheruntilpoint.com/e/u3d9s0jafdra",
+        "url": "https://christopheruntilpoint.com/e/sqlojfagznkd",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 2,
-        "url": "https://christopheruntilpoint.com/e/4da5jp4kp2m4",
+        "url": "https://christopheruntilpoint.com/e/e9s9kenr0vs1",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 3,
-        "url": "https://christopheruntilpoint.com/e/9gnop0c5ldyk",
+        "url": "https://christopheruntilpoint.com/e/l6ncvhp2z27y",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 3,
-        "url": "https://christopheruntilpoint.com/e/ms15jl45ed5u",
+        "url": "https://christopheruntilpoint.com/e/st7bclmxhcl0",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 4,
-        "url": "https://christopheruntilpoint.com/e/brwfi7fq6z2f",
+        "url": "https://christopheruntilpoint.com/e/yndhexqjvjhu",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 4,
-        "url": "https://christopheruntilpoint.com/e/7enlfk075yk9",
+        "url": "https://christopheruntilpoint.com/e/nv1yjgpijj6l",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 5,
-        "url": "https://christopheruntilpoint.com/e/4nr9gvs5e9ql",
+        "url": "https://christopheruntilpoint.com/e/znokvgiqllko",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 5,
-        "url": "https://christopheruntilpoint.com/e/yqixqzfe3tgj",
+        "url": "https://christopheruntilpoint.com/e/bwmtxi9jlcdo",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 6,
-        "url": "https://christopheruntilpoint.com/e/6zblf1lsqg4q",
+        "url": "https://christopheruntilpoint.com/e/egdsuixwqpkg",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 6,
-        "url": "https://christopheruntilpoint.com/e/88dmobc0wkn8",
+        "url": "https://christopheruntilpoint.com/e/bvrckqzhzze1",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 7,
-        "url": "https://christopheruntilpoint.com/e/rzvxkghgftqo",
+        "url": "https://christopheruntilpoint.com/e/vqvbozzqtl7y",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 7,
-        "url": "https://christopheruntilpoint.com/e/q65mgp7gxqxo",
+        "url": "https://christopheruntilpoint.com/e/7qbitegtltxl",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 8,
-        "url": "https://christopheruntilpoint.com/e/uhnnkdkszanx",
+        "url": "https://christopheruntilpoint.com/e/b7opl9z9qudq",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 8,
-        "url": "https://christopheruntilpoint.com/e/cibc24elzcfs",
+        "url": "https://christopheruntilpoint.com/e/0o8nieytrlwh",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 9,
-        "url": "https://christopheruntilpoint.com/e/ompz6xmjhhvz",
+        "url": "https://christopheruntilpoint.com/e/u6dss91zfxwj",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 9,
-        "url": "https://christopheruntilpoint.com/e/nbihkv0obume",
+        "url": "https://christopheruntilpoint.com/e/abfvjjo3ivoi",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 10,
-        "url": "https://christopheruntilpoint.com/e/xvxgzwvucndk",
+        "url": "https://christopheruntilpoint.com/e/gyatximchisq",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 10,
-        "url": "https://christopheruntilpoint.com/e/jmoionmgmq88",
+        "url": "https://christopheruntilpoint.com/e/tx1263wnuuri",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 11,
-        "url": "https://christopheruntilpoint.com/e/zdtlhebv3xd6",
+        "url": "https://christopheruntilpoint.com/e/bgsaag8h4ml9",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 11,
-        "url": "https://christopheruntilpoint.com/e/z9uxpemme7ha",
+        "url": "https://christopheruntilpoint.com/e/pp7flalerjtv",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 12,
-        "url": "https://christopheruntilpoint.com/e/quw9n3me6b7u",
+        "url": "https://christopheruntilpoint.com/e/um6a5ipdwonj",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 12,
-        "url": "https://christopheruntilpoint.com/e/i16g1crpmhdb",
+        "url": "https://christopheruntilpoint.com/e/ca8tvtdnwcnz",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 13,
-        "url": "https://christopheruntilpoint.com/e/e05mcob2nwsp",
+        "url": "https://christopheruntilpoint.com/e/plp4jdxiuz12",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 13,
-        "url": "https://christopheruntilpoint.com/e/oljd1yd2isgs",
+        "url": "https://christopheruntilpoint.com/e/u4jzlslapjsx",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 14,
-        "url": "https://christopheruntilpoint.com/e/cex0zx2p60v0",
+        "url": "https://christopheruntilpoint.com/e/pqlovg3me7ux",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 14,
-        "url": "https://christopheruntilpoint.com/e/deh1o5w4f5ik",
+        "url": "https://christopheruntilpoint.com/e/vcray7488rdg",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 15,
-        "url": "https://christopheruntilpoint.com/e/bcuhdtkwvcfo",
+        "url": "https://christopheruntilpoint.com/e/0klfccph1jue",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 15,
-        "url": "https://christopheruntilpoint.com/e/bh74ef7ozogb",
+        "url": "https://christopheruntilpoint.com/e/buu0bl3ewjyt",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 16,
-        "url": "https://christopheruntilpoint.com/e/wws3bpkv1c4f",
+        "url": "https://christopheruntilpoint.com/e/tlsnbllv55lm",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 16,
-        "url": "https://christopheruntilpoint.com/e/h7ohwl5eter7",
+        "url": "https://christopheruntilpoint.com/e/1jynfeadukt4",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 17,
-        "url": "https://christopheruntilpoint.com/e/vq0dwejw1nrp",
+        "url": "https://christopheruntilpoint.com/e/6esonxf3lduq",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 17,
-        "url": "https://christopheruntilpoint.com/e/zq6epqku64fi",
+        "url": "https://christopheruntilpoint.com/e/zkjdforiikze",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 18,
-        "url": "https://christopheruntilpoint.com/e/4sq4m3phwdlc",
+        "url": "https://christopheruntilpoint.com/e/d7msya6dneh8",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 18,
-        "url": "https://christopheruntilpoint.com/e/rfolnehfztlm",
+        "url": "https://christopheruntilpoint.com/e/wjgniqjeaqj9",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 19,
-        "url": "https://christopheruntilpoint.com/e/vwws8lovh8rs",
+        "url": "https://christopheruntilpoint.com/e/flcy4gseibfb",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 19,
-        "url": "https://christopheruntilpoint.com/e/9hd5otho0eco",
+        "url": "https://christopheruntilpoint.com/e/hme9etgc6j09",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 20,
-        "url": "https://christopheruntilpoint.com/e/ruxwjil2z9aa",
+        "url": "https://christopheruntilpoint.com/e/sdup8dlkz8dz",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 20,
-        "url": "https://christopheruntilpoint.com/e/bdcscs9fpdpr",
+        "url": "https://christopheruntilpoint.com/e/yd8kzecwzwrl",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 21,
-        "url": "https://christopheruntilpoint.com/e/fw1sy4uqrghb",
+        "url": "https://christopheruntilpoint.com/e/n11olan8spms",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 21,
-        "url": "https://christopheruntilpoint.com/e/mfyz6swtznvf",
+        "url": "https://christopheruntilpoint.com/e/fpwar70uliqy",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 22,
-        "url": "https://christopheruntilpoint.com/e/kvddd71fkkij",
+        "url": "https://christopheruntilpoint.com/e/vohmqzt7izey",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 22,
-        "url": "https://christopheruntilpoint.com/e/5zdqecfkm713",
+        "url": "https://christopheruntilpoint.com/e/4lazrwgiihk6",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 23,
-        "url": "https://christopheruntilpoint.com/e/dnmpctws91f4",
+        "url": "https://christopheruntilpoint.com/e/sczlxmf7dwhn",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 23,
-        "url": "https://christopheruntilpoint.com/e/ssn910on5ybf",
+        "url": "https://christopheruntilpoint.com/e/bujrdt3lllm7",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 24,
-        "url": "https://christopheruntilpoint.com/e/9cxkkkklob1v",
+        "url": "https://christopheruntilpoint.com/e/g2vvumzcrlpk",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 24,
-        "url": "https://christopheruntilpoint.com/e/2rkecsofq56t",
+        "url": "https://christopheruntilpoint.com/e/zmkpzxe1xutd",
         "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 1,
+        "url": "https://christopheruntilpoint.com/e/xlo1rekgslom",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 2,
+        "url": "https://christopheruntilpoint.com/e/92lfkroump37",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 3,
+        "url": "https://christopheruntilpoint.com/e/1mwcj9mxh8ze",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 4,
+        "url": "https://christopheruntilpoint.com/e/9jnquu61yvjn",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/3pnnmtx04sbr",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 7,
+        "url": "https://christopheruntilpoint.com/e/tlanqbncbkho",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/03jggwoedbvf",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/chwv9rnvqu0z",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/xx0y5frnsytw",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 11,
+        "url": "https://christopheruntilpoint.com/e/jppkgtk4ouah",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 5,
+        "url": "https://christopheruntilpoint.com/e/wvon89lfug1s",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 14,
+        "url": "https://christopheruntilpoint.com/e/xau2tjvmppja",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 12,
+        "url": "https://christopheruntilpoint.com/e/gtddwumxkapz",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 16,
+        "url": "https://christopheruntilpoint.com/e/ykwp5d3rimqj",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 13,
+        "url": "https://christopheruntilpoint.com/e/bzrasyyqgbx9",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 15,
+        "url": "https://christopheruntilpoint.com/e/rvrnx8v6thf1",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 18,
+        "url": "https://christopheruntilpoint.com/e/hsxl30tb8tly",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 19,
+        "url": "https://christopheruntilpoint.com/e/efovbyuuioll",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 21,
+        "url": "https://christopheruntilpoint.com/e/hwh2y3edzwtc",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 20,
+        "url": "https://christopheruntilpoint.com/e/w4knhhq1xciz",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 17,
+        "url": "https://christopheruntilpoint.com/e/fenh7sdpveem",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 24,
+        "url": "https://christopheruntilpoint.com/e/ecbuhcbzpyer",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 22,
+        "url": "https://christopheruntilpoint.com/e/hawzwqvsrgjf",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 23,
+        "url": "https://christopheruntilpoint.com/e/zfdif34d4wrd",
+        "language": 2,
         "server": "Gamma"
       },
       {
@@ -251684,146 +251840,218 @@
     "episodes": [
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/xm8wdkl5lasm",
+        "url": "https://christopheruntilpoint.com/e/zb81gjr3wepo",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 2,
-        "url": "https://christopheruntilpoint.com/e/dtjfsohaydeb",
+        "url": "https://christopheruntilpoint.com/e/fnt5ndvatznn",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 3,
-        "url": "https://christopheruntilpoint.com/e/tkxtq5tdstoc",
+        "url": "https://christopheruntilpoint.com/e/db7yrjfbxzsh",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 4,
-        "url": "https://christopheruntilpoint.com/e/q8blx20hjrtn",
+        "url": "https://christopheruntilpoint.com/e/lxaauk5bid7r",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 5,
-        "url": "https://christopheruntilpoint.com/e/nlt3i3qpze8v",
+        "url": "https://christopheruntilpoint.com/e/icizwithgvsw",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 6,
-        "url": "https://christopheruntilpoint.com/e/gt6myvtgs4sm",
+        "url": "https://christopheruntilpoint.com/e/wgyi3tc9iwc5",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 7,
-        "url": "https://christopheruntilpoint.com/e/mpcheeyyunun",
+        "url": "https://christopheruntilpoint.com/e/fg89hkl1gshs",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 8,
-        "url": "https://christopheruntilpoint.com/e/bxsfhur3942t",
+        "url": "https://christopheruntilpoint.com/e/zuuslprufk0e",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 9,
-        "url": "https://christopheruntilpoint.com/e/u5f2ohiqhoqq",
+        "url": "https://christopheruntilpoint.com/e/o8wgkads0qzr",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 10,
-        "url": "https://christopheruntilpoint.com/e/aqhposwzhoiy",
+        "url": "https://christopheruntilpoint.com/e/r3yvbg8lhjbm",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 11,
-        "url": "https://christopheruntilpoint.com/e/kbc42drn66eb",
+        "url": "https://christopheruntilpoint.com/e/lxarzmtiwlsf",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 12,
-        "url": "https://christopheruntilpoint.com/e/ufgevfh4owhk",
+        "url": "https://christopheruntilpoint.com/e/yr9ts8tvzews",
         "language": 0,
         "server": "Gamma"
       },
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/ru7rshgh35jk",
+        "url": "https://christopheruntilpoint.com/e/buvjgwwjdunp",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 2,
-        "url": "https://christopheruntilpoint.com/e/vbqjxcas3bpq",
+        "url": "https://christopheruntilpoint.com/e/qe0oabgyy9gg",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 3,
-        "url": "https://christopheruntilpoint.com/e/taofy9kgnx8x",
+        "url": "https://christopheruntilpoint.com/e/gqosoucumeyo",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 4,
-        "url": "https://christopheruntilpoint.com/e/cie4izytr3yz",
+        "url": "https://christopheruntilpoint.com/e/l0lpthysuupa",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 5,
-        "url": "https://christopheruntilpoint.com/e/bykpxznlrtac",
+        "url": "https://christopheruntilpoint.com/e/cznvgn73vfc8",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 6,
-        "url": "https://christopheruntilpoint.com/e/jzpzqho1jtk7",
+        "url": "https://christopheruntilpoint.com/e/a618p4ftqw8h",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 7,
-        "url": "https://christopheruntilpoint.com/e/ra2mplgublzj",
+        "url": "https://christopheruntilpoint.com/e/jjws06azy7ol",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 8,
-        "url": "https://christopheruntilpoint.com/e/wtvzpjkw876i",
+        "url": "https://christopheruntilpoint.com/e/ptoy0y4d7st6",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 9,
-        "url": "https://christopheruntilpoint.com/e/td2vbkbzysf9",
+        "url": "https://christopheruntilpoint.com/e/xmwwlt6p8es9",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 10,
-        "url": "https://christopheruntilpoint.com/e/q3wmor1bmggi",
+        "url": "https://christopheruntilpoint.com/e/vyaaol7h2xef",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 11,
-        "url": "https://christopheruntilpoint.com/e/q5xwpmvwcifu",
+        "url": "https://christopheruntilpoint.com/e/76tl8pnmqggd",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 12,
-        "url": "https://christopheruntilpoint.com/e/nowsgrtxlrkb",
+        "url": "https://christopheruntilpoint.com/e/qagcxjhbpbur",
         "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 3,
+        "url": "https://christopheruntilpoint.com/e/tgkt2ubko5pc",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 2,
+        "url": "https://christopheruntilpoint.com/e/dvxm7o2itey6",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 1,
+        "url": "https://christopheruntilpoint.com/e/mq9pm8fz1cc6",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 4,
+        "url": "https://christopheruntilpoint.com/e/h2c46dd7gt4l",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 5,
+        "url": "https://christopheruntilpoint.com/e/x7807uhwgkmg",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/xrgl8hskznds",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 7,
+        "url": "https://christopheruntilpoint.com/e/atafl0ovplra",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/oucomtcmh7vl",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/t1zo0yhmfbxe",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 11,
+        "url": "https://christopheruntilpoint.com/e/ar1xlqvsdxro",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/kt1tgmysxmmi",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 12,
+        "url": "https://christopheruntilpoint.com/e/gwktj1s7oabw",
+        "language": 2,
         "server": "Gamma"
       },
       {
@@ -334640,74 +334868,218 @@
     "episodes": [
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/puvawvlfuons",
+        "url": "https://christopheruntilpoint.com/e/amzslw3sxapf",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 2,
-        "url": "https://christopheruntilpoint.com/e/pfwwnwvlpmhe",
+        "url": "https://christopheruntilpoint.com/e/tekhn1fpv31r",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 3,
-        "url": "https://christopheruntilpoint.com/e/s0bcejm873ou",
+        "url": "https://christopheruntilpoint.com/e/5efdkcorcwha",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 4,
-        "url": "https://christopheruntilpoint.com/e/lfbq9oui216h",
+        "url": "https://christopheruntilpoint.com/e/oc7cznqknxel",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 5,
-        "url": "https://christopheruntilpoint.com/e/c6nbqqeop3c7",
+        "url": "https://christopheruntilpoint.com/e/tdfucqzcaobp",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 6,
-        "url": "https://christopheruntilpoint.com/e/mm25r3fzrjew",
+        "url": "https://christopheruntilpoint.com/e/kqw1fdnqblmr",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 7,
-        "url": "https://christopheruntilpoint.com/e/raxlrxrmoung",
+        "url": "https://christopheruntilpoint.com/e/tkfzpx0ff0s1",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 8,
-        "url": "https://christopheruntilpoint.com/e/mlbcmxdapz60",
+        "url": "https://christopheruntilpoint.com/e/zutclorpdxwf",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 9,
-        "url": "https://christopheruntilpoint.com/e/93rvanzqadyn",
+        "url": "https://christopheruntilpoint.com/e/tcnx7ggt0swe",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 10,
-        "url": "https://christopheruntilpoint.com/e/gy8f4zv7zu3m",
+        "url": "https://christopheruntilpoint.com/e/a8fkkucolkyc",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 11,
-        "url": "https://christopheruntilpoint.com/e/ye0cv5tiisr6",
+        "url": "https://christopheruntilpoint.com/e/7zgdhhtjgpzd",
         "language": 1,
         "server": "Gamma"
       },
       {
         "episode": 12,
-        "url": "https://christopheruntilpoint.com/e/1sdgyljzk81g",
+        "url": "https://christopheruntilpoint.com/e/cur0vbhgjyzp",
         "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 1,
+        "url": "https://christopheruntilpoint.com/e/lnu3z8ycunrh",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 4,
+        "url": "https://christopheruntilpoint.com/e/xuomgs2qe3cc",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 2,
+        "url": "https://christopheruntilpoint.com/e/nhu8tkjt4uxq",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 5,
+        "url": "https://christopheruntilpoint.com/e/ndwjeyru2z0o",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 3,
+        "url": "https://christopheruntilpoint.com/e/tpix6mhhpyae",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/aeg13qts1zvl",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 7,
+        "url": "https://christopheruntilpoint.com/e/3z1wd46yax7z",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/dr0n7i8ekzs9",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/zmdamjxwa6ky",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/ljj95yrktyyh",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 11,
+        "url": "https://christopheruntilpoint.com/e/hqt3q20ycydi",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 12,
+        "url": "https://christopheruntilpoint.com/e/yef5vgi3xdhu",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 1,
+        "url": "https://christopheruntilpoint.com/e/ginumyjxtl9s",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 3,
+        "url": "https://christopheruntilpoint.com/e/vcgo8i6gayxw",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 2,
+        "url": "https://christopheruntilpoint.com/e/wcactjaif9og",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 4,
+        "url": "https://christopheruntilpoint.com/e/6ctvat1reear",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/p9zq8dstdjsi",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/u0jmzfgq1k50",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 7,
+        "url": "https://christopheruntilpoint.com/e/sq4ziunweshc",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/qwht6rzflnhb",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/dpip1w6szoqz",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 5,
+        "url": "https://christopheruntilpoint.com/e/ypxtyyadffe1",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 12,
+        "url": "https://christopheruntilpoint.com/e/s5efg2ylguek",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
+        "episode": 11,
+        "url": "https://christopheruntilpoint.com/e/joclivy44u7r",
+        "language": 2,
         "server": "Gamma"
       },
       {
@@ -348030,7 +348402,7 @@
       },
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/xnxkckte6pct",
+        "url": "https://christopheruntilpoint.com/e/sibmgnfnroim",
         "language": 1,
         "server": "Gamma"
       },
@@ -367098,7 +367470,7 @@
       },
       {
         "episode": 8,
-        "url": "https://christopheruntilpoint.com/e/ofkpxfhfwat0",
+        "url": "https://christopheruntilpoint.com/e/brtiamfh070p",
         "language": 0,
         "server": "Gamma"
       },
@@ -385820,7 +386192,7 @@
     "episodes": [
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/l2ptzz2ia4j6",
+        "url": "https://christopheruntilpoint.com/e/y8kc1iqpcyoa",
         "language": 0,
         "server": "Gamma"
       },
@@ -408200,7 +408572,7 @@
       },
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/dvvb0lpdnce1",
+        "url": "https://christopheruntilpoint.com/e/g5a9vwb1fyds",
         "language": 1,
         "server": "Gamma"
       },
@@ -408520,7 +408892,7 @@
       },
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/y9myxofos8cy",
+        "url": "https://christopheruntilpoint.com/e/5tgelz2qu9rq",
         "language": 1,
         "server": "Gamma"
       },
@@ -419844,7 +420216,7 @@
     "episodes": [
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/sjabbn5yccuy",
+        "url": "https://christopheruntilpoint.com/e/lyxdvfwnqn42",
         "language": 0,
         "server": "Gamma"
       },
@@ -446411,6 +446783,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 22,
+        "url": "https://christopheruntilpoint.com/e/ugvb2jfz4rjd",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/3d5bn8z3hzct",
         "language": 0,
@@ -446485,6 +446863,12 @@
       {
         "episode": 13,
         "url": "https://filemoon.sx/e/1wsnh102xmx6",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 22,
+        "url": "https://filemoon.sx/e/gzqgjzymzltc",
         "language": 0,
         "server": "Delta"
       }
@@ -464206,7 +464590,7 @@
     "episodes": [
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/zklhmjrnpwrb",
+        "url": "https://christopheruntilpoint.com/e/cglog7hb8aiz",
         "language": 0,
         "server": "Gamma"
       },
@@ -496189,6 +496573,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 20,
+        "url": "https://christopheruntilpoint.com/e/2tmmvflxgvwn",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/hlp455bbpdup",
         "language": 0,
@@ -522920,7 +523310,7 @@
     "episodes": [
       {
         "episode": 1,
-        "url": "https://christopheruntilpoint.com/e/72aelqjs1ras",
+        "url": "https://christopheruntilpoint.com/e/e5rfbqmoiwt4",
         "language": 0,
         "server": "Gamma"
       },
@@ -543147,6 +543537,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 22,
+        "url": "https://christopheruntilpoint.com/e/kmfaxnssgrda",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/fcm6s8b72nmp",
         "language": 0,
@@ -543269,6 +543665,12 @@
       {
         "episode": 21,
         "url": "https://filemoon.sx/e/6mitdme6jt6r",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 22,
+        "url": "https://filemoon.sx/e/higg8m35btb4",
         "language": 0,
         "server": "Delta"
       }
@@ -543815,6 +544217,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/r659swxq2igb",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/zj574xdxlzsy",
         "language": 0,
@@ -543865,6 +544273,12 @@
       {
         "episode": 9,
         "url": "https://filemoon.sx/e/ds6pyzaerr42",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 10,
+        "url": "https://filemoon.sx/e/f8zgsd1hqr5k",
         "language": 0,
         "server": "Delta"
       }
@@ -544083,6 +544497,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/3jogist2nhqp",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/mbzxlhrp4p82",
         "language": 0,
@@ -544133,6 +544553,12 @@
       {
         "episode": 9,
         "url": "https://filemoon.sx/e/w0097wv5mh13",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 10,
+        "url": "https://filemoon.sx/e/8aery5ox7otg",
         "language": 0,
         "server": "Delta"
       }
@@ -544235,6 +544661,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/wdw7l6psxo41",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/ushp29zetzwd",
         "language": 0,
@@ -544323,6 +544755,12 @@
         "url": "https://filemoon.sx/e/xxgrjqmiz6sr",
         "language": 1,
         "server": "Delta"
+      },
+      {
+        "episode": 10,
+        "url": "https://filemoon.sx/e/ltj9m63jgydg",
+        "language": 0,
+        "server": "Delta"
       }
     ],
     "alternative_names": [],
@@ -544387,6 +544825,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 10,
+        "url": "https://christopheruntilpoint.com/e/rlucg45w0awe",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/5b202tr540wi",
         "language": 0,
@@ -544437,6 +544881,12 @@
       {
         "episode": 9,
         "url": "https://filemoon.sx/e/spd7rqchvu91",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 10,
+        "url": "https://filemoon.sx/e/1g4n08n8b1m1",
         "language": 0,
         "server": "Delta"
       }
@@ -544831,6 +545281,18 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/dmz8zewxizah",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/6shbycka00eo",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/heoi2zupu6tl",
         "language": 0,
@@ -544978,6 +545440,18 @@
         "episode": 9,
         "url": "https://filemoon.sx/e/b1cijk1ed8gw",
         "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/6nch4m4iiayq",
+        "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/0viywl48wota",
+        "language": 2,
         "server": "Delta"
       }
     ],
@@ -545571,6 +546045,18 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/yzx7ljd8vxcv",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/acgouipzxuj1",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/50nvdshllso0",
         "language": 0,
@@ -545718,6 +546204,18 @@
         "episode": 9,
         "url": "https://filemoon.sx/e/9iw8vgrtxg4k",
         "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/b27eov9obt5s",
+        "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/n5oh82fp4ai4",
+        "language": 2,
         "server": "Delta"
       }
     ],
@@ -547901,6 +548399,24 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/trddx81v7uha",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/mbwvq1fvty3m",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/ssnkjrwqzatl",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/vn9z7fl7241w",
         "language": 0,
@@ -548041,6 +548557,24 @@
       {
         "episode": 8,
         "url": "https://filemoon.sx/e/1g3vc83o6pja",
+        "language": 2,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/rr0px7tzbsz3",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/lcwmc6ia24g9",
+        "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/dlo0ukdx9igm",
         "language": 2,
         "server": "Delta"
       }
@@ -548334,7 +548868,7 @@
       },
       {
         "episode": 9,
-        "url": "https://christopheruntilpoint.com/e/sty5kgikdqrh",
+        "url": "https://christopheruntilpoint.com/e/5qnovmps3zq1",
         "language": 0,
         "server": "Gamma"
       },
@@ -548973,6 +549507,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/u0pdsiitaagq",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/9e7lco4567st",
         "language": 0,
@@ -549017,6 +549557,12 @@
       {
         "episode": 8,
         "url": "https://filemoon.sx/e/jrp8qxr6xpzq",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/ex9j2p03w1vj",
         "language": 0,
         "server": "Delta"
       }
@@ -549077,6 +549623,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/me7pf1sjqa9h",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/20010ibpyyd8",
         "language": 0,
@@ -549121,6 +549673,12 @@
       {
         "episode": 8,
         "url": "https://filemoon.sx/e/u7bib73ftmu6",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/y7s1zu4mnro6",
         "language": 0,
         "server": "Delta"
       }
@@ -549181,6 +549739,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/htckcdbnrtvx",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/9izvi4ja6ok1",
         "language": 0,
@@ -549225,6 +549789,12 @@
       {
         "episode": 8,
         "url": "https://filemoon.sx/e/5fyep444gyay",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/noc13moi53u7",
         "language": 0,
         "server": "Delta"
       }
@@ -549285,6 +549855,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/jhkl0j78es8h",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/oih415kof4c1",
         "language": 0,
@@ -549331,6 +549907,12 @@
         "url": "https://filemoon.sx/e/69li2mybzniy",
         "language": 0,
         "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/hphc14629b59",
+        "language": 0,
+        "server": "Delta"
       }
     ],
     "alternative_names": [],
@@ -549371,6 +549953,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/9otwjlkemy4j",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/50wvi46raccj",
         "language": 0,
@@ -549397,6 +549985,12 @@
       {
         "episode": 5,
         "url": "https://filemoon.sx/e/61m8wypc14qn",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 6,
+        "url": "https://filemoon.sx/e/vd3lm0p1v781",
         "language": 0,
         "server": "Delta"
       }
@@ -549505,6 +550099,18 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/vrt0fk0rneey",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/9uu4bqiorrbo",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/6s6k7pu87rc5",
         "language": 0,
@@ -549599,6 +550205,18 @@
         "url": "https://filemoon.sx/e/qytji4n2mxh3",
         "language": 1,
         "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/okarydc9bath",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/xqwuy6z7xb01",
+        "language": 1,
+        "server": "Delta"
       }
     ],
     "alternative_names": [],
@@ -549657,6 +550275,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/pa3xrwpptffa",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/bi6pu1sbp06o",
         "language": 0,
@@ -549701,6 +550325,12 @@
       {
         "episode": 8,
         "url": "https://filemoon.sx/e/ovlec04eg1p8",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/oo1owfkkcuij",
         "language": 0,
         "server": "Delta"
       }
@@ -549761,6 +550391,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/rjqvsvukbdxg",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/ch2r9gyquyfj",
         "language": 0,
@@ -549805,6 +550441,12 @@
       {
         "episode": 8,
         "url": "https://filemoon.sx/e/03ukcrvbe8oo",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/k4tbrpa80jfj",
         "language": 0,
         "server": "Delta"
       }
@@ -549961,6 +550603,24 @@
         "server": "Gamma"
       },
       {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/jmapmqltsdhu",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/bblw6mval4f6",
+        "language": 1,
+        "server": "Gamma"
+      },
+      {
+        "episode": 9,
+        "url": "https://christopheruntilpoint.com/e/m5uwu2r1xndx",
+        "language": 2,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/1jwx5j3e6sr5",
         "language": 0,
@@ -550101,6 +550761,24 @@
       {
         "episode": 8,
         "url": "https://filemoon.sx/e/gojy8jiufkpq",
+        "language": 2,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/awccktkax88r",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/rdipplv23quu",
+        "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 9,
+        "url": "https://filemoon.sx/e/zjcz4nb8dxlf",
         "language": 2,
         "server": "Delta"
       }
@@ -550429,6 +551107,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/20ezwsehrdhd",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/xlimk6vxkawf",
         "language": 0,
@@ -550474,6 +551158,12 @@
         "episode": 1,
         "url": "https://filemoon.sx/e/14a79ex2ysjv",
         "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 8,
+        "url": "https://filemoon.sx/e/7pkfst1lxvxc",
+        "language": 0,
         "server": "Delta"
       }
     ],
@@ -550527,6 +551217,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/twojple06dqs",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/zvgik80hzc21",
         "language": 0,
@@ -550565,6 +551261,12 @@
       {
         "episode": 7,
         "url": "https://filemoon.sx/e/jgw59cb3r8qd",
+        "language": 0,
+        "server": "Delta"
+      },
+      {
+        "episode": 8,
+        "url": "https://filemoon.sx/e/nj2i7krttssw",
         "language": 0,
         "server": "Delta"
       }
@@ -550643,6 +551345,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 8,
+        "url": "https://christopheruntilpoint.com/e/sgvryprqwvvu",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/rrofrfx45wpa",
         "language": 0,
@@ -550706,6 +551414,12 @@
         "episode": 4,
         "url": "https://filemoon.sx/e/lt4yhw4enp0a",
         "language": 1,
+        "server": "Delta"
+      },
+      {
+        "episode": 8,
+        "url": "https://filemoon.sx/e/5z3ku24jztbi",
+        "language": 0,
         "server": "Delta"
       }
     ],
@@ -550807,6 +551521,12 @@
         "server": "Gamma"
       },
       {
+        "episode": 6,
+        "url": "https://christopheruntilpoint.com/e/hnwtleyrkz82",
+        "language": 0,
+        "server": "Gamma"
+      },
+      {
         "episode": 1,
         "url": "https://filemoon.sx/e/zygk0mtvp03w",
         "language": 0,
@@ -550894,6 +551614,12 @@
         "episode": 5,
         "url": "https://filemoon.sx/e/mlvjxy5ex0is",
         "language": 2,
+        "server": "Delta"
+      },
+      {
+        "episode": 6,
+        "url": "https://filemoon.sx/e/gi7jjorf3xr3",
+        "language": 0,
         "server": "Delta"
       }
     ],
