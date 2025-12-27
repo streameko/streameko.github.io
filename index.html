@@ -641,7 +641,7 @@ async function loadDatabase() {
 
         const files = fflate.unzipSync(zipBuffer);
 
-        if (!files['anime.db']) throw new Error("No se encontró anime.db en el zip");
+        if (!files['anime.db']) throw new Error("No hay datos dentro del contenedor de la DB.");
 
         const db = new SQL.Database(files['anime.db']);
         processDatabase(db);
