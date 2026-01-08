@@ -2,27 +2,11 @@
   "update_info": {
     "info": {
       "added": [
-        "Primera version estable de la app, bueno, a medias ajajaja esto no lo verá el usuario comun, es para mi prueba interna.",
-        "Soporte para NAAAAAAADAAAAAAAAAAAAAAAAAA"
+        "Prueba para update"
       ],
       "fixed": [
-        "Corregidos varios enlaces",
-        "Corregido servidor Tokio",
-        "Corregido sistema de descargas Kioto",
-        "Sistema de actualizaciones (Ironico, no?)"
       ],
       "changed": [
-        "Herobrine ha sido eliminado.",
-        "De hecho, estoy escribiendo algo largo",
-        "Para ver como lo maneja la ui",
-        "Así si se ve raro lo arreglo",
-        "Y si no pues ni modo",
-        "Tengo hambre",
-        "Quiero por lo menos una maruchan",
-        "Pero no hay",
-        "Ni maruchan ni dinero",
-        "Y ya son las 11 casi las 12",
-        "lel"
       ]
     },
     "priority": 2
