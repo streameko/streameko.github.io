@@ -2,11 +2,12 @@
   "update_info": {
     "info": {
       "added": [
-        "¡Primera versión de la app lanzada!"
       ],
       "fixed": [
+        "Se corrigió un error el cual evitaba que los episodios se actualizaran correctamente."
       ],
       "changed": [
+        "Se cambió el texto de la interfaz de inicio."
       ]
     },
     "priority": 2
