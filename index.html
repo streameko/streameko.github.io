@@ -324,11 +324,11 @@
   
   <div class="flex justify-between items-center cursor-pointer" id="message-header">
     <p class="font-semibold text-white/90">
-      ¡YA TENEMOS APP, NO ES UN SIMULACRO!
+      Aviso importante sobre Streameko (léelo porfa)
     </p>
     <button id="toggle-message-btn" class="text-sm font-bold text-violet-300 hover:text-white transition-colors flex items-center gap-1">
-      Leer más... 
-      <svg id="arrow-icon" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      Leer más...
+      <svg id="arrow-icon" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
       </svg>
     </button>
@@ -337,26 +337,45 @@
   <div id="collapsible-content" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out">
     <div class="mt-4 pt-4 border-t border-white/10">
       <div class="text-left">
+
         <p class="text-white/80 mb-4 leading-relaxed">
-          ¿Quieren ver anime sin anuncios y con mejor rendimiento? ¡Ahora es posible! Hemos lanzado la <strong>app oficial de Streameko</strong>, disponible en <a href="https://app.streameko.qzz.io" class="text-blue-400 hover:underline">app.streameko.qzz.io</a>. Esta aplicación permite a los usuarios disfrutar de una experiencia sin publicidad.
+          Primero que nada, una disculpa. En este momento, la versión web de Streameko ahora mismo no cumple el objetivo original de ser <strong>totalmente sin anuncios</strong>.
         </p>
 
         <p class="text-white/80 mb-4 leading-relaxed">
-          Me pondría a explicar todos los detalles pero me da flojera, pero pueden leer más en la página de la app.
+          Para mostrar los videos sin publicidad, Streameko no reproduce el reproductor del proveedor tal cual, sino que <strong>extrae el video directamente</strong> y lo sirve de otra forma. Esto requiere librerías especiales y procesamiento adicional del lado del servidor.
         </p>
 
         <p class="text-white/80 mb-4 leading-relaxed">
-          Desde ya aclaro, el unico enlace oficial para descargar la app es <a href="https://app.streameko.qzz.io" class="text-blue-400 hover:underline">app.streameko.qzz.io</a>. Cualquier otro sitio que diga ofrecer la app de Streameko es falso y probablemente malicioso.
+          El problema actual es que los proveedores de video disponibles ahora utilizan <strong>medidas de seguridad más avanzadas</strong>. Esto no hace imposible la extracción, pero sí exige <strong>servidores más potentes</strong> para manejar esas librerías sin que todo explote como PC con 2 GB de RAM.
         </p>
 
         <p class="text-white/80 mb-4 leading-relaxed">
-          Tampoco se cobrará nada por la app, si alguien les pide dinero por descargarla o usarla, es un intento de estafa.
-        </p> 
-        <p class="text-white/80 mb-4 leading-relaxed">
-          Aunque si desean apoyar el proyecto, pueden considerar donar en la página de donaciones, lo agradeceré toda mi vida y te haré un altar en mi casa 🙏
+          Mantener ese tipo de servidores tiene un costo real. Por eso, mientras no sea posible cubrirlo, la web mostrará anuncios en los reproductores (nosotros no los ponemos, los pone el reproductor externo).
         </p>
+
         <p class="text-white/80 mb-4 leading-relaxed">
-          Neta muchas gracias por el apoyo, seguiré dando mi mejor esfuerzo para hacer una experiencia increíble para todos ustedes.
+          <strong>La buena noticia:</strong> la <strong>app oficial de Streameko</strong> está disponible de forma <strong>gratuita</strong>, <strong>sin un solo anuncio</strong> y con <strong>todos los servidores funcionando correctamente</strong>.
+          Puedes descargarla únicamente desde  
+          <a href="https://app.streameko.qzz.io" class="text-blue-400 hover:underline">app.streameko.qzz.io</a>.
+        </p>
+
+        <p class="text-white/80 mb-4 leading-relaxed">
+          No existe ningún cobro por la app. Si alguien intenta venderla o pedir dinero por descargarla, es falso.
+        </p>
+
+        <p class="text-white/80 mb-4 leading-relaxed">
+          Si en algún momento desean apoyar el proyecto, las donaciones ayudan directamente a mantener y mejorar la infraestructura necesaria para que la web también pueda volver a ser completamente sin anuncios.
+        </p>
+
+        <p class="text-white/80 mb-4 leading-relaxed">
+          Pueden encontrar información de bloqueadores de anuncios en estas 2 páginas:
+          <a href="adblocker.html" class="text-blue-400 hover:underline">Para PC</a>.
+          <a href="adcel.html" class="text-blue-400 hover:underline">Para Teléfono</a>.
+        </p>
+
+        <p class="text-white/80 mb-4 leading-relaxed">
+          Gracias de verdad por el apoyo, la paciencia y por seguir usando Streameko. El proyecto sigue activo y en mejora constante.
         </p>
 
         <div class="text-center my-6 space-x-4">
@@ -369,14 +388,18 @@
         </div>
 
         <p class="text-white/80 mt-6 leading-relaxed">
-          (Por cierto, la app tambien funciona para Google TV para que vean su maratón en la pantalla grande)
+          (La app también funciona en Google TV, por si el maratón merece pantalla grande).
         </p>
 
-        <p class="text-center text-sm text-white/60 mt-4 italic">-KaiZ, enemigo natural del sueño y las páginas malas de anime</p>
+        <p class="text-center text-sm text-white/60 mt-4 italic">
+          — KaiZ, del equipo de Streameko
+        </p>
+
       </div>
     </div>
   </div>
 </div>
+
 <div class="px-6 mt-6">
     <div class="relative flex items-center">
       <input type="text" id="buscador" placeholder="Buscar anime..." class="flex-grow p-3 pr-10 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
