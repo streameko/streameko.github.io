@@ -2,16 +2,13 @@
   "update_info": {
     "info": {
       "added": [
-        "Se agregó soporte para descargar desde servidores Tokio y Kioto."
       ],
       "fixed": [
-        "Se corrigió un error general en servidor Nara (reproducción y descargas fallidas).",
-        "Se optimizó el proceso de descarga."
+        "Se ha corregido un error menor que causaba que en cicunstancias muy específicas los episodios descargados no se actualizaran correctamente."
       ],
       "changed": [
-        "Se eliminó servidor Osaka debido a que no se encontraba disponible."
       ]
     },
-    "priority": 2
+    "priority": 1
   }
 }
