@@ -4,11 +4,11 @@
       "added": [
       ],
       "fixed": [
-        "Se ha corregido un error menor que causaba que en cicunstancias muy específicas los episodios descargados no se actualizaran correctamente."
+        "Se ha corregido un error importante que causaba que las portadas guardadas en cache no se borraran correctamente, lo que resultaba en que el almacenamiento se llenara con portadas sin poder eliminarlas."
       ],
       "changed": [
       ]
     },
-    "priority": 1
+    "priority": 2
   }
 }
