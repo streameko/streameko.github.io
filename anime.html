@@ -317,6 +317,15 @@ body { background-color: var(--bg); color: var(--text); font-family: sans-serif;
   0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
   50% { opacity: 0.5; transform: translateX(-50%) scale(1.3); }
 }
+.link-donar {
+    color: #3b82f6;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.link-donar:hover {
+    color: #60a5fa;
+}
   </style>
 </head>
 <body class="min-h-screen font-sans">
@@ -371,7 +380,7 @@ body { background-color: var(--bg); color: var(--text); font-family: sans-serif;
       <div id="overviewContainer" class="relative overflow-hidden transition-all duration-300">
         <p id="animeOverview" class="text-white/80 text-sm whitespace-pre-line line-clamp-3 overflow-hidden transition-all duration-300"></p>
         <div id="adsLegend" class="text-xs text-white/70 mt-2 text-center">
-        ¡Nara y Osaka ahora están disponibles sin anuncios!
+        ¡Recuerda que puedes <a href="donar.html" class="link-donar">DONAR</a> para poder comprar servidores que nos permitan remover los anuncios y mejorar la experiencia de todos! ✨
         </div>
         <button id="toggleOverview" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-3 py-1 rounded-full transition hidden">Ver más</button>
       </div>
