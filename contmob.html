@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contacto Mobile – Streameko</title>
+  <title>Contacto – Streameko</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
@@ -76,7 +76,6 @@
       transform: scale(1);
     }
 
-    /* AJUSTES MÓVILES CORREGIDOS - IGUAL QUE INDEX Y ANIME */
     .is-mobile .logo-text {
       font-size: 1.25rem;
     }
@@ -198,7 +197,8 @@
   </style>
 </head>
 <body class="font-sans">
-  <!-- pagina hecha para verse en el webview de streameko app, por lo tanto se elimina header y footer y eliminamos contacto dmca porque nadie envia forms dmca desde una app-->
+
+<!-- para webview in-app en streameko app pa que les quede mas facil donarme sin buscar la web normal-->
 
   <main class="max-w-2xl mx-auto p-6 mt-10">
     <div class="form-container">
@@ -213,7 +213,9 @@
             <option value="error">He encontrado un error 🐞</option>
             <option value="peticion">Falta un anime que me gusta 🎬</option>
             <option value="sugerencia">Tengo una sugerencia 💡</option>
+            <option value="donacion">Quiero donar ♥️</option>
             <option value="colaborar">Quiero colaborar / Afiliación 🤝</option>
+            <option value="dmca">Notificación de Copyright (DMCA) ⚖️</option>
             <option value="otro">Otro motivo...</option>
           </select>
         </div>
@@ -227,13 +229,13 @@
           <label for="error-type" class="block text-sm font-semibold">¿Qué tipo de error es?</label>
           <select id="error-type" name="error_type" class="form-select">
             <option value="caido">Enlace caído / video no carga</option>
-            <option value="rendimiento">La app va lenta</option>
-            <option value="visual">La app se ve mal</option>
+            <option value="rendimiento">Rendimiento / La web va lenta</option>
+            <option value="visual">Error visual / La página se ve mal</option>
             <option value="duplicado">Animes o episodios duplicados</option>
             <option value="otro-error">Otro (describir abajo)</option>
           </select>
           <label for="error-message" class="block text-sm font-semibold">Descripción del Error</label>
-          <textarea id="error-message" name="error_message" rows="4" class="form-textarea" placeholder="Describe el problema. Si es de rendimiento, dinos tu dispositivo y version de la app. Si es episodio caido, indica anime, episodio, y servidor"></textarea>
+          <textarea id="error-message" name="error_message" rows="4" class="form-textarea" placeholder="Pega la URL de la página y describe el problema. Si es de rendimiento, dinos tu dispositivo y navegador."></textarea>
         </div>
 
         <div id="section-peticion" class="hidden space-y-6">
@@ -268,24 +270,43 @@
           </a>
         </div>
 
+        <div id="section-donacion" class="hidden space-y-6">
+          <div class="p-4 bg-black/20 rounded-lg border border-white/6">
+            <p class="font-semibold mb-2">¡Gracias por el interés en donar, lo apreciamos mucho!</p>
+            <p class="text-white/70">Tu apoyo mantiene a Streameko en marcha: nos ayuda a cubrir costos de servidores que permitan una mejor experiencia, y seguir agregando animes para la comunidad.</p>
+          </div>
+
+          <label for="donation-type" class="block text-sm font-semibold">¿Qué quieres contarnos?</label>
+          <select id="donation-type" name="donation_type" class="form-select">
+            <option value="intencion">Solo tengo intención de donar</option>
+            <option value="explicar">Quiero explicar por qué (opcional)</option>
+            <option value="dudas">Tengo dudas sobre el proceso</option>
+          </select>
+
+          <div id="donation-details-container" class="hidden">
+            <label for="donation-details" class="block text-sm font-semibold">Escribe aquí (opcional)</label>
+            <textarea id="donation-details" name="donation_details" rows="4" class="form-textarea" placeholder="Si quieres, dinos por qué deseas donar o escribe tus dudas sobre el proceso."></textarea>
+          </div>
+        </div>
+
         <div id="section-otro" class="hidden space-y-6">
           <label for="otro-subject" class="block text-sm font-semibold">Asunto</label>
           <input type="text" id="otro-subject" name="otro_subject" placeholder="¿De qué trata tu mensaje?" class="form-input">
           <label for="otro-message" class="block text-sm font-semibold">Mensaje</label>
           <textarea id="otro-message" name="otro_message" rows="5" class="form-textarea" placeholder="Cuéntanos qué tienes en mente..."></textarea>
         </div>
-        <input type="hidden" name="form_type" id="form-type" value="">
-        <input type="hidden" name="timestamp" id="timestamp" value="">
-        <input type="hidden" name="user_ip" id="user-ip" value="">
-
 
         <div id="privacy-section" class="hidden privacy-checkbox">
           <input type="checkbox" id="privacy-accept" name="privacy_accept" required>
           <label for="privacy-accept">
             Al enviar este formulario, aceptas nuestra 
-            <a href="privacidadmob.html" target="_blank">Política de Privacidad</a>. 
+            <a href="privacidad.html" target="_blank">Política de Privacidad</a>. 
           </label>
         </div>
+
+        <input type="hidden" name="form_type" id="form-type" value="">
+        <input type="hidden" name="timestamp" id="timestamp" value="">
+        <input type="hidden" name="user_ip" id="user-ip" value="">
 
         <div id="submit-button-container" class="hidden">
           <button type="submit" id="submit-btn" class="submit-btn w-full text-white font-bold py-3 px-4 rounded-lg">
@@ -296,6 +317,7 @@
       </form>
     </div>
   </main>
+
 
 
   <script>
@@ -316,7 +338,6 @@
       }
     }
     detectarDispositivo();
-
 
     let userIP = null;
 
@@ -355,10 +376,15 @@
       sugerencia: document.getElementById('section-sugerencia'),
       peticion: document.getElementById('section-peticion'),
       dmca: document.getElementById('section-dmca'),
+      donacion: document.getElementById('section-donacion'),
       otro: document.getElementById('section-otro'),
       colaborar: document.getElementById('section-colaborar'),
       fandub: document.getElementById('section-fandub')
     };
+
+    const donationTypeSelect = document.getElementById('donation-type');
+    const donationDetailsContainer = document.getElementById('donation-details-container');
+    const donationDetails = document.getElementById('donation-details');
 
     reasonSelect.addEventListener('change', (event) => {
       const selectedValue = event.target.value;
@@ -371,7 +397,9 @@
       privacySection.classList.add('hidden');
       emailLabel.textContent = '(Opcional)';
       emailInput.required = false;
-      
+      donationDetailsContainer.classList.add('hidden');
+      donationDetails.value = '';
+
       if (selectedValue) {
         formTypeInput.value = selectedValue;
         
@@ -389,7 +417,7 @@
             submitContainer.classList.remove('hidden');
             privacySection.classList.remove('hidden');
 
-            const requiredCases = ['colaborar', 'otro'];
+            const requiredCases = ['colaborar', 'otro', 'donacion'];
             if (requiredCases.includes(selectedValue)) {
               emailLabel.textContent = '(Requerido)';
               emailInput.required = true;
@@ -397,6 +425,18 @@
         }
       }
     });
+
+    if (donationTypeSelect) {
+      donationTypeSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (val === 'explicar' || val === 'dudas') {
+          donationDetailsContainer.classList.remove('hidden');
+        } else {
+          donationDetailsContainer.classList.add('hidden');
+          donationDetails.value = '';
+        }
+      });
+    }
 
     function showNotification(message, type = 'success') {
       const existingNotifications = document.querySelectorAll('.notification');
@@ -440,7 +480,7 @@
         return;
       }
 
-      const requiredCases = ['colaborar', 'otro'];
+      const requiredCases = ['colaborar', 'otro', 'donacion'];
       if (requiredCases.includes(reason) && !formData.get('email')) {
         showNotification('El correo electrónico es requerido para este tipo de consulta', 'error');
         return;
@@ -491,6 +531,14 @@
             templateParams.fandub_message = formData.get('fandub_message');
             templateParams.message = formData.get('fandub_message') + `\n\nIP: ${userIP || 'No disponible'}`;
             break;
+
+          case 'donacion':
+            const donationType = formData.get('donation_type') || 'intencion';
+            const donationDetailsText = formData.get('donation_details') || '';
+            templateParams.donation_type = donationType;
+            templateParams.donation_message = donationDetailsText || 'El usuario indicó intención de donar o no proporcionó más detalles.';
+            templateParams.message = `Donación - Tipo: ${donationType}\n\nMensaje adicional: ${donationDetailsText}\n\nIP: ${userIP || 'No disponible'}\n\nMensaje fijo: ¡Gracias por el interés en donar, lo apreciamos mucho!`;
+            break;
           
           case 'otro':
             templateParams.otro_subject = formData.get('otro_subject');
@@ -514,6 +562,7 @@
           sugerencia: '✅ ¡Sugerencia recibida! Tus ideas brillan más que las luces de la ciudad en Call of the Night.',
           colaborar: '✅ ¡Propuesta recibida! La revisaremos con la precisión de Subaru tratando de salvar a Rem.',
           fandub: '✅ ¡Consulta sobre fandub recibida! Nos pondremos en contacto contigo.',
+          donacion: '✅ ¡Gracias! Recibimos tu mensaje sobre donaciones y te contactaremos en breve.',
           otro: '✅ ¡Mensaje enviado! Responderemos antes de que Ado saque su próximo hit.'
         };
 
@@ -528,6 +577,7 @@
           submitContainer.classList.add('hidden');
           privacySection.classList.add('hidden');
           formTypeInput.value = '';
+          donationDetailsContainer.classList.add('hidden');
         }, 2000);
 
       } catch (error) {
