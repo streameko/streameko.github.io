@@ -4,11 +4,11 @@
       "added": [
       ],
       "fixed": [
-        "Se ha corregido un error importante que causaba que las portadas guardadas en cache no se borraran correctamente, lo que resultaba en que el almacenamiento se llenara con portadas sin poder eliminarlas."
+        "Se ha corregido un error que provocaba inestabilidad en descargas de servidor Tokio."
       ],
       "changed": [
       ]
     },
-    "priority": 2
+    "priority": 1
   }
 }
