@@ -315,8 +315,10 @@
     </nav>
   </div>
 </header>
-<div class="bg-green-500 text-white py-4 px-6 text-sm text-center">
-  ¡Ahora tenemos <a href="https://app.streameko.qzz.io" class="text-blue-300 hover:text-blue-100">app</a>!
+
+<div id="fake-error-banner" class="bg-red-700 text-white px-6 py-4 text-center font-mono text-sm tracking-wide">
+  <strong>500 Internal Server Error</strong><br>
+  The server encountered an unexpected condition that prevented it from fulfilling the request.
 </div>
 
 <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>
@@ -739,7 +741,30 @@ async function loadDatabase() {
       renderRows();
     });
     
-    loadDatabase();
+function fakeServerError() {
+    const rows = [
+        "row-recientes",
+        "row-milista",
+        "row-sub",
+        "row-dub"
+    ];
+
+    rows.forEach(id => {
+        const el = document.getElementById(id);
+        renderSkeletons(el);
+
+        const errorMsg = document.createElement("p");
+        errorMsg.className = "text-red-500 text-sm mt-2 font-mono";
+        errorMsg.textContent = "Error 500: Failed to fetch resource.";
+        el.appendChild(errorMsg);
+    });
+
+    console.error("500 Internal Server Error (simulated)");
+}
+
+  setTimeout(() => {
+    fakeServerError();
+  }, 3435);
 // no me acordé y programe esto para que funcionara SIEMPRE con el anuncio pero ahora que no había anuncio se rompia, ahora si lo preparé para estar listo por si no hay anuncio
   const header = document.getElementById('message-header');
   const toggleBtn = document.getElementById('toggle-message-btn');
