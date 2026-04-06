@@ -2,13 +2,16 @@
   "update_info": {
     "info": {
       "added": [
+        "Se han agregado pestañas en el menú de episodios y se mejoró la UX en general."
       ],
       "fixed": [
-        "Se ha corregido un error que provocaba inestabilidad en descargas de servidor Tokio."
+        "Se ha corregido un error menor en la forma que se muestran los animes.",
+        "Se ha corregido un error importante en el reproductor.",
+        "Se ha corregido un error menor en el formulario de contacto."
       ],
       "changed": [
       ]
     },
-    "priority": 1
+    "priority": 2
   }
 }
