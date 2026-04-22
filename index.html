@@ -41,7 +41,7 @@
       --glow-color: rgba(167, 139, 250, 0.4);
     }
     html { scroll-behavior: smooth; }
-    body { background-color: var(--bg); color: var(--text); font-family: sans-serif; }
+    body { background-color: var(--bg); color: var(--text); font-family: sans-serif; background-image: radial-gradient(circle at top, rgba(229, 9, 20, 0.12), transparent 34%), radial-gradient(circle at 85% 10%, rgba(167, 139, 250, 0.12), transparent 28%), linear-gradient(180deg, #070707 0%, #000 100%); }
     .scrolling-row { display: flex; overflow-x: auto; gap: 1rem; padding: 1rem 0; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
     .scrolling-row::-webkit-scrollbar { display: none; }
     .anime-card {
@@ -61,10 +61,106 @@
       50% { background-color: #3f3f46; }
     }
     @media (hover: hover) {
-      .anime-card:hover { transform: scale(1.08); z-index: 10; }
+      .anime-card:hover { transform: scale(1.08); z-index: 2; }
       .anime-card:hover .card-link p { color: var(--accent); }
     }
     .anime-card p { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+
+    .anime-card p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .section-shell {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .scroll-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%) scale(0.96);
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(180deg, rgba(24, 24, 27, 0.92), rgba(9, 9, 11, 0.92));
+      color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .scroll-btn.visible {
+      opacity: 0.85;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .scroll-btn:hover {
+      opacity: 1;
+      transform: translateY(-50%) scale(1.08);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+      background: linear-gradient(180deg, rgba(39, 39, 42, 0.98), rgba(15, 15, 16, 0.98));
+    }
+
+    .scroll-btn:active {
+      transform: translateY(-50%) scale(0.96);
+    }
+
+    .scroll-btn.left { left: -18px; }
+    .scroll-btn.right { right: -18px; }
+    .scroll-btn svg { width: 20px; height: 20px; }
+
+    @media (max-width: 1024px) {
+      .scroll-btn {
+        display: none;
+      }
+      .scrolling-row {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+      }
+    }
+
+    .scrolling-row {
+      scroll-behavior: smooth;
+      scroll-snap-type: x proximity;
+    }
+
+    .anime-card {
+      scroll-snap-align: start;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      z-index: 1;
+    }
+
+    .anime-card:hover {
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+    }
+
+    .anime-card img {
+      transition: transform 0.35s ease;
+    }
+
+    @media (hover: hover) {
+      .anime-card:hover img {
+        transform: scale(1.03);
+      }
+    }
+
+    .section-title {
+      letter-spacing: 0.2px;
+    }
 
     .watchlist-btn {
       position: absolute;
@@ -347,14 +443,14 @@
 </div> -->
 
 <h1 class="text-3xl font-bold px-6 mt-4">Streameko</h1>
-<div class="max-w-4xl mx-auto my-6 p-5 bg-zinc-800/50 border border-violet-400/30 rounded-xl shadow-lg backdrop-blur-sm overflow-hidden">
+<div class="max-w-4xl mx-auto my-6 p-5 bg-zinc-800/55 border border-violet-400/25 rounded-2xl shadow-lg backdrop-blur-md overflow-hidden">
   
   <div class="flex justify-between items-center cursor-pointer" id="message-header">
     <p class="font-semibold text-white/90">
       ¡La prueba de Ekocast fue un éxito!
     </p>
-    <button id="toggle-message-btn" class="text-sm font-bold text-violet-300 hover:text-white transition-colors flex items-center gap-1">
-      Leer más...
+    <button id="toggle-message-btn" class="text-sm font-bold text-violet-300 hover:text-white transition-colors flex items-center gap-1" aria-expanded="false">
+      <span id="toggle-message-text">Leer más...</span>
       <svg id="arrow-icon" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
       </svg>
@@ -421,8 +517,8 @@
 </div>
 
 <div class="px-6 mt-6">
-    <div class="relative flex items-center">
-      <input type="text" id="buscador" placeholder="Buscar anime..." class="flex-grow p-3 pr-10 rounded-full bg-zinc-800 text-white placeholder-white/50 border border-white/20" />
+    <div class="relative flex items-center max-w-4xl mx-auto">
+      <input type="text" id="buscador" placeholder="Buscar anime..." class="flex-grow p-3 pr-10 rounded-full bg-zinc-900/85 text-white placeholder-white/45 border border-white/15 shadow-inner shadow-black/30 focus:outline-none focus:ring-2 focus:ring-violet-500/35 focus:border-violet-400/40 transition" />
       <button id="clearSearch" class="absolute right-12 top-1/2 -translate-y-1/2 text-white/40 hidden">✕</button>
       <button id="genre-btn" class="genre-btn ml-2">🎭</button>
     </div>
@@ -437,30 +533,78 @@
     </div>
 </div>
 
+  
   <div class="px-6">
     <div class="mt-8">
       <div class="flex justify-between items-center mb-2">
-        <h2 class="text-xl font-semibold">🕒 Recientes</h2>
+        <h2 class="text-xl font-semibold section-title">🕒 Recientes</h2>
         <button onclick="limpiarRecientes()" class="limpiar-recientes-btn text-xs text-white px-4 py-2 rounded-full font-semibold">Limpiar Recientes 🧹</button>
       </div>
-      <div id="row-recientes" class="scrolling-row"></div>
+      <div class="relative section-shell">
+        <button class="scroll-btn left" onclick="scrollRow('row-recientes', -1)" aria-label="Desplazar recientes a la izquierda">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div id="row-recientes" class="scrolling-row"></div>
+        <button class="scroll-btn right" onclick="scrollRow('row-recientes', 1)" aria-label="Desplazar recientes a la derecha">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
     </div>
-    
+
     <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-2">🔖 Mi Lista</h2>
-      <div id="row-milista" class="scrolling-row"></div>
+      <h2 class="text-xl font-semibold mb-2 section-title">🔖 Mi Lista</h2>
+      <div class="relative section-shell">
+        <button class="scroll-btn left" onclick="scrollRow('row-milista', -1)" aria-label="Desplazar mi lista a la izquierda">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div id="row-milista" class="scrolling-row"></div>
+        <button class="scroll-btn right" onclick="scrollRow('row-milista', 1)" aria-label="Desplazar mi lista a la derecha">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
     </div>
-    
+
     <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-2">🇯🇵 Subtitulados</h2>
-      <div id="row-sub" class="scrolling-row"></div>
+      <h2 class="text-xl font-semibold mb-2 section-title">🇯🇵 Subtitulados</h2>
+      <div class="relative section-shell">
+        <button class="scroll-btn left" onclick="scrollRow('row-sub', -1)" aria-label="Desplazar subtitulados a la izquierda">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div id="row-sub" class="scrolling-row"></div>
+        <button class="scroll-btn right" onclick="scrollRow('row-sub', 1)" aria-label="Desplazar subtitulados a la derecha">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-2">🇲🇽 Doblados</h2>
-      <div id="row-dub" class="scrolling-row"></div>
+      <h2 class="text-xl font-semibold mb-2 section-title">🇲🇽 Doblados</h2>
+      <div class="relative section-shell">
+        <button class="scroll-btn left" onclick="scrollRow('row-dub', -1)" aria-label="Desplazar doblados a la izquierda">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div id="row-dub" class="scrolling-row"></div>
+        <button class="scroll-btn right" onclick="scrollRow('row-dub', 1)" aria-label="Desplazar doblados a la derecha">
+          <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
-
 <footer class="py-8 text-center border-t border-white/10">
   <p class="text-white/50">© 2026 Streameko. ¡Para la comunidad!</p>
 </footer>
@@ -574,6 +718,9 @@ function eliminarDeRecientes(event, id) {
         skeleton.className = "anime-card skeleton";
         container.appendChild(skeleton);
       }
+      if (container.id) {
+        requestAnimationFrame(() => updateScrollButtons(container.id));
+      }
     }
 
     function updateMiListaRow() {
@@ -581,7 +728,8 @@ function eliminarDeRecientes(event, id) {
         const ids = getMiLista();
         row.innerHTML = "";
         if (ids.length === 0) {
-            row.innerHTML = `<p class='text-white/50'>Nada aquí, ¡agrega unos y velos!</p>`;
+            row.innerHTML = `<p class='text-white/50 py-2'>Nada aquí, ¡agrega unos y velos!</p>`;
+            updateScrollButtons("row-milista");
             return;
         }
         ids.forEach(id => {
@@ -589,6 +737,7 @@ function eliminarDeRecientes(event, id) {
                 row.appendChild(crearCard(animeData[id], id));
             }
         });
+        requestAnimationFrame(() => updateScrollButtons("row-milista"));
     }
 
 function prettifyGenre(genre) {
@@ -648,7 +797,7 @@ recientesIds.forEach(id => {
     }
 });
         if (rowRecientes.children.length === 0) {
-            rowRecientes.innerHTML = `<p class='text-white/50'>Aún no has visto nada, ¿cambiamos eso?</p>`;
+            rowRecientes.innerHTML = `<p class='text-white/50 py-2'>Aún no has visto nada, ¿cambiamos eso?</p>`;
         }
 
         updateMiListaRow();
@@ -669,8 +818,15 @@ recientesIds.forEach(id => {
             }
         });
 
-        if (rowSub.children.length === 0 && query) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado.</p>";
-        if (rowDub.children.length === 0 && query) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado.</p>";
+        if (rowSub.children.length === 0 && query) rowSub.innerHTML = "<p class='text-white/50 py-2'>Nada encontrado.</p>";
+        if (rowDub.children.length === 0 && query) rowDub.innerHTML = "<p class='text-white/50 py-2'>Nada encontrado.</p>";
+
+        requestAnimationFrame(() => {
+          updateScrollButtons("row-recientes");
+          updateScrollButtons("row-milista");
+          updateScrollButtons("row-sub");
+          updateScrollButtons("row-dub");
+        });
     }
     
 async function loadDatabase() {
@@ -726,6 +882,11 @@ async function loadDatabase() {
 
         renderGenreList();
         renderRows();
+        requestAnimationFrame(() => {
+      updateAllScrollButtons();
+      setTimeout(updateAllScrollButtons, 50);
+      setTimeout(updateAllScrollButtons, 250);
+    });
     }
     
     function limpiarRecientes() {
@@ -740,6 +901,32 @@ async function loadDatabase() {
         localStorage.removeItem("recientes");
         renderRows();
       }, 600); 
+    }
+
+    function updateScrollButtons(rowId) {
+      const row = document.getElementById(rowId);
+      if (!row) return;
+      const shell = row.closest('.section-shell');
+      if (!shell) return;
+
+      const cards = row.querySelectorAll('.anime-card:not(.skeleton)').length;
+      const hasPlaceholder = !!row.querySelector('p[class*="text-white/50"]');
+      const shouldShow = cards > 0 && !hasPlaceholder;
+
+      shell.querySelectorAll('.scroll-btn').forEach(btn => {
+        btn.classList.toggle('visible', shouldShow);
+      });
+    }
+
+    function updateAllScrollButtons() {
+      ['row-recientes', 'row-milista', 'row-sub', 'row-dub'].forEach(updateScrollButtons);
+    }
+
+    function scrollRow(rowId, direction) {
+      const row = document.getElementById(rowId);
+      if (!row) return;
+      const amount = Math.max(320, Math.floor(row.clientWidth * 0.85));
+      row.scrollBy({ left: amount * direction, behavior: 'smooth' });
     }
 
     document.getElementById("buscador").addEventListener("input", (e) => {
@@ -803,6 +990,17 @@ detectarDispositivo();
   closeGenrePanel.addEventListener('click', () => {
     genrePanel.classList.remove('open');
   });
+
+  window.addEventListener('resize', () => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(updateAllScrollButtons, 100);
+  });
+
+  window.addEventListener('load', () => {
+    setTimeout(updateAllScrollButtons, 150);
+  });
+
+  requestAnimationFrame(updateAllScrollButtons);
 
   </script>
 </body>
