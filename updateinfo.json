@@ -5,7 +5,7 @@
         "[1.0.6] Se han agregado pestañas en el menú de episodios y se mejoró la UX en general."
       ],
       "fixed": [
-        "[1.0.7] Se ha eliminado un anime de prueba que se había agregado por error.",
+        "[1.0.7] Se ha eliminado un anime de prueba que se había agregado por un descuido.",
         "[1.0.7] Se ha corregido un error que causaba el cierre repentino de la app en ciertos dispositivos.",
         "[1.0.7] Se ha eliminado una librería que causaba el cierre repentino de la app en ciertos dispositivos.",
         "[1.0.6] Se ha corregido un error menor en la forma que se muestran los animes.",
