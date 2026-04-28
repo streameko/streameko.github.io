@@ -2,18 +2,14 @@
   "update_info": {
     "info": {
       "added": [
-        "[1.0.6] Se han agregado pestañas en el menú de episodios y se mejoró la UX en general."
+        "¡Se ha agregado la función de transmitir el contenido a la TV!",
+        "Se agregó un mejor manejo en la pantalla de episodios.",
+        "Se agregó la opción de saltar el OP/ED y el avanzar automáticamente al siguiente episodio."
       ],
       "fixed": [
-        "[1.0.7] Se ha eliminado un anime de prueba que se había agregado por un descuido.",
-        "[1.0.7] Se ha corregido un error que causaba el cierre repentino de la app en ciertos dispositivos.",
-        "[1.0.7] Se ha eliminado una librería que causaba el cierre repentino de la app en ciertos dispositivos.",
-        "[1.0.6] Se ha corregido un error menor en la forma que se muestran los animes.",
-        "[1.0.6] Se ha corregido un error importante en el reproductor.",
-        "[1.0.6] Se ha corregido un error menor en el formulario de contacto."
+        "Se corrigió un error importante que causaba fallas al reproducir/descargar desde servidor Kioto."
       ],
       "changed": [
-        "[1.0.7] Se han actualizado algunas librerías internas para mejorar el rendimiento y compatibilidad con dispositivos recientes."
       ]
     },
     "priority": 2
