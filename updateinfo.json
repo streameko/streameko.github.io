@@ -7,7 +7,8 @@
         "Se agregó la opción de saltar el OP/ED y el avanzar automáticamente al siguiente episodio."
       ],
       "fixed": [
-        "Se corrigió un error importante que causaba fallas al reproducir/descargar desde servidor Kioto."
+        "Se corrigió un error importante que causaba fallas al reproducir/descargar desde servidor Kioto.",
+        "¡Oops! Se nos quedó la base de datos de pruebas, mala nuestra. Ya se ha corregido."
       ],
       "changed": [
       ]
