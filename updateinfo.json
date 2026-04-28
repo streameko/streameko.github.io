@@ -4,7 +4,8 @@
       "added": [
         "¡Se ha agregado la función de transmitir el contenido a la TV!",
         "Se agregó un mejor manejo en la pantalla de episodios.",
-        "Se agregó la opción de saltar el OP/ED y el avanzar automáticamente al siguiente episodio."
+        "Se agregó la opción de saltar el OP/ED y el avanzar automáticamente al siguiente episodio.",
+        "Se agregó una función que permite mejor manejo interno de la descarga de episodios."
       ],
       "fixed": [
         "Se corrigió un error importante que causaba fallas al reproducir/descargar desde servidor Kioto."
