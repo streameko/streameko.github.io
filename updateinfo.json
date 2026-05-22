@@ -2,14 +2,16 @@
   "update_info": {
     "info": {
       "added": [
+        "Se agregó soporte para transmitir a TV que no sean Chromecast."
       ],
       "fixed": [
-        "Se corrigió un error leve pero molesto que causaba que el los episodios que cargaban de forma automática no se reproducieran en el idioma correcto."
+        "Se corrigieron errores menores.",
+        "Se arregló un error que causaba que los episodios no cargaran."
       ],
       "changed": [
-        "Se cambió ligeralmente el texto de la pildora de 'episodio siguiente'."
+        "Se cambió el esquema de la base de datos de emergencia, cualquier error reportarlo a soporte@streameko.qzz.io"
       ]
     },
-    "priority": 1
+    "priority": 2
   }
 }

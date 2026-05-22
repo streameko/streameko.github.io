@@ -1085,7 +1085,7 @@ function initCastButton() {
     try {
       const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` });
 
-      const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/anime.zip";
+      const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/´new_anime.zip";
       const response = await fetch(zipUrl);
       const arrayBuffer = await response.arrayBuffer();
       const zipData = new Uint8Array(arrayBuffer);
