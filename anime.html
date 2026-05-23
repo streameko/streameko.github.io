@@ -667,11 +667,15 @@ function initCastButton() {
 
   const serverDisplayNames = { "Gamma": "Tokio", "Delta": "Nara", "Alpha": "Osaka", "Epsilon": "Kioto" };
   const serverBaseUrls = { 
-    "Gamma": "https://christopheruntilpoint.com/e/", 
+    "Gamma": "https://bryantenunder.com/e/", 
     "Alpha": "https://dumbalag.com/e/", 
     "Delta": "https://byseraguci.com/e/", 
     "Epsilon": "https://luluvdoo.com/e/" 
   };
+
+  function reversePlayerKey(key) {
+    return String(key || "").split("").reverse().join("");
+  }
 
   function cleanupVideo() {
     const videoPlayer = document.getElementById("videoPlayer");
@@ -952,7 +956,7 @@ function initCastButton() {
     modalBox.addEventListener("animationend", handleEnterEnd);
 
     if (SCANNABLE_SERVERS.includes(server)) {
-      const rawUrl = serverBaseUrls[server] + path;
+      const rawUrl = serverBaseUrls[server] + reversePlayerKey(path);
       console.log(`[Streameko] Servidor Scannable (${server}). Scrapeando: ${rawUrl}`);
 
       try {
@@ -981,7 +985,7 @@ function initCastButton() {
           'Anuncios podrían mostrarse al usar el reproductor externo.'
         );
         
-        const targetUrl = serverBaseUrls[server] + path;
+        const targetUrl = serverBaseUrls[server] + reversePlayerKey(path);
         
         document.getElementById("modalContent").innerHTML = `
           <iframe 
@@ -1000,7 +1004,7 @@ function initCastButton() {
         4000
       );
       
-      const targetUrl = serverBaseUrls[server] + path;
+      const targetUrl = serverBaseUrls[server] + reversePlayerKey(path);
       console.log(`[Streameko] Servidor NO scannable (${server}). iFrame: ${targetUrl}`);
       
       document.getElementById("modalContent").innerHTML = `
@@ -1077,15 +1081,15 @@ function initCastButton() {
     });
   }
   async function loadAnimeData() {
-    if (!animeId) { 
-      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado. Por favor reportalo</p>'; 
-      return; 
+    if (!animeId) {
+      document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado. Por favor reportalo</p>';
+      return;
     }
 
     try {
       const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` });
 
-      const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/´new_anime.zip";
+      const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/new_anime.zip";
       const response = await fetch(zipUrl);
       const arrayBuffer = await response.arrayBuffer();
       const zipData = new Uint8Array(arrayBuffer);
@@ -1105,7 +1109,7 @@ function initCastButton() {
   }
 
   function mostrarAnimeDesdeDB(db) {
-    const animeRes = db.exec("SELECT name, name_alternative, overview, genres FROM animes WHERE id = :id", {':id': animeId});
+    const animeRes = db.exec("SELECT name, name_alternative, overview, genres FROM AnimeEntity WHERE id = :id", {':id': animeId});
     if (!animeRes.length || !animeRes[0].values.length) { 
       document.body.innerHTML = '<p class="text-center text-red-400 mt-10">Error 404: Anime no encontrado</p>'; 
       return; 
@@ -1147,9 +1151,9 @@ function initCastButton() {
       }
     }, 100);
     
-    const episodesQuery = `SELECT e.number, p.language, p.link, s.name as server_name FROM episodes AS e JOIN players AS p ON e.id = p.episode_id JOIN servers AS s ON p.server_id = s.id WHERE e.anime_id = :id ORDER BY p.language, CAST(e.number AS REAL)`;
+    const episodesQuery = `SELECT e.number, p.language, p.link, s.name as server_name FROM EpisodeEntity AS e JOIN PlayerEntity AS p ON e.id = p.episode_id JOIN ServerEntity AS s ON p.server_id = s.id WHERE e.anime_id = :id ORDER BY p.language, CAST(e.number AS REAL)`;
     const episodesRes = db.exec(episodesQuery, {':id': animeId});
-    const episodes = episodesRes.length ? episodesRes[0].values.map(([number, language, link, server]) => ({number, language, link, server})) : [];
+    const episodes = episodesRes.length ? episodesRes[0].values.map(([number, language, link, server]) => ({ number: Number(number), language: Number(language), link, server })) : [];
     
     const episodiosUnicos = new Set(episodes.map(ep => ep.number));
     document.getElementById("episodeCount").textContent = `${episodiosUnicos.size} episodio(s)`;

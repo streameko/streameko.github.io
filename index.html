@@ -334,14 +334,14 @@
 
   </div>
 </div>
-
+    <!--
 <div class="bg-gradient-to-r from-red-500 to-red-700 text-white py-4 px-6">
   <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3">
-    
+
     <p class="text-sm sm:text-base font-medium text-center">
       ⛔ INTERRUPCION IMPORTANTE DETECTADA ⛔ <br> 
       <span class="hidden sm:inline">Hemos detectado una falla en la base de datos, estamos investigando el problema y trabajando en una solución.</span>
-    </p>
+    </p> -->
     
   </div>
 </div>
@@ -701,7 +701,7 @@ async function loadDatabase() {
 }
 
     function processDatabase(db) {
-        const animesResult = db.exec("SELECT id, name, name_alternative, poster, overview, genres FROM animes");
+        const animesResult = db.exec("SELECT id, name, name_alternative, poster, overview, genres FROM AnimeEntity");
         if (animesResult.length > 0) {
             animesResult[0].values.forEach(row => {
                 animeData[row[0]] = {
@@ -715,12 +715,17 @@ async function loadDatabase() {
             });
         }
 
-        const episodesQuery = `SELECT e.anime_id, e.number, p.language FROM episodes AS e JOIN players AS p ON e.id = p.episode_id`;
+        const episodesQuery = `
+            SELECT DISTINCT e.anime_id, e.number, CAST(p.language AS INTEGER) AS language
+            FROM EpisodeEntity AS e
+            JOIN PlayerEntity AS p ON e.id = p.episode_id
+            WHERE p.language IN ('0', '1', '2')
+        `;
         const episodesResult = db.exec(episodesQuery);
         if (episodesResult.length > 0) {
             episodesResult[0].values.forEach(([anime_id, number, language]) => {
                 if (!episodeData[anime_id]) episodeData[anime_id] = [];
-                episodeData[anime_id].push({ episode: number, language });
+                episodeData[anime_id].push({ episode: number, language: Number(language) });
             });
         }
 
