@@ -2,16 +2,14 @@
   "update_info": {
     "info": {
       "added": [
-        "Se agregó soporte para transmitir a TV que no sean Chromecast."
       ],
       "fixed": [
-        "Se corrigieron errores menores.",
-        "Se arregló un error que causaba que los episodios no cargaran."
+        "Se arregló un error que causaba que los episodios que duran más de 1 hora no mostraran su duración correctamente.",
+        "Se arregló un error que causaba que la pantalla de episodios no funcionara correctamente en televisores."
       ],
       "changed": [
-        "Se cambió el esquema de la base de datos de emergencia, cualquier error reportarlo a soporte@streameko.qzz.io"
       ]
     },
-    "priority": 2
+    "priority": 1
   }
 }
