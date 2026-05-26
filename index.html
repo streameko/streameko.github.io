@@ -287,6 +287,59 @@
   cursor: pointer;
 }
 
+.row-wrapper {
+  position: relative;
+}
+
+.row-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.15);
+
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  padding: 0;
+  line-height: 1;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.row-arrow:hover {
+  background: rgba(229, 9, 20, 0.9);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.row-arrow.left {
+  left: -10px;
+}
+
+.row-arrow.right {
+  right: -10px;
+}
+
+@media (max-width: 768px) {
+  .row-arrow {
+    display: none;
+  }
+}
+
 
   </style>
 </head>
@@ -443,21 +496,37 @@
         <h2 class="text-xl font-semibold">🕒 Recientes</h2>
         <button onclick="limpiarRecientes()" class="limpiar-recientes-btn text-xs text-white px-4 py-2 rounded-full font-semibold">Limpiar Recientes 🧹</button>
       </div>
-      <div id="row-recientes" class="scrolling-row"></div>
+      <div class="row-wrapper">
+        <button class="row-arrow left" onclick="scrollRow('row-recientes', -500)">❮</button>
+        <div id="row-recientes" class="scrolling-row"></div>
+        <button class="row-arrow right" onclick="scrollRow('row-recientes', 500)">❯</button>
+      </div>
     </div>
     
     <div class="mt-8">
       <h2 class="text-xl font-semibold mb-2">🔖 Mi Lista</h2>
-      <div id="row-milista" class="scrolling-row"></div>
+      <div class="row-wrapper">
+        <button class="row-arrow left" onclick="scrollRow('row-milista', -500)">❮</button>
+        <div id="row-milista" class="scrolling-row"></div>
+        <button class="row-arrow right" onclick="scrollRow('row-milista', 500)">❯</button>
+      </div>
     </div>
     
     <div class="mt-8">
       <h2 class="text-xl font-semibold mb-2">🇯🇵 Subtitulados</h2>
-      <div id="row-sub" class="scrolling-row"></div>
+      <div class="row-wrapper">
+        <button class="row-arrow left" onclick="scrollRow('row-sub', -500)">❮</button>
+        <div id="row-sub" class="scrolling-row"></div>
+        <button class="row-arrow right" onclick="scrollRow('row-sub', 500)">❯</button>
+      </div>
     </div>
     <div class="mt-8">
       <h2 class="text-xl font-semibold mb-2">🇲🇽 Doblados</h2>
-      <div id="row-dub" class="scrolling-row"></div>
+      <div class="row-wrapper">
+        <button class="row-arrow left" onclick="scrollRow('row-dub', -500)">❮</button>
+        <div id="row-dub" class="scrolling-row"></div>
+        <button class="row-arrow right" onclick="scrollRow('row-dub', 500)">❯</button>
+      </div>
     </div>
   </div>
 
@@ -671,6 +740,7 @@ recientesIds.forEach(id => {
 
         if (rowSub.children.length === 0 && query) rowSub.innerHTML = "<p class='text-white/50'>Nada encontrado.</p>";
         if (rowDub.children.length === 0 && query) rowDub.innerHTML = "<p class='text-white/50'>Nada encontrado.</p>";
+        updateRowArrows();
     }
     
 async function loadDatabase() {
@@ -679,6 +749,7 @@ async function loadDatabase() {
         renderSkeletons(document.getElementById("row-milista"));
         renderSkeletons(document.getElementById("row-sub"));
         renderSkeletons(document.getElementById("row-dub"));
+        updateRowArrows();
 
         const SQL = await initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}` });
         const zipUrl = "https://raw.githubusercontent.com/streameko/streameko.github.io/main/new_anime.zip";
@@ -808,7 +879,30 @@ detectarDispositivo();
   closeGenrePanel.addEventListener('click', () => {
     genrePanel.classList.remove('open');
   });
+function scrollRow(rowId, amount) {
+  const row = document.getElementById(rowId);
 
+  row.scrollBy({
+    left: amount,
+    behavior: 'smooth'
+  });
+}
+function updateRowArrows() {
+  document.querySelectorAll('.row-wrapper').forEach(wrapper => {
+    const row = wrapper.querySelector('.scrolling-row');
+    const arrows = wrapper.querySelectorAll('.row-arrow');
+
+    const cards = row.querySelectorAll('.anime-card');
+
+    const hasRealCards = Array.from(cards).some(card =>
+      !card.classList.contains('skeleton')
+    );
+
+    arrows.forEach(arrow => {
+      arrow.style.display = hasRealCards ? 'flex' : 'none';
+    });
+  });
+}
   </script>
 </body>
 </html>
