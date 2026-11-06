@@ -2,14 +2,16 @@
   "update_info": {
     "info": {
       "added": [
+        "Contenido nuevo como varios animes y episodios."
       ],
       "fixed": [
-        "Se arregló un error que causaba que los episodios que duran más de 1 hora no mostraran su duración correctamente.",
-        "Se arregló un error que causaba que la pantalla de episodios no funcionara correctamente en televisores."
+        "Se arregló la reproducción de los servidores 'Tokio' 'Nara' y 'Kioto' que no funcionaban correctamente."
       ],
       "changed": [
+        "¡Streameko se despide! Fue una gran aventura, pero se ha vuelto demasiado difícil mantener la aplicación, así que hemos realizado una ultima actualización para despedirnos. ¡Gracias por todo el apoyo!",
+        "-KaiZ, del equipo de Streameko."
       ]
     },
-    "priority": 1
+    "priority": 2
   }
 }
